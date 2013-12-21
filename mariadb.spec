@@ -30,6 +30,7 @@ BuildRequires:	xfsprogs-devel
 BuildRequires:	pkgconfig(ncursesw)
 BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pkgconfig(zlib)
+BuildRequires:	pkgconfig(libevent)
 BuildRequires:	wrap-devel
 
 %description
