@@ -16,6 +16,21 @@ License: GPL
 Group: System/Servers
 Requires: %{name}-server = %{EVRD}
 Requires: %{name}-client = %{EVRD}
+BuildRequires:	bison
+BuildRequires:	cmake
+BuildRequires:	dos2unix
+BuildRequires:	doxygen
+BuildRequires:	python
+BuildRequires:	systemd-units
+BuildRequires:	systemtap
+BuildRequires:	libaio-devel
+BuildRequires:	stdc++-devel
+BuildRequires:	readline-devel
+BuildRequires:	xfsprogs-devel
+BuildRequires:	pkgconfig(ncursesw)
+BuildRequires:	pkgconfig(openssl)
+BuildRequires:	pkgconfig(zlib)
+BuildRequires:	wrap-devel
 
 %description
 The MariaDB database, a drop-in replacement for MySQL
