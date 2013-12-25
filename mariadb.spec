@@ -32,6 +32,10 @@ BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pkgconfig(zlib)
 BuildRequires:	pkgconfig(libevent)
 BuildRequires:	wrap-devel
+# For plugin/auth_pam.so
+BuildRequires:	pam-devel
+# For plugin/ha_oqgraph.so
+BuildRequires:	boost-devel
 
 %description
 The MariaDB database, a drop-in replacement for MySQL
