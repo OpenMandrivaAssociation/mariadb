@@ -46,6 +46,9 @@ Summary: Development files for the MariaDB database
 Provides: %{name}-devel = %{EVRD}
 Provides: %{mklibname -d mysqlclient_r} = %{EVRD}
 Requires: %{mklibname mysqlclient 18} = %{EVRD}
+Obsoletes: %{mklibname -d mysql} < %{EVRD}
+Provides: %{mklibname -d mysql} = %{EVRD}
+%rename mysql-devel
 Group: Development/Other
 
 %description -n %{devpackage}
@@ -145,7 +148,7 @@ The MariaDB server. For a full MariaDB database server, install
 package '%{name}'.
 
 %pre server
-%_pre_useradd %{muser} %{_localstatedir}/lib/mysql /sbin/nologin
+%_pre_useradd %{muser} /srv/mysql /sbin/nologin
 
 %post server
 %_post_service mysqld mysqld.service
@@ -206,7 +209,7 @@ package '%{name}'.
 %{_bindir}/mysqld-prepare-db-dir
 %{_bindir}/mysqld-wait-ready
 %doc %{_docdir}/%{name}-%{version}
-%attr(711,%{muser},%{muser}) %{_localstatedir}/lib/mysql
+%attr(711,%{muser},%{muser}) /srv/mysql
 %attr(711,%{muser},%{muser}) %{_localstatedir}/log/mysqld
 %{_mandir}/man1/innochecksum.1*
 %{_mandir}/man1/myisam_ftdump.1*
@@ -331,7 +334,7 @@ export CXXFLAGS="%{optflags} -fno-strict-aliasing"
 
 %cmake	-DINSTALL_LAYOUT=RPM \
 	-DMYSQL_DATADIR=/srv/mysql \
-	-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock \
+	-DMYSQL_UNIX_ADDR=/run/mysqld/mysql.sock \
 	-DWITH_EXTRA_CHARSETS=complex \
 	-DWITH_LIBEVENT=system
 
@@ -354,9 +357,9 @@ rm -rf %{buildroot}%{_sysconfdir}/init.d
 mkdir -p %{buildroot}%{_docdir}/%{name}-%{version}
 find %{buildroot}%{_docdir} -type f -exec mv {} %{buildroot}%{_docdir}/%{name}-%{version}/ ';'
 
-mkdir -p %{buildroot}%{_localstatedir}/lib/mysql \
+mkdir -p %{buildroot}/srv/mysql \
 	%{buildroot}%{_localstatedir}/log/mysqld
-chmod 711 %{buildroot}%{_localstatedir}/lib/mysql \
+chmod 711 %{buildroot}/srv/mysql \
 	%{buildroot}%{_localstatedir}/log/mysqld
 
 # Unneeded stuff
