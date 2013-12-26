@@ -106,7 +106,6 @@ Plugins for the MariaDB database
 %{_libdir}/mysql/plugin/ha_sphinx.so
 %{_libdir}/mysql/plugin/ha_spider.so
 %{_libdir}/mysql/plugin/ha_test_sql_discovery.so
-%{_libdir}/mysql/plugin/ha_tokudb.so
 %{_libdir}/mysql/plugin/handlersocket.so
 %{_libdir}/mysql/plugin/libdaemon_example.so
 %{_libdir}/mysql/plugin/locales.so
@@ -122,6 +121,29 @@ Plugins for the MariaDB database
 %{_libdir}/mysql/plugin/semisync_slave.so
 %{_libdir}/mysql/plugin/sql_errlog.so
 %{_mandir}/man1/mysql_plugin.1*
+
+%package plugin-tokudb
+Summary: The TokuDB storage engine plugin for MariaDB
+Requires: %{name}-server = %{EVRD}
+Group: Databases
+
+%description plugin-tokudb
+The TokuDB storage engine plugin for MariaDB.
+
+TokuDB is a storage engine for MySQL and MariaDB that is specifically
+designed for high performance on write-intensive workloads.
+It achieves this via Fractal Tree indexing. TokuDB is a scalable, ACID
+and MVCC compliant storage engine that provides indexing-based query
+improvements, offers online schema modifications, and reduces slave lag
+for both hard disk drives and flash memory.
+
+# As of 10.0.6, tokudb is x86_64 only
+%ifarch x86_64
+%files plugin-tokudb
+%{_libdir}/mysql/plugin/ha_tokudb.so
+%{_sysconfdir}/my.cnf.d/tokudb.cnf
+%{_bindir}/tokuftdump
+%endif
 
 %package test
 Summary: MariaDB test suite
@@ -177,7 +199,6 @@ package '%{name}'.
 %{_sysconfdir}/my.cnf.d/client.cnf
 %{_sysconfdir}/my.cnf.d/mysql-clients.cnf
 %{_sysconfdir}/my.cnf.d/server.cnf
-%{_sysconfdir}/my.cnf.d/tokudb.cnf
 %{_bindir}/aria_chk
 %{_bindir}/aria_dump_log
 %{_bindir}/aria_ftdump
@@ -207,7 +228,6 @@ package '%{name}'.
 %{_bindir}/replace
 %{_bindir}/resolve_stack_dump
 %{_bindir}/resolveip
-%{_bindir}/tokuftdump
 %{_sbindir}/mysqld
 /lib/systemd/system/mysqld.service
 %{_bindir}/mysqld-prepare-db-dir
