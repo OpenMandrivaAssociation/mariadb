@@ -4,12 +4,13 @@
 %define muser mysql
 
 Name: mariadb
-Version: 10.0.6
+Version: 10.0.7
 Release: 1
 Source0: http://mirrors.fe.up.pt/pub/mariadb/mariadb-%{version}/kvm-tarbake-jaunty-x86/mariadb-%{version}.tar.gz
 Source100: mysqld.service
 Source101: mysqld-prepare-db-dir
 Source102: mysqld-wait-ready
+Source1000: %{name}.rpmlintrc
 Summary: The MariaDB database, a drop-in replacement for MySQL
 URL: http://mariadb.org/
 License: GPL
@@ -101,14 +102,15 @@ Plugins for the MariaDB database
 %{_libdir}/mysql/plugin/ha_example.so
 %{_libdir}/mysql/plugin/ha_federated.so
 %{_libdir}/mysql/plugin/ha_federatedx.so
-%{_libdir}/mysql/plugin/ha_oqgraph.so
 %{_libdir}/mysql/plugin/ha_sequence.so
 %{_libdir}/mysql/plugin/ha_sphinx.so
 %{_libdir}/mysql/plugin/ha_spider.so
 %{_libdir}/mysql/plugin/ha_test_sql_discovery.so
+%{_libdir}/mysql/plugin/ha_xtradb.so
 %{_libdir}/mysql/plugin/handlersocket.so
 %{_libdir}/mysql/plugin/libdaemon_example.so
 %{_libdir}/mysql/plugin/locales.so
+%{_libdir}/mysql/plugin/metadata_lock_info.so
 %{_libdir}/mysql/plugin/mypluglib.so
 %{_libdir}/mysql/plugin/mysql_clear_password.so
 %{_libdir}/mysql/plugin/qa_auth_client.so
@@ -209,7 +211,6 @@ package '%{name}'.
 %{_bindir}/myisamchk
 %{_bindir}/myisamlog
 %{_bindir}/myisampack
-%{_bindir}/mysql_config
 %{_bindir}/mysql_convert_table_format
 %{_bindir}/mysql_fix_extensions
 %{_bindir}/mysql_install_db
@@ -309,6 +310,10 @@ Common files needed by both the MariaDB server and client
 %{_datadir}/mysql/spanish
 %{_datadir}/mysql/swedish
 %{_datadir}/mysql/ukrainian
+# We put this into -common for now because it is needed for both
+# -server (used by mysqld_safe) and by -devel (configure scripts calling
+# it, e.g. php)
+%{_bindir}/mysql_config
 
 %package client
 Summary: MariaDB command line client
@@ -349,7 +354,7 @@ MariaDB command line client
 %setup -q
 # Workarounds for bugs
 sed -i "s@data/test@\${INSTALL_MYSQLTESTDIR}@g" sql/CMakeLists.txt
-sed -i "s/srv_buf_size/srv_sort_buf_size/" storage/innobase/row/row0log.cc
+#sed -i "s/srv_buf_size/srv_sort_buf_size/" storage/innobase/row/row0log.cc
 sed -i 's, -fuse-linker-plugin,,' storage/tokudb/ft-index/cmake_modules/TokuSetupCompiler.cmake storage/tokudb/CMakeLists.txt
 
 # aliasing rule violations at least in storage/tokudb/ft-index/ft/dbufio.cc
