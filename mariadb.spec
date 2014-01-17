@@ -39,7 +39,7 @@ BuildRequires:	pam-devel
 BuildRequires:	boost-devel
 
 %description
-The MariaDB database, a drop-in replacement for MySQL
+The MariaDB database, a drop-in replacement for MySQL.
 
 %libpackage mysqlclient %{libmajor}
 %{_libdir}/libmysqlclient_r.so.%{libmajor}*
@@ -57,7 +57,7 @@ Provides: %{mklibname -d mysql} = %{EVRD}
 Group: Development/Other
 
 %description -n %{devpackage}
-Development files for the MariaDB database
+Development files for the MariaDB database.
 
 %files -n %{devpackage}
 %{_includedir}/mysql
@@ -72,7 +72,7 @@ Provides: %{name}-static-devel = %{EVRD}
 Group: Development/Other
 
 %description -n %{staticpackage}
-Static libraries for the MariaDB database
+Static libraries for the MariaDB database.
 
 %files -n %{staticpackage}
 %{_libdir}/libmysqlclient.a
@@ -84,7 +84,7 @@ Summary: MariaDB plugins
 Group: Databases
 
 %description plugin
-Plugins for the MariaDB database
+Plugins for the MariaDB database.
 
 %files plugin
 %{_libdir}/mysql/plugin/adt_null.so
@@ -152,7 +152,7 @@ Summary: MariaDB test suite
 Group: System/Servers
 
 %description test
-MariaDB test suite
+MariaDB test suite.
 
 %files test
 %{_bindir}/mysqltest
@@ -267,7 +267,7 @@ Summary: Tool to convert code written for mSQL to MySQL/MariaDB
 Group: Development/Other
 
 %description msql2mysql
-Tool to convert code written for mSQL to MySQL/MariaDB
+Tool to convert code written for mSQL to MySQL/MariaDB.
 
 %files msql2mysql
 %{_bindir}/msql2mysql
@@ -279,7 +279,7 @@ Group: System/Servers
 BuildArch: noarch
 
 %description common
-Common files needed by both the MariaDB server and client
+Common files needed by both the MariaDB server and client.
 
 %files common
 %doc README COPYING
@@ -320,7 +320,7 @@ Summary: MariaDB command line client
 Group: Databases
 
 %description client
-MariaDB command line client
+MariaDB command line client.
 
 %files client
 %{_bindir}/mysql
