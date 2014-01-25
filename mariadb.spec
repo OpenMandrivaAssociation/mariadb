@@ -5,7 +5,7 @@
 
 Name: mariadb
 Version: 10.0.7
-Release: 1
+Release: 2
 Source0: http://mirrors.fe.up.pt/pub/mariadb/mariadb-%{version}/kvm-tarbake-jaunty-x86/mariadb-%{version}.tar.gz
 Source100: mysqld.service
 Source101: mysqld-prepare-db-dir
@@ -51,6 +51,7 @@ Summary: Development files for the MariaDB database
 Provides: %{name}-devel = %{EVRD}
 Provides: %{mklibname -d mysqlclient_r} = %{EVRD}
 Requires: %{mklibname mysqlclient 18} = %{EVRD}
+Requires: %{name}-common = %{EVRD}
 Obsoletes: %{mklibname -d mysql} < %{EVRD}
 Provides: %{mklibname -d mysql} = %{EVRD}
 %rename mysql-devel
