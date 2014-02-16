@@ -4,8 +4,8 @@
 %define muser mysql
 
 Name: mariadb
-Version: 10.0.7
-Release: 2
+Version: 10.0.8
+Release: 1
 Source0: http://mirrors.fe.up.pt/pub/mariadb/mariadb-%{version}/kvm-tarbake-jaunty-x86/mariadb-%{version}.tar.gz
 Source100: mysqld.service
 Source101: mysqld-prepare-db-dir
@@ -119,7 +119,6 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/qa_auth_server.so
 %{_libdir}/mysql/plugin/query_cache_info.so
 %{_libdir}/mysql/plugin/query_response_time.so
-%{_libdir}/mysql/plugin/sphinx.so
 %{_libdir}/mysql/plugin/semisync_master.so
 %{_libdir}/mysql/plugin/semisync_slave.so
 %{_libdir}/mysql/plugin/sql_errlog.so
@@ -353,14 +352,15 @@ MariaDB command line client.
 
 %prep
 %setup -q
+%apply_patches
 # Workarounds for bugs
 sed -i "s@data/test@\${INSTALL_MYSQLTESTDIR}@g" sql/CMakeLists.txt
 #sed -i "s/srv_buf_size/srv_sort_buf_size/" storage/innobase/row/row0log.cc
-sed -i 's, -fuse-linker-plugin,,' storage/tokudb/ft-index/cmake_modules/TokuSetupCompiler.cmake storage/tokudb/CMakeLists.txt
+#sed -i 's, -fuse-linker-plugin,,' storage/tokudb/ft-index/cmake_modules/TokuSetupCompiler.cmake storage/tokudb/CMakeLists.txt
 
 # aliasing rule violations at least in storage/tokudb/ft-index/ft/dbufio.cc
-export CFLAGS="%{optflags} -fno-strict-aliasing"
-export CXXFLAGS="%{optflags} -fno-strict-aliasing"
+export CFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized"
+export CXXFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized"
 
 %cmake	-DINSTALL_LAYOUT=RPM \
 	-DMYSQL_DATADIR=/srv/mysql \
