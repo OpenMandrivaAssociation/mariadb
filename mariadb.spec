@@ -5,7 +5,7 @@
 
 Name: mariadb
 Version: 10.0.8
-Release: 2
+Release: 3
 Source0: http://mirrors.fe.up.pt/pub/mariadb/mariadb-%{version}/kvm-tarbake-jaunty-x86/mariadb-%{version}.tar.gz
 Source100: mysqld.service
 Source101: mysqld-prepare-db-dir
@@ -38,6 +38,7 @@ BuildRequires:	pam-devel
 # For plugin/ha_oqgraph.so
 BuildRequires:	boost-devel
 Obsoletes: mysql < 5.7
+Provides: mysql = 5.7
 
 %description
 The MariaDB database, a drop-in replacement for MySQL.
@@ -73,6 +74,7 @@ Summary: Static libraries for the MariaDB database
 Provides: %{name}-static-devel = %{EVRD}
 Group: Development/Other
 Obsoletes: mysql-static-devel < 5.7
+Provides: mysql-static-devel = 5.7
 
 %description -n %{staticpackage}
 Static libraries for the MariaDB database.
@@ -86,6 +88,7 @@ Static libraries for the MariaDB database.
 Summary: MariaDB plugins
 Group: Databases
 Obsoletes: mysql-plugin < 5.7
+Provides: mysql-plugin = 5.7
 
 %description plugin
 Plugins for the MariaDB database.
@@ -154,6 +157,7 @@ for both hard disk drives and flash memory.
 Summary: MariaDB test suite
 Group: System/Servers
 Obsoletes: mysql-test < 5.7
+Provides: mysql-test = 5.7
 
 %description test
 MariaDB test suite.
@@ -175,6 +179,7 @@ Group: System/Servers
 Requires: %{name}-common = %{EVRD}
 Requires: %{name}-plugin = %{EVRD}
 Obsoletes: mysql-server < 5.7
+Provides: mysql-server = 5.7
 
 %description server
 The MariaDB server. For a full MariaDB database server, install
@@ -283,6 +288,7 @@ Summary: Common files needed by both the MariaDB server and client
 Group: System/Servers
 BuildArch: noarch
 Obsoletes: mysql-common < 5.7
+Provides: mysql-common = 5.7
 
 %description common
 Common files needed by both the MariaDB server and client.
@@ -325,6 +331,7 @@ Common files needed by both the MariaDB server and client.
 Summary: MariaDB command line client
 Group: Databases
 Obsoletes: mysql-client < 5.7
+Provides: mysql-client = 5.7
 
 %description client
 MariaDB command line client.
