@@ -111,6 +111,7 @@ Summary: MariaDB plugins
 Group: Databases
 Obsoletes: mysql-plugin < 5.7
 Provides: mysql-plugin = 5.7
+Conflicts: mysql-server <= 5.5.30-3
 
 %description plugin
 Plugins for the MariaDB database.
