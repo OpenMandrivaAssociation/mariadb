@@ -5,12 +5,15 @@
 
 Name: mariadb
 Version: 10.0.8
-Release: 4
+Release: 5
 Source0: http://mirrors.fe.up.pt/pub/mariadb/mariadb-%{version}/kvm-tarbake-jaunty-x86/mariadb-%{version}.tar.gz
 Source100: mysqld.service
 Source101: mysqld-prepare-db-dir
 Source102: mysqld-wait-ready
 Source1000: %{name}.rpmlintrc
+# Don't strip -Wformat from --cflags -- -Werror=format-string without -Wformat
+# means trouble
+Patch0:	mariadb-10.0.8-fix-mysql_config.patch
 Summary: The MariaDB database, a drop-in replacement for MySQL
 URL: http://mariadb.org/
 License: GPL
