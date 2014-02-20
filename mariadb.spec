@@ -356,6 +356,7 @@ Summary: MariaDB command line client
 Group: Databases
 Obsoletes: mysql-client < 5.7
 Provides: mysql-client = 5.7
+Conflicts: mysql-server <= 5.5.30-3
 
 %description client
 MariaDB command line client.
