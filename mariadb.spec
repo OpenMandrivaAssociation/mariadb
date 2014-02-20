@@ -5,7 +5,7 @@
 
 Name: mariadb
 Version: 10.0.8
-Release: 3
+Release: 4
 Source0: http://mirrors.fe.up.pt/pub/mariadb/mariadb-%{version}/kvm-tarbake-jaunty-x86/mariadb-%{version}.tar.gz
 Source100: mysqld.service
 Source101: mysqld-prepare-db-dir
@@ -46,13 +46,17 @@ The MariaDB database, a drop-in replacement for MySQL.
 %libpackage mysqlclient %{libmajor}
 %{_libdir}/libmysqlclient_r.so.%{libmajor}*
 
+%libpackage mysqld %{libmajor}
+
 %define devpackage %mklibname -d mysqlclient
 
 %package -n %{devpackage}
 Summary: Development files for the MariaDB database
 Provides: %{name}-devel = %{EVRD}
 Provides: %{mklibname -d mysqlclient_r} = %{EVRD}
+Provides: %{mklibname -d mysqld} = %{EVRD}
 Requires: %{mklibname mysqlclient 18} = %{EVRD}
+Requires: %{mklibname mysqld 18} = %{EVRD}
 Requires: %{name}-common = %{EVRD}
 Obsoletes: %{mklibname -d mysql} < %{EVRD}
 Provides: %{mklibname -d mysql} = %{EVRD}
@@ -71,6 +75,7 @@ Development files for the MariaDB database.
 
 %package -n %{staticpackage}
 Summary: Static libraries for the MariaDB database
+Requires: %{devpackage} = %{EVRD}
 Provides: %{name}-static-devel = %{EVRD}
 Group: Development/Other
 Obsoletes: mysql-static-devel < 5.7
@@ -83,6 +88,20 @@ Static libraries for the MariaDB database.
 %{_libdir}/libmysqlclient.a
 %{_libdir}/libmysqlclient_r.a
 %{_libdir}/libmysqlservices.a
+
+%define staticembpackage %mklibname -d -s mysqld
+
+%package -n %{staticembpackage}
+Summary: Static libraries for the Embedded MariaDB database
+Provides: %{name}-embedded-static-devel = %{EVRD}
+Group: Development/Other
+Requires: %{staticpackage} = %{EVRD}
+
+%description -n %{staticembpackage}
+Static libraries for the Embedded MariaDB database
+
+%files -n %{staticembpackage}
+%{_libdir}/libmysqld.a
 
 %package plugin
 Summary: MariaDB plugins
@@ -164,7 +183,9 @@ MariaDB test suite.
 
 %files test
 %{_bindir}/mysqltest
+%{_bindir}/mysqltest_embedded
 %{_bindir}/mysql_client_test
+%{_bindir}/mysql_client_test_embedded
 %{_datadir}/mysql-test
 %{_mandir}/man1/mysql-stress-test.pl.1*
 %{_mandir}/man1/mysql-test-run.pl.1*
@@ -338,6 +359,7 @@ MariaDB command line client.
 
 %files client
 %{_bindir}/mysql
+%{_bindir}/mysql_embedded
 %{_bindir}/mysqlaccess
 %{_bindir}/mysqladmin
 %{_bindir}/mysqlbinlog
@@ -380,6 +402,8 @@ export CXXFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized
 	-DMYSQL_DATADIR=/srv/mysql \
 	-DMYSQL_UNIX_ADDR=/run/mysqld/mysql.sock \
 	-DWITH_EXTRA_CHARSETS=complex \
+	-DWITH_EMBEDDED_SERVER:BOOL=ON \
+	-DWITH_READLINE:BOOL=ON \
 	-DWITH_LIBEVENT=system
 
 %build
