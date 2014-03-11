@@ -31,6 +31,7 @@ BuildRequires:	libaio-devel
 BuildRequires:	stdc++-devel
 BuildRequires:	readline-devel
 BuildRequires:	xfsprogs-devel
+BuildRequires:	jemalloc-devel
 BuildRequires:	pkgconfig(ncursesw)
 BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pkgconfig(zlib)
