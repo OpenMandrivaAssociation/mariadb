@@ -4,8 +4,8 @@
 %define muser mysql
 
 Name: mariadb
-Version: 10.0.8
-Release: 5
+Version: 10.0.9
+Release: 1
 Source0: http://mirrors.fe.up.pt/pub/mariadb/mariadb-%{version}/kvm-tarbake-jaunty-x86/mariadb-%{version}.tar.gz
 Source100: mysqld.service
 Source101: mysqld-prepare-db-dir
@@ -136,7 +136,7 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/ha_sphinx.so
 %{_libdir}/mysql/plugin/ha_spider.so
 %{_libdir}/mysql/plugin/ha_test_sql_discovery.so
-%{_libdir}/mysql/plugin/ha_xtradb.so
+%{_libdir}/mysql/plugin/ha_innodb.so
 %{_libdir}/mysql/plugin/handlersocket.so
 %{_libdir}/mysql/plugin/libdaemon_example.so
 %{_libdir}/mysql/plugin/locales.so
@@ -400,8 +400,10 @@ sed -i "s@data/test@\${INSTALL_MYSQLTESTDIR}@g" sql/CMakeLists.txt
 #sed -i 's, -fuse-linker-plugin,,' storage/tokudb/ft-index/cmake_modules/TokuSetupCompiler.cmake storage/tokudb/CMakeLists.txt
 
 # aliasing rule violations at least in storage/tokudb/ft-index/ft/dbufio.cc
-export CFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized"
-export CXXFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized"
+# -fuse-ld=bfd is necessary for the libmysql_versions.ld linker script to work.
+export CFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -fuse-ld=bfd"
+export CXXFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -fuse-ld=bfd"
+export LDFLAGS="%{optflags} -fuse-ld=bfd"
 
 %cmake	-DINSTALL_LAYOUT=RPM \
 	-DMYSQL_DATADIR=/srv/mysql \
