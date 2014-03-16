@@ -398,7 +398,9 @@ MariaDB command line client.
 # Workarounds for bugs
 sed -i "s@data/test@\${INSTALL_MYSQLTESTDIR}@g" sql/CMakeLists.txt
 #sed -i "s/srv_buf_size/srv_sort_buf_size/" storage/innobase/row/row0log.cc
-#sed -i 's, -fuse-linker-plugin,,' storage/tokudb/ft-index/cmake_modules/TokuSetupCompiler.cmake storage/tokudb/CMakeLists.txt
+%if "%{distepoch}" < "2014.0"
+sed -e 's, -fuse-linker-plugin,,' -i storage/tokudb/ft-index/cmake_modules/TokuSetupCompiler.cmake storage/tokudb/CMakeLists.txt
+%endif
 
 %build
 # aliasing rule violations at least in storage/tokudb/ft-index/ft/dbufio.cc
@@ -416,8 +418,8 @@ export LDFLAGS="%{optflags} -fuse-ld=bfd"
 	-DWITH_LIBEVENT=system
 
 # Used by logformat during build
-export LD_LIBRARY_PATH=`pwd`/build/storage/tokudb/ft-index/portability:$LD_LIBRARY_PATH
-%make -C build || make -C build
+export LD_LIBRARY_PATH=`pwd`/storage/tokudb/ft-index/portability:$LD_LIBRARY_PATH
+%make -k || make
 
 %install
 %makeinstall_std -C build
