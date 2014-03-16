@@ -400,6 +400,7 @@ sed -i "s@data/test@\${INSTALL_MYSQLTESTDIR}@g" sql/CMakeLists.txt
 #sed -i "s/srv_buf_size/srv_sort_buf_size/" storage/innobase/row/row0log.cc
 #sed -i 's, -fuse-linker-plugin,,' storage/tokudb/ft-index/cmake_modules/TokuSetupCompiler.cmake storage/tokudb/CMakeLists.txt
 
+%build
 # aliasing rule violations at least in storage/tokudb/ft-index/ft/dbufio.cc
 # -fuse-ld=bfd is necessary for the libmysql_versions.ld linker script to work.
 export CFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -fuse-ld=bfd"
@@ -414,7 +415,6 @@ export LDFLAGS="%{optflags} -fuse-ld=bfd"
 	-DWITH_READLINE:BOOL=ON \
 	-DWITH_LIBEVENT=system
 
-%build
 # Used by logformat during build
 export LD_LIBRARY_PATH=`pwd`/build/storage/tokudb/ft-index/portability:$LD_LIBRARY_PATH
 %make -C build || make -C build
