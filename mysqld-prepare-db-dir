@@ -16,6 +16,9 @@ get_mysql_option(){
         fi
 }
 
+mkdir -p /run/mysqld
+chown mysql:mysql /run/mysqld
+
 # Defaults here had better match what mysqld_safe will default to
 get_mysql_option mysqld datadir "/srv/mysql"
 datadir="$result"
