@@ -4,9 +4,9 @@
 %define muser mysql
 
 Name: mariadb
-Version: 10.0.9
-Release: 2
-Source0: http://mirrors.fe.up.pt/pub/mariadb/mariadb-%{version}/kvm-tarbake-jaunty-x86/mariadb-%{version}.tar.gz
+Version: 10.0.10
+Release: 1
+Source0: http://mariadb.mirror.nucleus.be//mariadb-%{version}/kvm-tarbake-jaunty-x86/mariadb-%{version}.tar.gz
 Source100: mysqld.service
 Source101: mysqld-prepare-db-dir
 Source102: mysqld-wait-ready
@@ -151,6 +151,7 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/query_response_time.so
 %{_libdir}/mysql/plugin/semisync_master.so
 %{_libdir}/mysql/plugin/semisync_slave.so
+%{_libdir}/mysql/plugin/server_audit.so
 %{_libdir}/mysql/plugin/sql_errlog.so
 %{_mandir}/man1/mysql_plugin.1*
 
