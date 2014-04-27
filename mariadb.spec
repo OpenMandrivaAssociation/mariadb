@@ -5,7 +5,7 @@
 
 Name: mariadb
 Version: 10.0.10
-Release: 1
+Release: 2
 Source0: http://mariadb.mirror.nucleus.be//mariadb-%{version}/kvm-tarbake-jaunty-x86/mariadb-%{version}.tar.gz
 Source100: mysqld.service
 Source101: mysqld-prepare-db-dir

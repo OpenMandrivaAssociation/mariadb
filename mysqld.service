@@ -34,6 +34,9 @@ TimeoutSec=300
 # We rely on systemd, not mysqld_safe, to restart mysqld if it dies
 Restart=always
 
+# mysqld-prepare-db-dir needs root rights, this drops privileges only for ExecStart
+PermissionsStartOnly=true
+
 # Place temp files in a secure directory, not /tmp
 PrivateTmp=true
 
