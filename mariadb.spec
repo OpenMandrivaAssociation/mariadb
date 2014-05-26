@@ -5,7 +5,7 @@
 
 Name: mariadb
 Version: 10.0.11
-Release: 1
+Release: 2
 Source0: http://mirrors.n-ix.net/mariadb/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 Source100: mysqld.service
 Source101: mysqld-prepare-db-dir
@@ -207,6 +207,7 @@ Requires: %{name}-common = %{EVRD}
 Requires: %{name}-plugin = %{EVRD}
 Obsoletes: mysql-server < 5.7
 Provides: mysql-server = 5.7
+Requires(post,preun): rpm-helper
 
 %description server
 The MariaDB server. For a full MariaDB database server, install
@@ -216,10 +217,10 @@ package '%{name}'.
 %_pre_useradd %{muser} /srv/mysql /sbin/nologin
 
 %post server
-%_post_service mysqld mysqld.service
+%systemd_post mysqld.service
 
 %preun server
-%_preun_service mysqld mysqld.service
+%systemd_preun mysqld.service
 
 %files server
 %dir %{_datadir}/mysql
