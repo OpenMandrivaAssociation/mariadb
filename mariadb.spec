@@ -5,7 +5,7 @@
 
 Name: mariadb
 Version: 10.0.11
-Release: 2
+Release: 3
 Source0: http://mirrors.n-ix.net/mariadb/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 Source100: mysqld.service
 Source101: mysqld-prepare-db-dir
