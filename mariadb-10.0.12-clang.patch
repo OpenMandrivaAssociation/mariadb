@@ -1,0 +1,38 @@
+--- mariadb-10.0.12/storage/tokudb/ft-index/portability/tests/CMakeLists.txt.omv~	2014-06-19 07:27:05.464399480 +0200
++++ mariadb-10.0.12/storage/tokudb/ft-index/portability/tests/CMakeLists.txt	2014-06-19 07:27:25.667867224 +0200
+@@ -22,11 +22,6 @@ if(BUILD_TESTING)
+   if (HAVE_WNO_UNUSED_RESULT)
+     add_space_separated_property(SOURCE try-leak-lost COMPILE_FLAGS -Wno-unused-result)
+   endif ()
+-  check_c_compiler_flag(-Wno-maybe-uninitialized HAVE_WNO_MAYBE_UNINITIALIZED)
+-  if (HAVE_WNO_MAYBE_UNINITIALIZED)
+-    add_space_separated_property(SOURCE try-uninit COMPILE_FLAGS -Wno-maybe-uninitialized)
+-    add_space_separated_property(TARGET try-uninit LINK_FLAGS -Wno-maybe-uninitialized)
+-  endif ()
+ 
+   configure_file(ensure_memcheck_fails.sh . COPYONLY)
+   foreach(test try-leak-lost try-leak-reachable try-uninit)
+--- mariadb-10.0.12/storage/tokudb/hatoku_hton.cc.omv~	2014-06-19 07:57:39.951526175 +0200
++++ mariadb-10.0.12/storage/tokudb/hatoku_hton.cc	2014-06-19 07:57:45.748244505 +0200
+@@ -258,7 +258,7 @@ static char *tokudb_log_dir;
+ // static long tokudb_lock_scan_time = 0;
+ // static ulong tokudb_region_size = 0;
+ // static ulong tokudb_cache_parts = 1;
+-const char *tokudb_hton_name = "TokuDB";
++const char * const tokudb_hton_name = "TokuDB";
+ static uint32_t tokudb_checkpointing_period;
+ static uint32_t tokudb_fsync_log_period;
+ uint32_t tokudb_write_status_frequency;
+--- mariadb-10.0.12/storage/tokudb/ft-index/buildheader/make_tdb.cc.omv~	2014-06-24 15:49:52.238540785 +0200
++++ mariadb-10.0.12/storage/tokudb/ft-index/buildheader/make_tdb.cc	2014-06-24 15:54:45.800670404 +0200
+@@ -143,6 +143,10 @@ static void sort_and_dump_fields (const
+ 	printf(fields[i].decl_format_string, fields[i].name);
+ 	printf(";\n");
+     }
++    if (field_counter <= 0 && !has_internal && !extra_decls) {
++        // Avoid empty struct (size 0 in C, size 1 in C++)
++        printf("  char dummy;\n");
++    }
+     printf("};\n");
+ }
+ 

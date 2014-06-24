@@ -14,6 +14,7 @@ Source1000: %{name}.rpmlintrc
 # Don't strip -Wformat from --cflags -- -Werror=format-string without -Wformat
 # means trouble
 Patch0:	mariadb-10.0.8-fix-mysql_config.patch
+Patch1: mariadb-10.0.12-clang.patch
 Summary: The MariaDB database, a drop-in replacement for MySQL
 URL: http://mariadb.org/
 License: GPL
@@ -398,15 +399,15 @@ MariaDB command line client.
 # Workarounds for bugs
 sed -i "s@data/test@\${INSTALL_MYSQLTESTDIR}@g" sql/CMakeLists.txt
 #sed -i "s/srv_buf_size/srv_sort_buf_size/" storage/innobase/row/row0log.cc
-%if "%{distepoch}" < "2014.0"
+if echo %{__cc} |grep -q clang; then
 sed -e 's, -fuse-linker-plugin,,' -i storage/tokudb/ft-index/cmake_modules/TokuSetupCompiler.cmake storage/tokudb/CMakeLists.txt
-%endif
+fi
 # -flto doesn't work with the way tokudb builds static libraries
 sed -e 's, -flto,,' -i storage/tokudb/ft-index/cmake_modules/TokuSetupCompiler.cmake storage/tokudb/CMakeLists.txt
 
 %build
-export CC=gcc
-export CXX=g++
+export CC="%{__cc} -Wno-unknown-warning-option -Wno-extern-c-compat -Qunused-arguments"
+export CXX="%{__cxx} -Wno-unknown-warning-option -Wno-extern-c-compat -Qunused-arguments"
 # aliasing rule violations at least in storage/tokudb/ft-index/ft/dbufio.cc
 # -fuse-ld=bfd is necessary for the libmysql_versions.ld linker script to work.
 # -Wl,--hash-style=both is a workaround for a build failure caused by com_err incorrectly
