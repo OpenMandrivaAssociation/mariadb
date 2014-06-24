@@ -4,8 +4,8 @@
 %define muser mysql
 
 Name: mariadb
-Version: 10.0.11
-Release: 3
+Version: 10.0.12
+Release: 1
 Source0: http://mirrors.n-ix.net/mariadb/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 Source100: mysqld.service
 Source101: mysqld-prepare-db-dir
@@ -283,7 +283,6 @@ package '%{name}'.
 %{_mandir}/man1/mysql_config.1*
 %{_mandir}/man1/mysql_convert_table_format.1*
 %{_mandir}/man1/mysql_fix_extensions.1*
-%{_mandir}/man1/mysql_fix_privilege_tables.1*
 %{_mandir}/man1/mysql_install_db.1*
 %{_mandir}/man1/mysql_secure_installation.1*
 %{_mandir}/man1/mysql_setpermission.1*
@@ -294,7 +293,6 @@ package '%{name}'.
 %{_mandir}/man1/mysqld_multi.1*
 %{_mandir}/man1/mysqld_safe.1*
 %{_mandir}/man1/mysqlhotcopy.1*
-%{_mandir}/man1/mysqlman.1*
 %{_mandir}/man1/perror.1*
 %{_mandir}/man1/replace.1*
 %{_mandir}/man1/resolve_stack_dump.1*
@@ -407,11 +405,16 @@ sed -e 's, -fuse-linker-plugin,,' -i storage/tokudb/ft-index/cmake_modules/TokuS
 sed -e 's, -flto,,' -i storage/tokudb/ft-index/cmake_modules/TokuSetupCompiler.cmake storage/tokudb/CMakeLists.txt
 
 %build
+export CC=gcc
+export CXX=g++
 # aliasing rule violations at least in storage/tokudb/ft-index/ft/dbufio.cc
 # -fuse-ld=bfd is necessary for the libmysql_versions.ld linker script to work.
-export CFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -fuse-ld=bfd"
-export CXXFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -fuse-ld=bfd"
-export LDFLAGS="%{optflags} -fuse-ld=bfd"
+# -Wl,--hash-style=both is a workaround for a build failure caused by com_err incorrectly
+# thinking it doesn't know about the my_uni_ctype symbol when built with ld 2.24.51.0.3
+# and -Wl,--hash-style=gnu
+export CFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized"
+export CXXFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized"
+export LDFLAGS="%{optflags} -fuse-ld=bfd -Wl,--hash-style=both"
 
 %cmake	-DINSTALL_LAYOUT=RPM \
 	-DMYSQL_DATADIR=/srv/mysql \
