@@ -5,7 +5,7 @@
 
 Name: mariadb
 Version: 10.0.12
-Release: 2
+Release: 3
 Source0: http://mirrors.n-ix.net/mariadb/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 Source100: mysqld.service
 Source101: mysqld-prepare-db-dir
@@ -237,9 +237,9 @@ package '%{name}'.
 %dir %{_libdir}/mysql
 %dir %{_libdir}/mysql/plugin
 %{_sysconfdir}/logrotate.d/mysql
-%{_sysconfdir}/my.cnf.d/client.cnf
-%{_sysconfdir}/my.cnf.d/mysql-clients.cnf
-%{_sysconfdir}/my.cnf.d/server.cnf
+%config(noreplace) %{_sysconfdir}/my.cnf.d/client.cnf
+%config(noreplace) %{_sysconfdir}/my.cnf.d/mysql-clients.cnf
+%config(noreplace) %{_sysconfdir}/my.cnf.d/server.cnf
 %{_bindir}/aria_chk
 %{_bindir}/aria_dump_log
 %{_bindir}/aria_ftdump
@@ -322,7 +322,7 @@ Common files needed by both the MariaDB server and client.
 
 %files common
 %doc README COPYING
-%{_sysconfdir}/my.cnf
+%config(noreplace) %{_sysconfdir}/my.cnf
 %dir %{_sysconfdir}/my.cnf.d
 %dir %{_datadir}/mysql
 %{_datadir}/mysql/english
