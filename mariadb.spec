@@ -175,7 +175,7 @@ for both hard disk drives and flash memory.
 %ifarch x86_64
 %files plugin-tokudb
 %{_libdir}/mysql/plugin/ha_tokudb.so
-%{_sysconfdir}/my.cnf.d/tokudb.cnf
+%config(noreplace) %{_sysconfdir}/my.cnf.d/tokudb.cnf
 %{_bindir}/tokuftdump
 %endif
 
