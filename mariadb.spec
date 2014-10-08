@@ -275,6 +275,11 @@ package '%{name}'.
 %doc %{_docdir}/%{name}-%{version}
 %attr(711,%{muser},%{muser}) /srv/mysql
 %attr(711,%{muser},%{muser}) %{_localstatedir}/log/mysqld
+%{_mandir}/man1/aria_chk.1*
+%{_mandir}/man1/aria_dump_log.1*
+%{_mandir}/man1/aria_ftdump.1*
+%{_mandir}/man1/aria_pack.1*
+%{_mandir}/man1/aria_read_log.1*
 %{_mandir}/man1/innochecksum.1*
 %{_mandir}/man1/myisam_ftdump.1*
 %{_mandir}/man1/myisamchk.1*
