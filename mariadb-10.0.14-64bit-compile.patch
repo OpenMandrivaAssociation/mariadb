@@ -32,3 +32,32 @@
      return make_rollback_pair_attr(size);
  }
  
+--- mariadb-10.0.14/storage/connect/array.cpp.omv~	2014-10-09 09:47:58.413856942 +0200
++++ mariadb-10.0.14/storage/connect/array.cpp	2014-10-09 09:48:06.160572596 +0200
+@@ -129,7 +129,7 @@ PARRAY MakeValueArray(PGLOBAL g, PPARM p
+         break;
+       case TYPE_VOID:
+         // Integer stored inside pp->Value
+-        par->AddValue(g, (int)parmp->Value);
++        par->AddValue(g, (int)(intptr_t)parmp->Value);
+         break;
+       } // endswitch valtyp
+ 
+--- mariadb-10.0.14/storage/tokudb/ft-index/tools/tokudb_dump.cc.omv~	2014-10-09 09:52:49.342361847 +0200
++++ mariadb-10.0.14/storage/tokudb/ft-index/tools/tokudb_dump.cc	2014-10-09 09:53:04.132453439 +0200
+@@ -247,6 +247,7 @@ outputplaintextstring(char* str)
+    g.plaintext = old_plaintext;
+ }
+ 
++#if 0
+ static inline int
+ hextoint(int ch)
+ {
+@@ -316,6 +317,7 @@ error:
+    PRINT_ERROR(0, "Quitting out due to errors.\n");
+    return EXIT_FAILURE;
+ }
++#endif
+ 
+ static inline int
+ verify_library_version(void)
