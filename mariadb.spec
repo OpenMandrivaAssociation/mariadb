@@ -5,7 +5,7 @@
 
 Name: mariadb
 Version: 10.0.14
-Release: 1
+Release: 2
 Source0: http://mirrors.n-ix.net/mariadb/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 Source100: mysqld.service
 Source101: mysqld-prepare-db-dir
@@ -15,6 +15,7 @@ Source1000: %{name}.rpmlintrc
 # means trouble
 Patch0:	mariadb-10.0.8-fix-mysql_config.patch
 Patch1: mariadb-10.0.12-clang.patch
+Patch2: mariadb-10.0.14-64bit-compile.patch
 Summary: The MariaDB database, a drop-in replacement for MySQL
 URL: http://mariadb.org/
 License: GPL
