@@ -412,8 +412,13 @@ fi
 sed -e 's, -flto,,' -i storage/tokudb/ft-index/cmake_modules/TokuSetupCompiler.cmake storage/tokudb/CMakeLists.txt
 
 %build
+%ifnarch aarch64
 export CC="%{__cc} -Wno-unknown-warning-option -Wno-extern-c-compat -Qunused-arguments"
 export CXX="%{__cxx} -Wno-unknown-warning-option -Wno-extern-c-compat -Qunused-arguments"
+%else
+export CC=gcc
+export CXX=g++
+%endif
 # aliasing rule violations at least in storage/tokudb/ft-index/ft/dbufio.cc
 # -fuse-ld=bfd is necessary for the libmysql_versions.ld linker script to work.
 # -Wl,--hash-style=both is a workaround for a build failure caused by com_err incorrectly
@@ -424,6 +429,12 @@ export CXXFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized
 export LDFLAGS="%{optflags} -fuse-ld=bfd -Wl,--hash-style=both"
 
 %cmake	-DINSTALL_LAYOUT=RPM \
+	-DFEATURE_SET="community" \
+	-DWITH_SSL=system \
+	-DWITH_ZLIB=system \
+	-DWITH_PCRE=system\
+	-DINSTALL_PLUGINDIR="%{_libdir}/mysql/plugin" \
+	-DINSTALL_LIBDIR="%{_libdir}" \
 	-DMYSQL_DATADIR=/srv/mysql \
 	-DMYSQL_UNIX_ADDR=/run/mysqld/mysql.sock \
 	-DWITH_EXTRA_CHARSETS=complex \
