@@ -2,10 +2,11 @@
 %define scmrev %{nil}
 %define libmajor 18
 %define muser mysql
+%bcond_without pcre
 
 Name: mariadb
 Version: 10.0.14
-Release: 2
+Release: 3
 Source0: http://mirrors.n-ix.net/mariadb/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 Source100: mysqld.service
 Source101: mysqld-prepare-db-dir
@@ -39,6 +40,9 @@ BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pkgconfig(zlib)
 BuildRequires:	pkgconfig(libevent)
 BuildRequires:	wrap-devel
+%if %{with pcre}
+BuildRequires:	pkgconfig(libpcre)
+%endif
 # For plugin/auth_pam.so
 BuildRequires:	pam-devel
 # For plugin/ha_oqgraph.so
@@ -432,7 +436,9 @@ export LDFLAGS="%{optflags} -fuse-ld=bfd -Wl,--hash-style=both"
 	-DFEATURE_SET="community" \
 	-DWITH_SSL=system \
 	-DWITH_ZLIB=system \
+%if %{with pcre}
 	-DWITH_PCRE=system\
+%endif
 	-DINSTALL_PLUGINDIR="%{_libdir}/mysql/plugin" \
 	-DINSTALL_LIBDIR="%{_libdir}" \
 	-DMYSQL_DATADIR=/srv/mysql \
