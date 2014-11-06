@@ -5,8 +5,8 @@
 %bcond_without pcre
 
 Name: mariadb
-Version: 10.0.14
-Release: 3
+Version: 10.1.1
+Release: 1
 Source0: http://mirrors.n-ix.net/mariadb/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 Source100: mysqld.service
 Source101: mysqld-prepare-db-dir
@@ -17,6 +17,7 @@ Source1000: %{name}.rpmlintrc
 Patch0:	mariadb-10.0.8-fix-mysql_config.patch
 Patch1: mariadb-10.0.12-clang.patch
 Patch2: mariadb-10.0.14-64bit-compile.patch
+Patch3: mariadb-10.1.1-dont-check-null-on-parameters-declared-nonnull.patch
 Summary: The MariaDB database, a drop-in replacement for MySQL
 URL: http://mariadb.org/
 License: GPL
@@ -80,6 +81,7 @@ Development files for the MariaDB database.
 %{_includedir}/mysql
 %{_libdir}/*.so
 %{_datadir}/aclocal/mysql.m4
+%{_datadir}/pkgconfig/mariadb.pc
 
 %define staticpackage %mklibname -d -s mysqlclient
 
@@ -132,7 +134,6 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/daemon_example.ini
 %{_libdir}/mysql/plugin/dialog.so
 %{_libdir}/mysql/plugin/dialog_examples.so
-%{_libdir}/mysql/plugin/feedback.so
 %{_libdir}/mysql/plugin/ha_archive.so
 %{_libdir}/mysql/plugin/ha_blackhole.so
 %{_libdir}/mysql/plugin/ha_connect.so
@@ -237,6 +238,7 @@ package '%{name}'.
 %{_datadir}/mysql/mysql_system_tables.sql
 %{_datadir}/mysql/mysql_system_tables_data.sql
 %{_datadir}/mysql/mysql_test_data_timezone.sql
+%{_datadir}/mysql/wsrep_notify
 %{_datadir}/mysql/*.cnf
 %{_mandir}/man8/*
 %dir %{_libdir}/mysql
@@ -273,7 +275,9 @@ package '%{name}'.
 %{_bindir}/replace
 %{_bindir}/resolve_stack_dump
 %{_bindir}/resolveip
+%{_bindir}/wsrep_*
 %{_sbindir}/mysqld
+%{_sbindir}/rcmysql
 /lib/systemd/system/mysqld.service
 %{_bindir}/mysqld-prepare-db-dir
 %{_bindir}/mysqld-wait-ready

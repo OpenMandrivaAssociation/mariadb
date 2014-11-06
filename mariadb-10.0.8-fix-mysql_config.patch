@@ -1,11 +1,11 @@
---- mariadb-10.0.8/scripts/mysql_config.sh.omv~	2014-02-20 13:09:27.971487740 +0100
-+++ mariadb-10.0.8/scripts/mysql_config.sh	2014-02-20 13:09:43.418487108 +0100
-@@ -133,7 +133,7 @@ cflags="$include @CFLAGS@ " #note: end s
- # FIXME until we have a --cxxflags, we need to remove -AC99
- #       to make --cflags usable for HP C++ (aCC)
- for remove in DDBUG_OFF DSAFE_MUTEX DUNIV_MUST_NOT_INLINE DFORCE_INIT_OF_VARS \
--              DEXTRA_DEBUG DHAVE_valgrind O 'O[0-9]' 'xO[0-9]' 'W[-A-Za-z]*' \
-+              DEXTRA_DEBUG DHAVE_valgrind O 'O[0-9]' 'xO[0-9]' \
-               'mtune=[-A-Za-z0-9]*' 'mcpu=[-A-Za-z0-9]*' 'march=[-A-Za-z0-9]*' \
-               Xa xstrconst "xc99=none" AC99 \
-               unroll2 ip mp restrict
+--- mariadb-10.1.1/scripts/mysql_config.pl.in.omv~	2014-11-06 14:02:07.096476066 +0100
++++ mariadb-10.1.1/scripts/mysql_config.pl.in	2014-11-06 14:02:09.875441324 +0100
+@@ -43,7 +43,7 @@ use strict;
+ 
+ my @exclude_cflags =
+   qw/DDBUG_OFF DSAFE_MUTEX DUNIV_MUST_NOT_INLINE DFORCE_INIT_OF_VARS
+-     DEXTRA_DEBUG DHAVE_valgrind O O[0-9] xO[0-9] W[-A-Za-z]*
++     DEXTRA_DEBUG DHAVE_valgrind O O[0-9] xO[0-9]
+      Xa xstrconst xc99=none
+      unroll2 ip mp restrict/;
+ 
