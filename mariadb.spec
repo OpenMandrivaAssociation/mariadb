@@ -407,11 +407,12 @@ sed -e 's, -fuse-linker-plugin,,' -i storage/tokudb/ft-index/cmake_modules/TokuS
 %build
 # aliasing rule violations at least in storage/tokudb/ft-index/ft/dbufio.cc
 # -fuse-ld=bfd is necessary for the libmysql_versions.ld linker script to work.
-export CFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -fuse-ld=bfd"
-export CXXFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -fuse-ld=bfd"
+export CFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -fuse-ld=bfd -fno-delete-null-pointer-checks"
+export CXXFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -fuse-ld=bfd -fno-delete-null-pointer-checks"
 export LDFLAGS="%{optflags} -fuse-ld=bfd"
 
-%cmake	-DINSTALL_LAYOUT=RPM \
+%cmake	\
+	-DINSTALL_LAYOUT=RPM \
 	-DMYSQL_DATADIR=/srv/mysql \
 	-DMYSQL_UNIX_ADDR=/run/mysqld/mysql.sock \
 	-DWITH_EXTRA_CHARSETS=complex \
