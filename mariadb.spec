@@ -274,6 +274,11 @@ package '%{name}'.
 %doc %{_docdir}/%{name}-%{version}
 %attr(711,%{muser},%{muser}) /srv/mysql
 %attr(711,%{muser},%{muser}) %{_localstatedir}/log/mysqld
+%{_mandir}/man1/aria_chk.1*
+%{_mandir}/man1/aria_dump_log.1*
+%{_mandir}/man1/aria_ftdump.1*
+%{_mandir}/man1/aria_pack.1*
+%{_mandir}/man1/aria_read_log.1*
 %{_mandir}/man1/innochecksum.1*
 %{_mandir}/man1/myisam_ftdump.1*
 %{_mandir}/man1/myisamchk.1*
@@ -283,7 +288,6 @@ package '%{name}'.
 %{_mandir}/man1/mysql_config.1*
 %{_mandir}/man1/mysql_convert_table_format.1*
 %{_mandir}/man1/mysql_fix_extensions.1*
-%{_mandir}/man1/mysql_fix_privilege_tables.1*
 %{_mandir}/man1/mysql_install_db.1*
 %{_mandir}/man1/mysql_secure_installation.1*
 %{_mandir}/man1/mysql_setpermission.1*
@@ -294,7 +298,6 @@ package '%{name}'.
 %{_mandir}/man1/mysqld_multi.1*
 %{_mandir}/man1/mysqld_safe.1*
 %{_mandir}/man1/mysqlhotcopy.1*
-%{_mandir}/man1/mysqlman.1*
 %{_mandir}/man1/perror.1*
 %{_mandir}/man1/replace.1*
 %{_mandir}/man1/resolve_stack_dump.1*
