@@ -421,8 +421,6 @@ sed -i "s@data/test@\${INSTALL_MYSQLTESTDIR}@g" sql/CMakeLists.txt
 %if "%{distepoch}" < "2014.0"
 sed -e 's, -fuse-linker-plugin,,' -i storage/tokudb/ft-index/cmake_modules/TokuSetupCompiler.cmake storage/tokudb/CMakeLists.txt
 %endif
-# no bundled pcre
-rm -rf pcre
 
 %build
 # aliasing rule violations at least in storage/tokudb/ft-index/ft/dbufio.cc
