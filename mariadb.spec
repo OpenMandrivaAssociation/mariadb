@@ -179,6 +179,20 @@ for both hard disk drives and flash memory.
 %{_bindir}/tokuftdump
 %endif
 
+%package plugin-mroonga
+Summary: The Mroonga storage engine plugin for MariaDB
+Requires: %{name}-server = %{EVRD}
+Group: Databases
+
+%description plugin-mroonga
+Mroonga is a storage engine for MySQL. It provides fast fulltext search feature
+to all MySQL users. Mroonga was called Groonga storage engine.
+
+%files plugin-mroonga
+%{_libdir}/mysql/plugin/ha_mroonga.so
+%{_datadir}/mysql/mroonga/install.sql
+%{_datadir}/mysql/mroonga/uninstall.sql
+
 %package test
 Summary: MariaDB test suite
 Group: System/Servers
@@ -407,6 +421,8 @@ sed -i "s@data/test@\${INSTALL_MYSQLTESTDIR}@g" sql/CMakeLists.txt
 %if "%{distepoch}" < "2014.0"
 sed -e 's, -fuse-linker-plugin,,' -i storage/tokudb/ft-index/cmake_modules/TokuSetupCompiler.cmake storage/tokudb/CMakeLists.txt
 %endif
+# no bundled pcre
+rm -rf pcre
 
 %build
 # aliasing rule violations at least in storage/tokudb/ft-index/ft/dbufio.cc
