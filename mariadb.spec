@@ -6,7 +6,7 @@
 
 Name: mariadb
 Version: 10.1.1
-Release: 1
+Release: 2
 Source0: http://mirrors.n-ix.net/mariadb/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 Source100: mysqld.service
 Source101: mysqld-prepare-db-dir
@@ -450,7 +450,8 @@ export LDFLAGS="%{optflags} -fuse-ld=bfd -Wl,--hash-style=both"
 	-DWITH_EXTRA_CHARSETS=complex \
 	-DWITH_EMBEDDED_SERVER:BOOL=ON \
 	-DWITH_READLINE:BOOL=ON \
-	-DWITH_LIBEVENT=system
+	-DWITH_LIBEVENT=system \
+    -DCOMPILATION_COMMENT="%{_vendor} MariaDB Server"
 
 # Used by logformat during build
 export LD_LIBRARY_PATH=`pwd`/storage/tokudb/ft-index/portability:$LD_LIBRARY_PATH
