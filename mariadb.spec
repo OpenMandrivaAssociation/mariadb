@@ -41,6 +41,7 @@ BuildRequires:	wrap-devel
 BuildRequires:	pam-devel
 # For plugin/ha_oqgraph.so
 BuildRequires:	boost-devel
+BuildRequires:	pcre-devel
 Obsoletes: mysql < 5.7
 Provides: mysql = 5.7
 
@@ -421,7 +422,11 @@ export LDFLAGS="%{optflags} -fuse-ld=bfd"
 	-DWITH_EXTRA_CHARSETS=complex \
 	-DWITH_EMBEDDED_SERVER:BOOL=ON \
 	-DWITH_READLINE:BOOL=ON \
-	-DWITH_LIBEVENT=system
+	-DWITH_LIBEVENT=system \
+    -DWITH_SSL=system \
+    -DWITH_ZLIB=system \
+    -DWITH_PRCE=system \
+    -DCOMPILATION_COMMENT="%{_vendor} MariaDB Server"
 
 # Used by logformat during build
 export LD_LIBRARY_PATH=`pwd`/storage/tokudb/ft-index/portability:$LD_LIBRARY_PATH
