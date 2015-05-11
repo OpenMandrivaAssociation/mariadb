@@ -4,9 +4,9 @@
 %define muser mysql
 
 Name: mariadb
-Version: 10.0.17
+Version: 10.0.19
 Release: 0.1
-Source0: http://mariadb.mirror.nucleus.be//mariadb-%{version}/kvm-tarbake-jaunty-x86/mariadb-%{version}.tar.gz
+Source0: https://downloads.mariadb.org/interstitial/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 Source100: mysqld.service
 Source101: mysqld-prepare-db-dir
 Source102: mysqld-wait-ready
