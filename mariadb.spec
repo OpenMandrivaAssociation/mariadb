@@ -4,7 +4,7 @@
 %define muser mysql
 
 Name: mariadb
-Version: 10.0.19
+Version: 10.0.20
 Release: 0.1
 Source0: https://downloads.mariadb.org/interstitial/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 Source100: mysqld.service
