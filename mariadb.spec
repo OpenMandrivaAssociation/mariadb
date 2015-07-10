@@ -177,6 +177,7 @@ for both hard disk drives and flash memory.
 %{_libdir}/mysql/plugin/ha_tokudb.so
 %config(noreplace) %{_sysconfdir}/my.cnf.d/tokudb.cnf
 %{_bindir}/tokuftdump
+%{_bindir}/tokuft_logprint
 %endif
 
 %package plugin-mroonga
