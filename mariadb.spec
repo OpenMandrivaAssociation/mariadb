@@ -1,3 +1,5 @@
+# FIXME crashes on startup when LTO is enabled
+%define _disable_lto 1
 %define beta %{nil}
 %define scmrev %{nil}
 %define libmajor 18
@@ -5,8 +7,8 @@
 %bcond_without pcre
 
 Name: mariadb
-Version: 10.1.1
-Release: 3
+Version: 10.1.5
+Release: 1
 Source0: http://mirrors.n-ix.net/mariadb/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 Source100: mysqld.service
 Source101: mysqld-prepare-db-dir
@@ -16,8 +18,10 @@ Source1000: %{name}.rpmlintrc
 # means trouble
 Patch0:	mariadb-10.0.8-fix-mysql_config.patch
 Patch1: mariadb-10.0.12-clang.patch
-Patch2: mariadb-10.0.14-64bit-compile.patch
+Patch2: mariadb-10.1.5-compatibility-with-llvm-ar.patch
 Patch3: mariadb-10.1.1-dont-check-null-on-parameters-declared-nonnull.patch
+Patch4: mariadb-10.1.5-fix-version-script-for-gold.patch
+Patch5: mariadb-10.1.5-fix-build-with-Werror.patch
 Summary: The MariaDB database, a drop-in replacement for MySQL
 URL: http://mariadb.org/
 License: GPL
@@ -140,7 +144,6 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/ha_example.so
 %{_libdir}/mysql/plugin/ha_federated.so
 %{_libdir}/mysql/plugin/ha_federatedx.so
-%{_libdir}/mysql/plugin/ha_sequence.so
 %{_libdir}/mysql/plugin/ha_sphinx.so
 %{_libdir}/mysql/plugin/ha_spider.so
 %{_libdir}/mysql/plugin/ha_test_sql_discovery.so
@@ -161,6 +164,11 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/server_audit.so
 %{_libdir}/mysql/plugin/sql_errlog.so
 %{_mandir}/man1/mysql_plugin.1*
+%{_libdir}/mysql/plugin/debug_key_management.so
+%{_libdir}/mysql/plugin/example_key_management.so
+%{_libdir}/mysql/plugin/file_key_management.so
+%{_libdir}/mysql/plugin/simple_password_check.so
+%{_libdir}/mysql/plugin/wsrep_info.so
 
 %package plugin-tokudb
 Summary: The TokuDB storage engine plugin for MariaDB
@@ -240,6 +248,9 @@ package '%{name}'.
 %{_datadir}/mysql/mysql_test_data_timezone.sql
 %{_datadir}/mysql/wsrep_notify
 %{_datadir}/mysql/*.cnf
+%{_datadir}/mysql/maria_add_gis_sp.sql
+%{_datadir}/mysql/maria_add_gis_sp_bootstrap.sql
+%{_datadir}/mysql/mroonga
 %{_mandir}/man8/*
 %dir %{_libdir}/mysql
 %dir %{_libdir}/mysql/plugin
@@ -419,6 +430,14 @@ fi
 # -flto doesn't work with the way tokudb builds static libraries
 sed -e 's, -flto,,' -i storage/tokudb/ft-index/cmake_modules/TokuSetupCompiler.cmake storage/tokudb/CMakeLists.txt
 
+# The version of xz bundled here comes with a version of libtool that doesn't support lto
+cd storage/tokudb/ft-index/third_party/xz-4.999.9beta
+libtoolize --force
+aclocal
+automake -a
+autoconf
+cd -
+
 %build
 %ifnarch aarch64
 export CC="%{__cc} -Wno-unknown-warning-option -Wno-extern-c-compat -Qunused-arguments"
@@ -428,13 +447,12 @@ export CC=gcc
 export CXX=g++
 %endif
 # aliasing rule violations at least in storage/tokudb/ft-index/ft/dbufio.cc
-# -fuse-ld=bfd is necessary for the libmysql_versions.ld linker script to work.
 # -Wl,--hash-style=both is a workaround for a build failure caused by com_err incorrectly
 # thinking it doesn't know about the my_uni_ctype symbol when built with ld 2.24.51.0.3
 # and -Wl,--hash-style=gnu
 export CFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -Wno-error=pointer-bool-conversion"
 export CXXFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -Wno-error=pointer-bool-conversion"
-export LDFLAGS="%{optflags} -fuse-ld=bfd -Wl,--hash-style=both"
+export LDFLAGS="%{optflags} -Wl,--hash-style=both -flto"
 
 %cmake	-DINSTALL_LAYOUT=RPM \
 	-DFEATURE_SET="community" \
@@ -451,7 +469,7 @@ export LDFLAGS="%{optflags} -fuse-ld=bfd -Wl,--hash-style=both"
 	-DWITH_EMBEDDED_SERVER:BOOL=ON \
 	-DWITH_READLINE:BOOL=ON \
 	-DWITH_LIBEVENT=system \
-    -DCOMPILATION_COMMENT="%{_vendor} MariaDB Server"
+	-DCOMPILATION_COMMENT="%{_vendor} MariaDB Server"
 
 # Used by logformat during build
 export LD_LIBRARY_PATH=`pwd`/storage/tokudb/ft-index/portability:$LD_LIBRARY_PATH
