@@ -421,6 +421,7 @@ MariaDB command line client.
 %prep
 %setup -q
 %apply_patches
+
 # Workarounds for bugs
 sed -i "s@data/test@\${INSTALL_MYSQLTESTDIR}@g" sql/CMakeLists.txt
 #sed -i "s/srv_buf_size/srv_sort_buf_size/" storage/innobase/row/row0log.cc

@@ -1,7 +1,7 @@
---- mariadb-10.1.5/libmysql/CMakeLists.txt.omv~	2015-07-15 11:14:44.230004952 +0200
-+++ mariadb-10.1.5/libmysql/CMakeLists.txt	2015-07-15 11:15:18.193899382 +0200
-@@ -384,7 +384,7 @@ IF(CMAKE_SYSTEM_NAME MATCHES "Linux")
-     @ONLY@
+--- mariadb-10.1.6/libmysql/CMakeLists.txt	2015-07-23 14:19:48.000000000 +0000
++++ mariadb-10.1.6/libmysql/CMakeLists.txt.tpg	2015-08-06 22:40:31.101837017 +0000
+@@ -384,7 +384,7 @@
+     @ONLY
    )
    SET(VERSION_SCRIPT_LINK_FLAGS 
 -    "-Wl,${CMAKE_CURRENT_BINARY_DIR}/libmysql_versions.ld")
