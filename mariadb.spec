@@ -44,6 +44,11 @@ BuildRequires:	pkgconfig(ncursesw)
 BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pkgconfig(zlib)
 BuildRequires:	pkgconfig(libevent)
+BuildRequires:	pkgconfig(liblz4)
+BuildRequires:	pkgconfig(liblzma)
+BuildRequires:	pkgconfig(libzmq)
+BuildRequires:	pkgconfig(msgpack)
+BuildRequires:	lzo-devel
 BuildRequires:	wrap-devel
 %if %{with pcre}
 BuildRequires:	pkgconfig(libpcre)
@@ -452,7 +457,7 @@ export CXX=g++
 # thinking it doesn't know about the my_uni_ctype symbol when built with ld 2.24.51.0.3
 # and -Wl,--hash-style=gnu
 export CFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -Wno-error=pointer-bool-conversion"
-export CXXFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -Wno-error=pointer-bool-conversion"
+export CXXFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -Wno-error=pointer-bool-conversion -fcxx-exceptions"
 export LDFLAGS="%{optflags} -Wl,--hash-style=both -flto"
 
 %cmake	-DINSTALL_LAYOUT=RPM \
