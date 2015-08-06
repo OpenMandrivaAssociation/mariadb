@@ -153,6 +153,7 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/ha_spider.so
 %{_libdir}/mysql/plugin/ha_test_sql_discovery.so
 %{_libdir}/mysql/plugin/ha_innodb.so
+%{_libdir}/mysql/plugin/ha_mroonga.so
 %{_libdir}/mysql/plugin/handlersocket.so
 %{_libdir}/mysql/plugin/libdaemon_example.so
 %{_libdir}/mysql/plugin/locales.so
@@ -196,6 +197,7 @@ for both hard disk drives and flash memory.
 %{_libdir}/mysql/plugin/ha_tokudb.so
 %config(noreplace) %{_sysconfdir}/my.cnf.d/tokudb.cnf
 %{_bindir}/tokuftdump
+%{_bindir}/tokuft_logprint
 %endif
 
 %package test
