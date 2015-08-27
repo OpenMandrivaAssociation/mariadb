@@ -24,6 +24,7 @@ Patch2: mariadb-10.1.5-compatibility-with-llvm-ar.patch
 Patch3: mariadb-10.1.1-dont-check-null-on-parameters-declared-nonnull.patch
 Patch4: mariadb-10.1.5-fix-version-script-for-gold.patch
 Patch5: mariadb-10.1.5-fix-build-with-Werror.patch
+Patch6:	mariadb-10.1.6-fix_atomic_check.patch
 Summary: The MariaDB database, a drop-in replacement for MySQL
 URL: http://mariadb.org/
 License: GPL
