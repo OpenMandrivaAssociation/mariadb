@@ -1,5 +1,7 @@
 # FIXME crashes on startup when LTO is enabled
+%ifarch %{ix86}
 %define _disable_lto 1
+%endif
 %define beta %{nil}
 %define scmrev %{nil}
 %define libmajor 18
@@ -460,7 +462,11 @@ export CXX=g++
 # and -Wl,--hash-style=gnu
 export CFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -Wno-error=pointer-bool-conversion"
 export CXXFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -Wno-error=pointer-bool-conversion -fcxx-exceptions"
+%ifarch %{ix86}
+export LDFLAGS="%{optflags} -Wl,--hash-style=both"
+%else
 export LDFLAGS="%{optflags} -Wl,--hash-style=both -flto"
+%endif
 
 %cmake	-DINSTALL_LAYOUT=RPM \
 	-DFEATURE_SET="community" \
