@@ -1,7 +1,6 @@
 # FIXME crashes on startup when LTO is enabled
-%ifarch %{ix86}
 %define _disable_lto 1
-%endif
+
 %define beta %{nil}
 %define scmrev %{nil}
 %define libmajor 18
@@ -10,7 +9,7 @@
 
 Name: mariadb
 Version: 10.1.6
-Release: 2
+Release: 3
 Source0: http://mirrors.n-ix.net/mariadb/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 Source100: mysqld.service
 Source101: mysqld-prepare-db-dir
