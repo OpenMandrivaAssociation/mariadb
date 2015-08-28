@@ -10,7 +10,7 @@
 
 Name: mariadb
 Version: 10.1.6
-Release: 1
+Release: 2
 Source0: http://mirrors.n-ix.net/mariadb/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 Source100: mysqld.service
 Source101: mysqld-prepare-db-dir
@@ -241,12 +241,6 @@ package '%{name}'.
 %pre server
 %_pre_useradd %{muser} /srv/mysql /sbin/nologin
 
-%post server
-%systemd_post mysqld.service
-
-%preun server
-%systemd_preun mysqld.service
-
 %files server
 %dir %{_datadir}/mysql
 %{_datadir}/mysql/errmsg-utf8.txt
@@ -261,6 +255,7 @@ package '%{name}'.
 %{_datadir}/mysql/maria_add_gis_sp.sql
 %{_datadir}/mysql/maria_add_gis_sp_bootstrap.sql
 %{_datadir}/mysql/mroonga
+%{_presetdir}/86-mysqld.preset
 %{_mandir}/man8/*
 %dir %{_libdir}/mysql
 %dir %{_libdir}/mysql/plugin
@@ -474,7 +469,7 @@ export LDFLAGS="%{optflags} -Wl,--hash-style=both -flto"
 	-DWITH_SSL=system \
 	-DWITH_ZLIB=system \
 %if %{with pcre}
-	-DWITH_PCRE=system\
+	-DWITH_PCRE=system \
 %endif
 	-DINSTALL_PLUGINDIR="%{_libdir}/mysql/plugin" \
 	-DINSTALL_LIBDIR="%{_libdir}" \
@@ -499,6 +494,11 @@ install -c -m 644 %{SOURCE100} %{buildroot}%{_systemunitdir}
 install -c -m 755 %{SOURCE101} %{buildroot}%{_bindir}
 install -c -m 755 %{SOURCE102} %{buildroot}%{_bindir}
 rm -rf %{buildroot}%{_sysconfdir}/init.d
+
+install -d %{buildroot}%{_presetdir}
+cat > %{buildroot}%{_presetdir}/86-mysqld.preset << EOF
+enable mysqld.service
+EOF
 
 # Fix bogus doc installation
 mkdir -p %{buildroot}%{_docdir}/%{name}-%{version}
