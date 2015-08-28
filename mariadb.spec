@@ -460,7 +460,7 @@ export CXXFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized
 %ifarch %{ix86}
 export LDFLAGS="%{optflags} -Wl,--hash-style=both"
 %else
-export LDFLAGS="%{optflags} -Wl,--hash-style=both -flto"
+export LDFLAGS="%{optflags} -Wl,--hash-style=both -fno-lto"
 %endif
 
 %cmake	-DINSTALL_LAYOUT=RPM \
