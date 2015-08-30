@@ -1,6 +1,3 @@
-# FIXME crashes on startup when LTO is enabled
-%define _disable_lto 1
-
 %define beta %{nil}
 %define scmrev %{nil}
 %define libmajor 18
@@ -9,7 +6,7 @@
 
 Name: mariadb
 Version: 10.1.6
-Release: 3
+Release: 4
 Source0: http://mirrors.n-ix.net/mariadb/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 Source100: mysqld.service
 Source101: mysqld-prepare-db-dir
@@ -458,9 +455,9 @@ export CXX=g++
 export CFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -Wno-error=pointer-bool-conversion"
 export CXXFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -Wno-error=pointer-bool-conversion -fcxx-exceptions"
 %ifarch %{ix86}
-export LDFLAGS="%{optflags} -Wl,--hash-style=both"
+export LDFLAGS="%{ldflags} -Wl,--hash-style=both"
 %else
-export LDFLAGS="%{optflags} -Wl,--hash-style=both -fno-lto"
+export LDFLAGS="%{ldflags} -Wl,--hash-style=both -flto"
 %endif
 
 %cmake	-DINSTALL_LAYOUT=RPM \
