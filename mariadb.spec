@@ -379,6 +379,8 @@ Common files needed by both the MariaDB server and client.
 # -server (used by mysqld_safe) and by -devel (configure scripts calling
 # it, e.g. php)
 %{_bindir}/mysql_config
+%{_bindir}/my_print_defaults
+%{_mandir}/man1/my_print_defaults.1*
 
 %package client
 Summary: MariaDB command line client
@@ -404,7 +406,6 @@ MariaDB command line client.
 %{_bindir}/mysqlshow
 %{_bindir}/mysqlslap
 %{_bindir}/mysql_waitpid
-%{_bindir}/my_print_defaults
 %{_mandir}/man1/mysql.1*
 %{_mandir}/man1/mysqlaccess.1*
 %{_mandir}/man1/mysqladmin.1*
@@ -417,7 +418,6 @@ MariaDB command line client.
 %{_mandir}/man1/mysqlslap.1*
 %{_mandir}/man1/mysqlshow.1*
 %{_mandir}/man1/mysql_waitpid.1*
-%{_mandir}/man1/my_print_defaults.1*
 
 %prep
 %setup -q
