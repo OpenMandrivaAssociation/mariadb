@@ -456,8 +456,8 @@ export CXX=g++
 # -Wl,--hash-style=both is a workaround for a build failure caused by com_err incorrectly
 # thinking it doesn't know about the my_uni_ctype symbol when built with ld 2.24.51.0.3
 # and -Wl,--hash-style=gnu
-export CFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -Wno-error=pointer-bool-conversion"
-export CXXFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -Wno-error=pointer-bool-conversion -fcxx-exceptions"
+export CFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -Wno-error=pointer-bool-conversion -Wno-error=missing-field-initializers"
+export CXXFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -Wno-error=pointer-bool-conversion -Wno-error=missing-field-initializers -fcxx-exceptions"
 %ifarch %{ix86}
 export LDFLAGS="%{ldflags} -Wl,--hash-style=both"
 %else
