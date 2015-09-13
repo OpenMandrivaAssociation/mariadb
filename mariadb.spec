@@ -378,6 +378,7 @@ Common files needed by both the MariaDB server and client.
 %{_datadir}/mysql/spanish
 %{_datadir}/mysql/swedish
 %{_datadir}/mysql/ukrainian
+%{_datadir}/mysql/policy
 # We put this into -common for now because it is needed for both
 # -server (used by mysqld_safe) and by -devel (configure scripts calling
 # it, e.g. php)
