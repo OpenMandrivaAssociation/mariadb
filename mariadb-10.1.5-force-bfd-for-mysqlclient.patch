@@ -5,7 +5,7 @@
    )
    SET(VERSION_SCRIPT_LINK_FLAGS 
 -    "-Wl,${CMAKE_CURRENT_BINARY_DIR}/libmysql_versions.ld")
-+    "-Wl,-T,${CMAKE_CURRENT_BINARY_DIR}/libmysql_versions.ld")
++    "-fuse-ld=bfd ${CMAKE_CURRENT_BINARY_DIR}/libmysql_versions.ld")
  
  ENDIF()
  
