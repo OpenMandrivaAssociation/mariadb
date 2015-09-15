@@ -9,7 +9,7 @@
 
 Name: mariadb
 Version: 10.1.7
-Release: 1
+Release: 2
 Source0: http://mirrors.n-ix.net/mariadb/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 Source100: mysqld.service
 Source101: mysqld-prepare-db-dir
@@ -445,19 +445,23 @@ autoconf
 cd -
 
 %build
-%ifnarch aarch64
+%ifnarch aarch64 %{ix86}
 export CC="%{__cc} -Wno-unknown-warning-option -Wno-extern-c-compat -Qunused-arguments"
 export CXX="%{__cxx} -Wno-unknown-warning-option -Wno-extern-c-compat -Qunused-arguments"
+export CFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -Wno-error=pointer-bool-conversion -Wno-error=missing-field-initializers"
+export CXXFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -Wno-error=pointer-bool-conversion -Wno-error=missing-field-initializers -fcxx-exceptions"
 %else
+# clang 3.7 on i586 fails to build libmysqlclient lib correctly
+# ld.gold gives assert in operator() symtab.cc:1656
+# ld.bfd gives div error or symver error
 export CC=gcc
 export CXX=g++
 %endif
+
 # aliasing rule violations at least in storage/tokudb/ft-index/ft/dbufio.cc
 # -Wl,--hash-style=both is a workaround for a build failure caused by com_err incorrectly
 # thinking it doesn't know about the my_uni_ctype symbol when built with ld 2.24.51.0.3
 # and -Wl,--hash-style=gnu
-export CFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -Wno-error=pointer-bool-conversion -Wno-error=missing-field-initializers"
-export CXXFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -Wno-error=pointer-bool-conversion -Wno-error=missing-field-initializers -fcxx-exceptions"
 %ifarch %{ix86}
 export LDFLAGS="%{ldflags} -Wl,--hash-style=both"
 %else
