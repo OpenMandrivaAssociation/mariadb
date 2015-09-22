@@ -2,5 +2,6 @@ removed_sources:
   mariadb-10.0.15.tar.gz: edd8ba315fffa727b52833df453ac9b88961130e
   mariadb-10.0.17.tar.gz: 240253b3ee21dea5e2f501778e8ee72b32a5d052
   mariadb-10.0.19.tar.gz: 6be3d7208ab2db02c26986fa174e7e7d7cd1c70d
-sources:
   mariadb-10.0.20.tar.gz: e005c8dc2b2e4b0b3215f8bbb9b0b43726c7cf6a
+sources:
+  mariadb-10.0.21.tar.gz: ee40a5c912e414c9d0e5170b664974fc79343e78
