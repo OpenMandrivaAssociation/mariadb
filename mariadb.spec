@@ -478,6 +478,9 @@ export LDFLAGS="%{ldflags} -Wl,--hash-style=both"
 export LDFLAGS="%{ldflags} -Wl,--hash-style=both"
 %endif
 
+# (tpg) install services into %_unitdir
+sed -i -e "s,/usr/lib/systemd/system,%{_unitdir},g" cmake/install_layout.cmake
+
 %cmake	-DINSTALL_LAYOUT=RPM \
 	-DFEATURE_SET="community" \
 	-DWITH_SSL=system \
