@@ -9,7 +9,6 @@ Name: mariadb
 Version: 10.1.8
 Release: 1
 Source0: http://mirrors.n-ix.net/mariadb/mariadb-%{version}/source/mariadb-%{version}.tar.gz
-Source100: mysqld.service
 Source101: mysqld-prepare-db-dir
 Source102: mysqld-wait-ready
 Source1000: %{name}.rpmlintrc
@@ -266,7 +265,7 @@ package '%{name}'.
 %config(noreplace) %{_sysconfdir}/my.cnf.d/client.cnf
 %config(noreplace) %{_sysconfdir}/my.cnf.d/mysql-clients.cnf
 %config(noreplace) %{_sysconfdir}/my.cnf.d/server.cnf
-%config(noreplace) %{_sysconfdir}/my.cnf.d/enable_encryption.cnf
+%config(noreplace) %{_sysconfdir}/my.cnf.d/enable_encryption.preset
 %{_bindir}/aria_chk
 %{_bindir}/aria_dump_log
 %{_bindir}/aria_ftdump
@@ -298,9 +297,15 @@ package '%{name}'.
 %{_bindir}/wsrep_*
 %{_sbindir}/mysqld
 %{_sbindir}/rcmysql
-/lib/systemd/system/mysqld.service
 %{_bindir}/mysqld-prepare-db-dir
 %{_bindir}/mysqld-wait-ready
+%{_bindir}/mariadb-service-convert
+%{_unitdir}/*.service
+%dir %{_unitdir}/mariadb@bootstrap.service.d
+%{_unitdir}/mariadb@bootstrap.service.d/*.conf
+%dir %{_datadir}/mysql/systemd
+%{_datadir}/mysql/systemd/*.service
+%{_datadir}/mysql/systemd/*.conf
 %doc %{_docdir}/%{name}-%{version}
 %attr(711,%{muser},%{muser}) /srv/mysql
 %attr(711,%{muser},%{muser}) %{_localstatedir}/log/mysqld
@@ -499,14 +504,13 @@ export LD_LIBRARY_PATH=`pwd`/storage/tokudb/ft-index/portability:$LD_LIBRARY_PAT
 
 # systemd integration
 mkdir -p %{buildroot}/lib/systemd/system
-install -c -m 644 %{SOURCE100} %{buildroot}%{_systemunitdir}
 install -c -m 755 %{SOURCE101} %{buildroot}%{_bindir}
 install -c -m 755 %{SOURCE102} %{buildroot}%{_bindir}
 rm -rf %{buildroot}%{_sysconfdir}/init.d
 
 install -d %{buildroot}%{_presetdir}
-cat > %{buildroot}%{_presetdir}/86-mysqld.preset << EOF
-enable mysqld.service
+cat > %{buildroot}%{_presetdir}/86-mariadb.preset << EOF
+enable mariadb.service
 EOF
 
 # Fix bogus doc installation
