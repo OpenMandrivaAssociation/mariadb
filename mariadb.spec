@@ -257,7 +257,7 @@ package '%{name}'.
 %{_datadir}/mysql/maria_add_gis_sp.sql
 %{_datadir}/mysql/maria_add_gis_sp_bootstrap.sql
 %{_datadir}/mysql/mroonga
-%{_presetdir}/86-mysqld.preset
+%{_presetdir}/86-mariadb.preset
 %{_mandir}/man8/*
 %dir %{_libdir}/mysql
 %dir %{_libdir}/mysql/plugin
@@ -493,6 +493,7 @@ export LDFLAGS="%{ldflags} -Wl,--hash-style=both"
 	-DWITH_EMBEDDED_SERVER:BOOL=ON \
 	-DWITH_READLINE:BOOL=ON \
 	-DWITH_LIBEVENT=system \
+	-DINSTALL_SYSTEMD_UNITDIR_RPM="%{_unitdir}" \
 	-DCOMPILATION_COMMENT="%{_vendor} MariaDB Server"
 
 # Used by logformat during build
