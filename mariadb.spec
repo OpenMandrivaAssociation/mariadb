@@ -38,7 +38,8 @@ BuildRequires:	cmake
 BuildRequires:	dos2unix
 BuildRequires:	doxygen
 BuildRequires:	python
-BuildRequires:	systemd-units
+BuildRequires:	pkgconfig(libsystemd)
+BuildRequires:	pkgconfig(libsystemd-daemon)
 BuildRequires:	systemtap
 BuildRequires:	libaio-devel
 BuildRequires:	stdc++-devel
@@ -265,6 +266,7 @@ package '%{name}'.
 %config(noreplace) %{_sysconfdir}/my.cnf.d/client.cnf
 %config(noreplace) %{_sysconfdir}/my.cnf.d/mysql-clients.cnf
 %config(noreplace) %{_sysconfdir}/my.cnf.d/server.cnf
+%config(noreplace) %{_sysconfdir}/my.cnf.d/enable_encryption.cnf
 %{_bindir}/aria_chk
 %{_bindir}/aria_dump_log
 %{_bindir}/aria_ftdump
