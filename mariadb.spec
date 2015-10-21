@@ -7,7 +7,7 @@
 
 Name: mariadb
 Version: 10.1.8
-Release: 1
+Release: 2
 Source0: http://mirrors.n-ix.net/mariadb/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 Source101: mysqld-prepare-db-dir
 Source102: mysqld-wait-ready
@@ -18,10 +18,10 @@ Patch0:	mariadb-10.0.8-fix-mysql_config.patch
 Patch1: mariadb-10.0.12-clang.patch
 Patch2: mariadb-10.1.5-compatibility-with-llvm-ar.patch
 Patch3: mariadb-10.1.1-dont-check-null-on-parameters-declared-nonnull.patch
-%ifarch %ix86
+%ifarch %ix86 x86_64
 Patch4: mariadb-10.1.5-force-bfd-for-mysqlclient.patch
 %endif
-%ifnarch %ix86
+%ifnarch %ix86 x86_64
 Patch7: mariadb-10.1.5-fix-version-script-for-gold.patch
 %endif
 Patch5: mariadb-10.1.7-fix-build-with-Werror.patch
