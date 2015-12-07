@@ -6,8 +6,8 @@
 %define _disable_lto 1
 
 Name: mariadb
-Version: 10.1.8
-Release: 2
+Version: 10.1.9
+Release: 1
 Source0: http://mirrors.n-ix.net/mariadb/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 Source101: mysqld-prepare-db-dir
 Source102: mysqld-wait-ready
@@ -271,6 +271,7 @@ package '%{name}'.
 %{_bindir}/aria_ftdump
 %{_bindir}/aria_pack
 %{_bindir}/aria_read_log
+%{_bindir}/galera_new_cluster
 %{_bindir}/innochecksum
 %{_bindir}/myisam_ftdump
 %{_bindir}/myisamchk
