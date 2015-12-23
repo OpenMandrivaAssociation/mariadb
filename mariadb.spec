@@ -467,6 +467,10 @@ export CXXFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized
 # ld.bfd gives div error or symver error
 export CC=gcc
 export CXX=g++
+%ifarch x86_64
+export CFLAGS="%{optflags} -fno-strict-aliasing"
+export CXXFLAGS="%{optflags} -fno-strict-aliasing"
+%endif
 %endif
 
 # aliasing rule violations at least in storage/tokudb/ft-index/ft/dbufio.cc
