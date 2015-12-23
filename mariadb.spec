@@ -7,7 +7,7 @@
 
 Name: mariadb
 Version: 10.1.9
-Release: 1
+Release: 2
 Source0: http://mirrors.n-ix.net/mariadb/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 Source101: mysqld-prepare-db-dir
 Source102: mysqld-wait-ready
@@ -456,7 +456,7 @@ autoconf
 cd -
 
 %build
-%ifnarch aarch64 %{ix86}
+%ifnarch aarch64 %{ix86} %{armx} x86_64
 export CC="%{__cc} -Wno-unknown-warning-option -Wno-extern-c-compat -Qunused-arguments"
 export CXX="%{__cxx} -Wno-unknown-warning-option -Wno-extern-c-compat -Qunused-arguments"
 export CFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -Wno-error=pointer-bool-conversion -Wno-error=missing-field-initializers"
@@ -476,6 +476,7 @@ export CXX=g++
 %ifarch %{ix86}
 export LDFLAGS="%{ldflags} -Wl,--hash-style=both"
 %else
+#export LDFLAGS="%{ldflags} -Wl,--hash-style=both -flto"
 export LDFLAGS="%{ldflags} -Wl,--hash-style=both"
 %endif
 
