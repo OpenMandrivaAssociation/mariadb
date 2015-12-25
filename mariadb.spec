@@ -6,8 +6,8 @@
 %define _disable_lto 1
 
 Name: mariadb
-Version: 10.1.9
-Release: 2
+Version: 10.1.10
+Release: 1
 Source0: http://mirrors.n-ix.net/mariadb/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 Source101: mysqld-prepare-db-dir
 Source102: mysqld-wait-ready
@@ -24,7 +24,7 @@ Patch4: mariadb-10.1.5-force-bfd-for-mysqlclient.patch
 %ifnarch %ix86 x86_64
 Patch7: mariadb-10.1.5-fix-version-script-for-gold.patch
 %endif
-Patch5: mariadb-10.1.7-fix-build-with-Werror.patch
+#Patch5: mariadb-10.1.7-fix-build-with-Werror.patch
 Patch6:	mariadb-10.1.6-fix_atomic_check.patch
 Summary: The MariaDB database, a drop-in replacement for MySQL
 URL: http://mariadb.org/
@@ -442,13 +442,13 @@ MariaDB command line client.
 sed -i "s@data/test@\${INSTALL_MYSQLTESTDIR}@g" sql/CMakeLists.txt
 #sed -i "s/srv_buf_size/srv_sort_buf_size/" storage/innobase/row/row0log.cc
 if echo %{__cc} |grep -q clang; then
-sed -e 's, -fuse-linker-plugin,,' -i storage/tokudb/ft-index/cmake_modules/TokuSetupCompiler.cmake storage/tokudb/CMakeLists.txt
+sed -e 's, -fuse-linker-plugin,,' -i storage/tokudb/PerconaFT/cmake_modules/TokuSetupCompiler.cmake storage/tokudb/CMakeLists.txt
 fi
 # -flto doesn't work with the way tokudb builds static libraries
-sed -e 's, -flto,,' -i storage/tokudb/ft-index/cmake_modules/TokuSetupCompiler.cmake storage/tokudb/CMakeLists.txt
+sed -e 's, -flto,,' -i storage/tokudb/PerconaFT/cmake_modules/TokuSetupCompiler.cmake storage/tokudb/CMakeLists.txt
 
 # The version of xz bundled here comes with a version of libtool that doesn't support lto
-cd storage/tokudb/ft-index/third_party/xz-4.999.9beta
+cd storage/tokudb/PerconaFT/third_party/xz-4.999.9beta
 libtoolize --force
 aclocal
 automake -a
@@ -473,16 +473,17 @@ export CXXFLAGS="%{optflags} -fno-strict-aliasing"
 %endif
 %endif
 
-# aliasing rule violations at least in storage/tokudb/ft-index/ft/dbufio.cc
+# aliasing rule violations at least in storage/tokudb/PerconaFT/ft/dbufio.cc
 # -Wl,--hash-style=both is a workaround for a build failure caused by com_err incorrectly
 # thinking it doesn't know about the my_uni_ctype symbol when built with ld 2.24.51.0.3
 # and -Wl,--hash-style=gnu
 %ifarch %{ix86}
-export LDFLAGS="%{ldflags} -Wl,--hash-style=both"
+#export LDFLAGS="%{ldflags} -Wl,--hash-style=both"
 %else
 #export LDFLAGS="%{ldflags} -Wl,--hash-style=both -flto"
-export LDFLAGS="%{ldflags} -Wl,--hash-style=both"
+#export LDFLAGS="%{ldflags} -Wl,--hash-style=both"
 %endif
+export LDFLAGS="$LDFLAGS -fuse-ld=bfd"
 
 # (tpg) install services into %_unitdir
 sed -i -e "s,/usr/lib/systemd/system,%{_unitdir},g" cmake/install_layout.cmake
@@ -506,7 +507,7 @@ sed -i -e "s,/usr/lib/systemd/system,%{_unitdir},g" cmake/install_layout.cmake
 	-DCOMPILATION_COMMENT="%{_vendor} MariaDB Server"
 
 # Used by logformat during build
-export LD_LIBRARY_PATH=`pwd`/storage/tokudb/ft-index/portability:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=`pwd`/storage/tokudb/PerconaFT/portability:$LD_LIBRARY_PATH
 %make -k || make
 
 %install
