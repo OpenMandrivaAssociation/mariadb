@@ -1,0 +1,11 @@
+--- mariadb-10.1.10/libmysql/CMakeLists.txt.omv~	2015-12-28 21:24:34.567113291 +0100
++++ mariadb-10.1.10/libmysql/CMakeLists.txt	2015-12-28 21:24:42.301127671 +0100
+@@ -273,7 +273,7 @@ SET(CLIENT_API_FUNCTIONS
+   "Client functions"
+ )
+ 
+-IF(CMAKE_SYSTEM_NAME MATCHES "Linux") 
++IF(CMAKE_SYSTEM_NAME MATCHES "OtherLinux") 
+   # When building RPM, or DEB package on Debian, use ELF symbol versioning
+   # for compatibility with distribution packages, so client shared library can 
+   # painlessly replace the one supplied by the distribution.

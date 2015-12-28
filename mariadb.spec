@@ -7,7 +7,7 @@
 
 Name: mariadb
 Version: 10.1.10
-Release: 1
+Release: 2
 Source0: http://mirrors.n-ix.net/mariadb/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 Source101: mysqld-prepare-db-dir
 Source102: mysqld-wait-ready
@@ -21,10 +21,12 @@ Patch3: mariadb-10.1.1-dont-check-null-on-parameters-declared-nonnull.patch
 %ifarch %ix86 x86_64
 Patch4: mariadb-10.1.5-force-bfd-for-mysqlclient.patch
 %endif
+# This breaks binary compatibility with some other distributions, but fixes the loading
+# of the Qt mysql plugin. Better fix wanted.
+Patch5:	mariadb-10.1.10-no-symbol-versioning.patch
 %ifnarch %ix86 x86_64
-Patch7: mariadb-10.1.5-fix-version-script-for-gold.patch
+#Patch7: mariadb-10.1.5-fix-version-script-for-gold.patch
 %endif
-#Patch5: mariadb-10.1.7-fix-build-with-Werror.patch
 Patch6:	mariadb-10.1.6-fix_atomic_check.patch
 Summary: The MariaDB database, a drop-in replacement for MySQL
 URL: http://mariadb.org/
