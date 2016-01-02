@@ -28,6 +28,7 @@ Patch5:	mariadb-10.1.10-no-symbol-versioning.patch
 #Patch7: mariadb-10.1.5-fix-version-script-for-gold.patch
 %endif
 Patch6:	mariadb-10.1.6-fix_atomic_check.patch
+Patch7: mariadb-10.1.10-clang-buildfix.patch
 Summary: The MariaDB database, a drop-in replacement for MySQL
 URL: http://mariadb.org/
 License: GPL
@@ -461,8 +462,8 @@ cd -
 %ifnarch aarch64 %{ix86}
 export CC="%{__cc} -Wno-unknown-warning-option -Wno-extern-c-compat -Qunused-arguments"
 export CXX="%{__cxx} -Wno-unknown-warning-option -Wno-extern-c-compat -Qunused-arguments"
-export CFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -Wno-error=pointer-bool-conversion -Wno-error=missing-field-initializers"
-export CXXFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=maybe-uninitialized -Wno-error=pointer-bool-conversion -Wno-error=missing-field-initializers -fcxx-exceptions"
+export CFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=pointer-bool-conversion -Wno-error=missing-field-initializers"
+export CXXFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=pointer-bool-conversion -Wno-error=missing-field-initializers -fcxx-exceptions"
 %else
 # clang 3.7 on i586 fails to build libmysqlclient lib correctly
 # ld.gold gives assert in operator() symtab.cc:1656
@@ -474,6 +475,14 @@ export CFLAGS="%{optflags} -fno-strict-aliasing"
 export CXXFLAGS="%{optflags} -fno-strict-aliasing"
 %endif
 %endif
+
+# Get rid of gcc specific flags when using clang
+if echo $CC |grep -q gcc; then
+export CFLAGS="$CFLAGS -Wno-error=maybe-uninitialized"
+export CXXFLAGS="$CXXFLAGS -Wno-error=maybe-uninitialized"
+else
+sed -i -e 's,-Wstrict-null-sentinel,,;s,-Wtrampolines,,;s,-Wlogical-op,,' storage/tokudb/PerconaFT/cmake_modules/TokuSetupCompiler.cmake
+fi
 
 # aliasing rule violations at least in storage/tokudb/PerconaFT/ft/dbufio.cc
 # -Wl,--hash-style=both is a workaround for a build failure caused by com_err incorrectly

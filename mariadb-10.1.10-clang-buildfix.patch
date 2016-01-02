@@ -1,0 +1,22 @@
+--- mariadb-10.1.10/storage/connect/json.cpp.omv~	2016-01-01 17:50:06.960775014 +0100
++++ mariadb-10.1.10/storage/connect/json.cpp	2016-01-01 17:50:18.082719532 +0100
+@@ -594,7 +594,7 @@ PSZ Serialize(PGLOBAL g, PJSON jsp, char
+   if (fs) {
+ 		fputs(EL, fs);
+     fclose(fs);
+-		str = (err) ? NULL : "Ok";
++		str = (err) ? NULL : const_cast<PSZ>("Ok");
+   } else if (!err) {
+     str = ((JOUTSTR*)jp)->Strp;
+     jp->WriteChr('\0');
+--- mariadb-10.1.10/storage/tokudb/ha_tokudb.cc.omv~	2016-01-02 01:40:34.743096586 +0100
++++ mariadb-10.1.10/storage/tokudb/ha_tokudb.cc	2016-01-02 01:40:46.036082226 +0100
+@@ -288,7 +288,7 @@ static int free_share(TOKUDB_SHARE * sha
+     }
+ 
+ const char *ha_tokudb::table_type() const {
+-    extern const char *tokudb_hton_name;
++    extern const char * const tokudb_hton_name;
+     return tokudb_hton_name;
+ } 
+ 
