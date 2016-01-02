@@ -1,3 +1,4 @@
 addFilter("E: zero-length")
 addFilter("E: non-standard-dir-perm")
 addFilter("E: non-executable-script")
+addFilter("E: debuginfo-without-sources")

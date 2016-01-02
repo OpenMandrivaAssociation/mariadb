@@ -7,7 +7,7 @@
 
 Name: mariadb
 Version: 10.1.10
-Release: 3
+Release: 4
 Source0: http://mirrors.n-ix.net/mariadb/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 Source101: mysqld-prepare-db-dir
 Source102: mysqld-wait-ready
@@ -359,6 +359,7 @@ Group: System/Servers
 BuildArch: noarch
 Obsoletes: mysql-common < 5.7
 Provides: mysql-common = 5.7
+Requires: %{name}-common-binaries = %{EVRD}
 
 %description common
 Common files needed by both the MariaDB server and client.
@@ -397,6 +398,18 @@ Common files needed by both the MariaDB server and client.
 # -server (used by mysqld_safe) and by -devel (configure scripts calling
 # it, e.g. php)
 %{_bindir}/mysql_config
+
+%package common-binaries
+Summary: Common binary files needed by both the MariaDB server and client
+Group: System/Servers
+Obsoletes: mysql-common < 5.7
+Provides: mysql-common = 5.7
+Requires: %{name}-common = %{EVRD}
+
+%description common-binaries
+Common files needed by both the MariaDB server and client.
+
+%files common-binaries
 %{_bindir}/my_print_defaults
 %{_mandir}/man1/my_print_defaults.1*
 
