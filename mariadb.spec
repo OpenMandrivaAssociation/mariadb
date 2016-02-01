@@ -6,8 +6,8 @@
 %define _disable_lto 1
 
 Name: mariadb
-Version: 10.1.10
-Release: 4
+Version: 10.1.11
+Release: 1
 Source0: http://mirrors.n-ix.net/mariadb/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 Source101: mysqld-prepare-db-dir
 Source102: mysqld-wait-ready
@@ -28,7 +28,7 @@ Patch5:	mariadb-10.1.10-no-symbol-versioning.patch
 #Patch7: mariadb-10.1.5-fix-version-script-for-gold.patch
 %endif
 Patch6:	mariadb-10.1.6-fix_atomic_check.patch
-Patch7: mariadb-10.1.10-clang-buildfix.patch
+Patch7: mariadb-10.1.11-clang.patch
 Summary: The MariaDB database, a drop-in replacement for MySQL
 URL: http://mariadb.org/
 License: GPL
@@ -145,6 +145,8 @@ Plugins for the MariaDB database.
 %files plugin
 %{_libdir}/mysql/plugin/adt_null.so
 %{_libdir}/mysql/plugin/auth_0x0100.so
+%{_libdir}/mysql/plugin/auth_gssapi.so
+%{_libdir}/mysql/plugin/auth_gssapi_client.so
 %{_libdir}/mysql/plugin/auth_pam.so
 %{_libdir}/mysql/plugin/auth_socket.so
 %{_libdir}/mysql/plugin/auth_test_plugin.so
@@ -257,6 +259,7 @@ package '%{name}'.
 %{_datadir}/mysql/mysql_test_data_timezone.sql
 %{_datadir}/mysql/wsrep_notify
 %{_datadir}/mysql/*.cnf
+%{_bindir}/maria_add_gis_sp.sql
 %{_datadir}/mysql/maria_add_gis_sp.sql
 %{_datadir}/mysql/maria_add_gis_sp_bootstrap.sql
 %{_datadir}/mysql/mroonga
