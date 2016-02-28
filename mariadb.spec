@@ -6,7 +6,7 @@
 %define _disable_lto 1
 
 Name: mariadb
-Version: 10.1.11
+Version: 10.1.12
 Release: 1
 Source0: http://mirrors.n-ix.net/mariadb/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 Source101: mysqld-prepare-db-dir
