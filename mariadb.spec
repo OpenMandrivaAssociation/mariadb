@@ -257,7 +257,6 @@ package '%{name}'.
 %{_datadir}/mysql/mysql_test_data_timezone.sql
 %{_datadir}/mysql/wsrep_notify
 %{_datadir}/mysql/*.cnf
-%{_bindir}/maria_add_gis_sp.sql
 %{_datadir}/mysql/maria_add_gis_sp.sql
 %{_datadir}/mysql/maria_add_gis_sp_bootstrap.sql
 %{_datadir}/mysql/mroonga
