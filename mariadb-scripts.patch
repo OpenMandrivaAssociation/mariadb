@@ -16,7 +16,6 @@
 +    mysql-check-socket
 +    mysql-check-upgrade
 +    mysql-scripts-common
-+    mysql_config_multilib
 +    mysql.init
 +    my.cnf
 +  )

@@ -20,8 +20,9 @@ Source4: mysql-wait-ready.sh
 Source5: mysql-check-socket.sh
 Source6: mysql-scripts-common.sh
 Source7: mysql-check-upgrade.sh
-Source8: mysql-wait-stop.sh
-Source9: mysql@.service.in
+Source8: mysql-scripts-common.sh
+Source9: mysql-wait-stop.sh
+Source10: mysql@.service.in
 Source1000: %{name}.rpmlintrc
 # Don't strip -Wformat from --cflags -- -Werror=format-string without -Wformat
 # means trouble
@@ -467,7 +468,7 @@ MariaDB command line client.
 %setup -q
 %apply_patches
 
-cp %{SOURCE1} %{SOURCE2} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{SOURCE9} scripts
+cp %{SOURCE1} %{SOURCE2} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{SOURCE9} %{SOURCE10} scripts
 
 # Workarounds for bugs
 sed -i "s@data/test@\${INSTALL_MYSQLTESTDIR}@g" sql/CMakeLists.txt
