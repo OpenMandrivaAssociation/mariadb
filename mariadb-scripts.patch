@@ -1,7 +1,7 @@
 diff -Naur mariadb-10.1.12/scripts/CMakeLists.txt mariadb-10.1.12.tpg/scripts/CMakeLists.txt
 --- mariadb-10.1.12/scripts/CMakeLists.txt	2016-02-24 14:25:23.000000000 +0000
-+++ mariadb-10.1.12.tpg/scripts/CMakeLists.txt	2016-03-03 19:49:06.586354279 +0000
-@@ -320,6 +320,33 @@
++++ mariadb-10.1.12.tpg/scripts/CMakeLists.txt	2016-03-03 20:09:51.679855641 +0000
+@@ -320,6 +320,31 @@
        COMPONENT ${${file}_COMPONENT}
       )
    ENDFOREACH()
@@ -17,8 +17,6 @@ diff -Naur mariadb-10.1.12/scripts/CMakeLists.txt mariadb-10.1.12.tpg/scripts/CM
 +    mysql-check-socket
 +    mysql-check-upgrade
 +    mysql-scripts-common
-+    mysql.init
-+    my.cnf
 +  )
 +  FOREACH(file ${SYSTEMD_SCRIPTS})
 +    IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${file}.sh)
