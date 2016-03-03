@@ -554,10 +554,9 @@ export LD_LIBRARY_PATH=`pwd`/storage/tokudb/PerconaFT/portability:$LD_LIBRARY_PA
 
 # systemd integration
 rm -rf %{buildroot}%{_sysconfdir}/init.d
-ls -ls scripts/*
-install -D -p -m 644 scripts/mysql.service %{buildroot}%{_unitdir}/%{name}.service
-install -D -p -m 644 scripts/mysql@.service %{buildroot}%{_unitdir}/%{name}@.service
-install -D -p -m 0644 scripts/mysql.tmpfiles.d %{buildroot}%{_tmpfilesdir}/%{name}.conf
+#install -D -p -m 644 scripts/mysql.service %{buildroot}%{_unitdir}/%{name}.service
+#install -D -p -m 644 scripts/mysql@.service %{buildroot}%{_unitdir}/%{name}@.service
+#install -D -p -m 0644 scripts/mysql.tmpfiles.d %{buildroot}%{_tmpfilesdir}/%{name}.conf
 
 install -d %{buildroot}%{_presetdir}
 cat > %{buildroot}%{_presetdir}/86-mariadb.preset << EOF
