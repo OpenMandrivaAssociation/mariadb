@@ -5,12 +5,23 @@
 %bcond_without pcre
 %define _disable_lto 1
 
+Summary: The MariaDB database, a drop-in replacement for MySQL
 Name: mariadb
 Version: 10.1.12
-Release: 1
+Release: 2
+URL: http://mariadb.org/
+License: GPL
+Group: System/Servers
 Source0: http://mirrors.n-ix.net/mariadb/mariadb-%{version}/source/mariadb-%{version}.tar.gz
-Source101: mysqld-prepare-db-dir
-Source102: mysqld-wait-ready
+Source1: mysql.tmpfiles.d.in
+Source2: mysql.service.in
+Source3: mysql-prepare-db-dir.sh
+Source4: mysql-wait-ready.sh
+Source5: mysql-check-socket.sh
+Source6: mysql-scripts-common.sh
+Source7: mysql-check-upgrade.sh
+Source8: mysql-wait-stop.sh
+Source9: mysql@.service.in
 Source1000: %{name}.rpmlintrc
 # Don't strip -Wformat from --cflags -- -Werror=format-string without -Wformat
 # means trouble
@@ -29,10 +40,7 @@ Patch5:	mariadb-10.1.10-no-symbol-versioning.patch
 %endif
 Patch6:	mariadb-10.1.6-fix_atomic_check.patch
 Patch7: mariadb-10.1.11-clang.patch
-Summary: The MariaDB database, a drop-in replacement for MySQL
-URL: http://mariadb.org/
-License: GPL
-Group: System/Servers
+Patch8: mariadb-scripts.patch
 Requires: %{name}-server = %{EVRD}
 Requires: %{name}-client = %{EVRD}
 BuildRequires:	bison
@@ -261,6 +269,7 @@ package '%{name}'.
 %{_datadir}/mysql/maria_add_gis_sp_bootstrap.sql
 %{_datadir}/mysql/mroonga
 %{_presetdir}/86-mariadb.preset
+%{_tmpfilesdir}/%{name}.conf
 %{_mandir}/man8/*
 %dir %{_libdir}/mysql
 %dir %{_libdir}/mysql/plugin
@@ -301,9 +310,13 @@ package '%{name}'.
 %{_bindir}/wsrep_*
 %{_sbindir}/mysqld
 %{_sbindir}/rcmysql
-%{_bindir}/mysqld-prepare-db-dir
-%{_bindir}/mysqld-wait-ready
 %{_bindir}/mariadb-service-convert
+%{_libexecdir}/mysql-prepare-db-dir
+%{_libexecdir}/mysql-wait-ready
+%{_libexecdir}/mysql-wait-stop
+%{_libexecdir}/mysql-check-socket
+%{_libexecdir}/mysql-check-upgrade
+%{_libexecdir}/mysql-scripts-common
 %{_unitdir}/*.service
 %dir %{_unitdir}/mariadb@bootstrap.service.d
 %{_unitdir}/mariadb@bootstrap.service.d/*.conf
@@ -454,6 +467,8 @@ MariaDB command line client.
 %setup -q
 %apply_patches
 
+cp %{SOURCE1} %{SOURCE2} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{SOURCE9} scripts
+
 # Workarounds for bugs
 sed -i "s@data/test@\${INSTALL_MYSQLTESTDIR}@g" sql/CMakeLists.txt
 #sed -i "s/srv_buf_size/srv_sort_buf_size/" storage/innobase/row/row0log.cc
@@ -538,15 +553,23 @@ export LD_LIBRARY_PATH=`pwd`/storage/tokudb/PerconaFT/portability:$LD_LIBRARY_PA
 %makeinstall_std -C build
 
 # systemd integration
-mkdir -p %{buildroot}/lib/systemd/system
-install -c -m 755 %{SOURCE101} %{buildroot}%{_bindir}
-install -c -m 755 %{SOURCE102} %{buildroot}%{_bindir}
 rm -rf %{buildroot}%{_sysconfdir}/init.d
+install -D -p -m 644 scripts/mysql.service %{buildroot}%{_unitdir}/%{name}.service
+install -D -p -m 644 scripts/mysql@.service %{buildroot}%{_unitdir}/%{name}@.service
+install -D -p -m 0644 scripts/mysql.tmpfiles.d %{buildroot}%{_tmpfilesdir}/%{name}.conf
 
 install -d %{buildroot}%{_presetdir}
 cat > %{buildroot}%{_presetdir}/86-mariadb.preset << EOF
 enable mariadb.service
 EOF
+
+# helper scripts for service starting
+install -p -m 755 scripts/mysql-prepare-db-dir %{buildroot}%{_libexecdir}/mysql-prepare-db-dir
+install -p -m 755 scripts/mysql-wait-ready %{buildroot}%{_libexecdir}/mysql-wait-ready
+install -p -m 755 scripts/mysql-wait-stop %{buildroot}%{_libexecdir}/mysql-wait-stop
+install -p -m 755 scripts/mysql-check-socket %{buildroot}%{_libexecdir}/mysql-check-socket
+install -p -m 755 scripts/mysql-check-upgrade %{buildroot}%{_libexecdir}/mysql-check-upgrade
+install -p -m 644 scripts/mysql-scripts-common %{buildroot}%{_libexecdir}/mysql-scripts-common
 
 # Fix bogus doc installation
 mkdir -p %{buildroot}%{_docdir}/%{name}-%{version}
