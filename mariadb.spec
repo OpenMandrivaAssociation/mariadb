@@ -309,14 +309,13 @@ package '%{name}'.
 %{_bindir}/resolveip
 %{_bindir}/wsrep_*
 %{_sbindir}/mysqld
-%{_sbindir}/rcmysql
 %{_bindir}/mariadb-service-convert
-%{_libexecdir}/mysql-prepare-db-dir
-%{_libexecdir}/mysql-wait-ready
-%{_libexecdir}/mysql-wait-stop
-%{_libexecdir}/mysql-check-socket
-%{_libexecdir}/mysql-check-upgrade
-%{_libexecdir}/mysql-scripts-common
+%{_sbindir}/mysql-prepare-db-dir
+%{_sbindir}/mysql-wait-ready
+%{_sbindir}/mysql-wait-stop
+%{_sbindir}/mysql-check-socket
+%{_sbindir}/mysql-check-upgrade
+%{_sbindir}/mysql-scripts-common
 %{_unitdir}/*.service
 %dir %{_unitdir}/mariadb@bootstrap.service.d
 %{_unitdir}/mariadb@bootstrap.service.d/*.conf
@@ -554,9 +553,10 @@ export LD_LIBRARY_PATH=`pwd`/storage/tokudb/PerconaFT/portability:$LD_LIBRARY_PA
 
 # systemd integration
 rm -rf %{buildroot}%{_sysconfdir}/init.d
-#install -D -p -m 644 scripts/mysql.service %{buildroot}%{_unitdir}/%{name}.service
-#install -D -p -m 644 scripts/mysql@.service %{buildroot}%{_unitdir}/%{name}@.service
-#install -D -p -m 0644 scripts/mysql.tmpfiles.d %{buildroot}%{_tmpfilesdir}/%{name}.conf
+rm -f %{buildroot}%{_sbindir}/rcmysql
+install -D -p -m 644 build/scripts/mysql.service %{buildroot}%{_unitdir}/%{name}.service
+install -D -p -m 644 build/scripts/mysql@.service %{buildroot}%{_unitdir}/%{name}@.service
+install -D -p -m 0644 build/scripts/mysql.tmpfiles.d %{buildroot}%{_tmpfilesdir}/%{name}.conf
 
 install -d %{buildroot}%{_presetdir}
 cat > %{buildroot}%{_presetdir}/86-mariadb.preset << EOF
@@ -564,12 +564,12 @@ enable mariadb.service
 EOF
 
 # helper scripts for service starting
-install -p -m 755 scripts/mysql-prepare-db-dir %{buildroot}%{_libexecdir}/mysql-prepare-db-dir
-install -p -m 755 scripts/mysql-wait-ready %{buildroot}%{_libexecdir}/mysql-wait-ready
-install -p -m 755 scripts/mysql-wait-stop %{buildroot}%{_libexecdir}/mysql-wait-stop
-install -p -m 755 scripts/mysql-check-socket %{buildroot}%{_libexecdir}/mysql-check-socket
-install -p -m 755 scripts/mysql-check-upgrade %{buildroot}%{_libexecdir}/mysql-check-upgrade
-install -p -m 644 scripts/mysql-scripts-common %{buildroot}%{_libexecdir}/mysql-scripts-common
+install -D -p -m 755 build/scripts/mysql-prepare-db-dir %{buildroot}%{_sbindir}/mysql-prepare-db-dir
+install -p -m 755 build/scripts/mysql-wait-ready %{buildroot}%{_sbindir}/mysql-wait-ready
+install -p -m 755 build/scripts/mysql-wait-stop %{buildroot}%{_sbindir}/mysql-wait-stop
+install -p -m 755 build/scripts/mysql-check-socket %{buildroot}%{_sbindir}/mysql-check-socket
+install -p -m 755 build/scripts/mysql-check-upgrade %{buildroot}%{_sbindir}/mysql-check-upgrade
+install -p -m 644 build/scripts/mysql-scripts-common %{buildroot}%{_sbindir}/mysql-scripts-common
 
 # Fix bogus doc installation
 mkdir -p %{buildroot}%{_docdir}/%{name}-%{version}
