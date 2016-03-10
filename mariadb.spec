@@ -8,7 +8,7 @@
 Summary: The MariaDB database, a drop-in replacement for MySQL
 Name: mariadb
 Version: 10.1.12
-Release: 2
+Release: 3
 URL: http://mariadb.org/
 License: GPL
 Group: System/Servers
@@ -537,6 +537,7 @@ sed -i -e "s,/usr/lib/systemd/system,%{_unitdir},g" cmake/install_layout.cmake
 	-DINSTALL_LIBDIR="%{_libdir}" \
 	-DMYSQL_DATADIR=/srv/mysql \
 	-DMYSQL_UNIX_ADDR=/run/mysqld/mysql.sock \
+	-DPID_FILE_DIR="/run/mysqld" \
 	-DWITH_EXTRA_CHARSETS=complex \
 	-DWITH_EMBEDDED_SERVER:BOOL=ON \
 	-DWITH_READLINE:BOOL=ON \
