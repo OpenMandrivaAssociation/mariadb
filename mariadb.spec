@@ -8,7 +8,7 @@
 Summary: The MariaDB database, a drop-in replacement for MySQL
 Name: mariadb
 Version: 10.1.12
-Release: 3
+Release: 4
 URL: http://mariadb.org/
 License: GPL
 Group: System/Servers
@@ -486,7 +486,7 @@ autoconf
 cd -
 
 %build
-%ifnarch aarch64 %{ix86}
+%ifnarch aarch64 %{ix86} x86_64
 export CC="%{__cc} -Wno-unknown-warning-option -Wno-extern-c-compat -Qunused-arguments"
 export CXX="%{__cxx} -Wno-unknown-warning-option -Wno-extern-c-compat -Qunused-arguments"
 export CFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=pointer-bool-conversion -Wno-error=missing-field-initializers"
