@@ -65,6 +65,7 @@ BuildRequires:	pkgconfig(liblzma)
 BuildRequires:	pkgconfig(libzmq)
 BuildRequires:	pkgconfig(msgpack)
 BuildRequires:	pkgconfig(krb5-gssapi)
+BuildRequires:	cracklib-devel
 BuildRequires:	lzo-devel
 BuildRequires:	wrap-devel
 %if %{with pcre}
