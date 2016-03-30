@@ -29,9 +29,7 @@ Patch0:	mariadb-10.0.8-fix-mysql_config.patch
 Patch1: mariadb-10.0.12-clang.patch
 Patch2: mariadb-10.1.5-compatibility-with-llvm-ar.patch
 Patch3: mariadb-10.1.1-dont-check-null-on-parameters-declared-nonnull.patch
-%ifarch %ix86 x86_64
 Patch4: mariadb-10.1.5-force-bfd-for-mysqlclient.patch
-%endif
 # This breaks binary compatibility with some other distributions, but fixes the loading
 # of the Qt mysql plugin. Better fix wanted.
 Patch5:	mariadb-10.1.10-no-symbol-versioning.patch
