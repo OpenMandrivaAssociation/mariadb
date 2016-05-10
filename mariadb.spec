@@ -7,7 +7,7 @@
 
 Summary: The MariaDB database, a drop-in replacement for MySQL
 Name: mariadb
-Version: 10.1.13
+Version: 10.1.14
 Release: 1
 URL: http://mariadb.org/
 License: GPL
@@ -30,9 +30,6 @@ Patch1: mariadb-10.0.12-clang.patch
 Patch2: mariadb-10.1.5-compatibility-with-llvm-ar.patch
 Patch3: mariadb-10.1.1-dont-check-null-on-parameters-declared-nonnull.patch
 Patch4: mariadb-10.1.5-force-bfd-for-mysqlclient.patch
-# This breaks binary compatibility with some other distributions, but fixes the loading
-# of the Qt mysql plugin. Better fix wanted.
-Patch5:	mariadb-10.1.10-no-symbol-versioning.patch
 %ifnarch %ix86 x86_64
 #Patch7: mariadb-10.1.5-fix-version-script-for-gold.patch
 %endif
@@ -384,6 +381,7 @@ Common files needed by both the MariaDB server and client.
 %config(noreplace) %{_sysconfdir}/my.cnf
 %dir %{_sysconfdir}/my.cnf.d
 %dir %{_datadir}/mysql
+%{_datadir}/mysql/mysql_to_mariadb.sql
 %{_datadir}/mysql/english
 %{_datadir}/mysql/charsets
 %{_datadir}/mysql/czech
@@ -529,6 +527,10 @@ export LDFLAGS="$LDFLAGS -fuse-ld=bfd"
 # (tpg) install services into %_unitdir
 sed -i -e "s,/usr/lib/systemd/system,%{_unitdir},g" cmake/install_layout.cmake
 
+# DISABLE_LIBMYSQLCLIENT_SYMBOL_VERSIONING breaks binary compatibility
+# with some other distributions, but fixes the loading
+# of the Qt mysql plugin. Better fix wanted.
+
 %cmake	-DINSTALL_LAYOUT=RPM \
 	-DFEATURE_SET="community" \
 	-DWITH_SSL=system \
@@ -536,6 +538,7 @@ sed -i -e "s,/usr/lib/systemd/system,%{_unitdir},g" cmake/install_layout.cmake
 %if %{with pcre}
 	-DWITH_PCRE=system \
 %endif
+	-DDISABLE_LIBMYSQLCLIENT_SYMBOL_VERSIONING:BOOL=ON \
 	-DINSTALL_PLUGINDIR="%{_libdir}/mysql/plugin" \
 	-DINSTALL_LIBDIR="%{_libdir}" \
 	-DMYSQL_DATADIR=/srv/mysql \
