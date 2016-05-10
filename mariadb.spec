@@ -2,6 +2,7 @@
 %define scmrev %{nil}
 %define libmajor 18
 %define muser mysql
+%define _disable_ld_no_undefined 1
 
 Name: mariadb
 Version: 10.0.25
