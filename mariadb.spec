@@ -44,7 +44,6 @@ BuildRequires:	dos2unix
 BuildRequires:	doxygen
 BuildRequires:	python
 BuildRequires:	pkgconfig(libsystemd)
-BuildRequires:	pkgconfig(libsystemd-daemon)
 BuildRequires:	systemtap
 BuildRequires:	libaio-devel
 BuildRequires:	stdc++-devel
@@ -316,9 +315,9 @@ package '%{name}'.
 %{_sbindir}/mysql-check-socket
 %{_sbindir}/mysql-check-upgrade
 %{_sbindir}/mysql-scripts-common
-%{_unitdir}/*.service
-%dir %{_unitdir}/mariadb@bootstrap.service.d
-%{_unitdir}/mariadb@bootstrap.service.d/*.conf
+%{_systemunitdir}/*.service
+%dir %{_systemunitdir}/mariadb@bootstrap.service.d
+%{_systemunitdir}/mariadb@bootstrap.service.d/*.conf
 %dir %{_datadir}/mysql/systemd
 %{_datadir}/mysql/systemd/*.service
 %{_datadir}/mysql/systemd/*.conf
@@ -524,8 +523,8 @@ fi
 %endif
 export LDFLAGS="$LDFLAGS -fuse-ld=bfd"
 
-# (tpg) install services into %_unitdir
-sed -i -e "s,/usr/lib/systemd/system,%{_unitdir},g" cmake/install_layout.cmake
+# (tpg) install services into %_systemunitdir
+sed -i -e "s,/usr/lib/systemd/system,%{_systemunitdir},g" cmake/install_layout.cmake
 
 # DISABLE_LIBMYSQLCLIENT_SYMBOL_VERSIONING breaks binary compatibility
 # with some other distributions, but fixes the loading
@@ -548,7 +547,7 @@ sed -i -e "s,/usr/lib/systemd/system,%{_unitdir},g" cmake/install_layout.cmake
 	-DWITH_EMBEDDED_SERVER:BOOL=ON \
 	-DWITH_READLINE:BOOL=ON \
 	-DWITH_LIBEVENT=system \
-	-DINSTALL_SYSTEMD_UNITDIR_RPM="%{_unitdir}" \
+	-DINSTALL_SYSTEMD_systemunitdir_RPM="%{_systemunitdir}" \
 	-DCOMPILATION_COMMENT="%{_vendor} MariaDB Server"
 
 # Used by logformat during build
@@ -561,8 +560,8 @@ export LD_LIBRARY_PATH=`pwd`/storage/tokudb/PerconaFT/portability:$LD_LIBRARY_PA
 # systemd integration
 rm -rf %{buildroot}%{_sysconfdir}/init.d
 rm -f %{buildroot}%{_sbindir}/rcmysql
-install -D -p -m 644 build/scripts/mysql.service %{buildroot}%{_unitdir}/%{name}.service
-install -D -p -m 644 build/scripts/mysql@.service %{buildroot}%{_unitdir}/%{name}@.service
+install -D -p -m 644 build/scripts/mysql.service %{buildroot}%{_systemunitdir}/%{name}.service
+install -D -p -m 644 build/scripts/mysql@.service %{buildroot}%{_systemunitdir}/%{name}@.service
 install -D -p -m 0644 build/scripts/mysql.tmpfiles.d %{buildroot}%{_tmpfilesdir}/%{name}.conf
 
 install -d %{buildroot}%{_presetdir}
