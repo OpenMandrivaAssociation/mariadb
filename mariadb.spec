@@ -282,6 +282,7 @@ package '%{name}'.
 %{_bindir}/aria_pack
 %{_bindir}/aria_read_log
 %{_bindir}/galera_new_cluster
+%{_bindir}/galera_recovery
 %{_bindir}/innochecksum
 %{_bindir}/myisam_ftdump
 %{_bindir}/myisamchk
