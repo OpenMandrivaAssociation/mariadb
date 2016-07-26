@@ -5,7 +5,7 @@
 %define _disable_ld_no_undefined 1
 
 Name: mariadb
-Version: 10.0.25
+Version: 10.0.26
 Release: 0.1
 Source0: https://downloads.mariadb.org/interstitial/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 Source100: mysqld.service
