@@ -18,11 +18,11 @@
  // static long tokudb_lock_scan_time = 0;
  // static ulong tokudb_region_size = 0;
  // static ulong tokudb_cache_parts = 1;
--const char *tokudb_hton_name = "TokuDB";
+-const char* tokudb_hton_name = "TokuDB";
 +const char * const tokudb_hton_name = "TokuDB";
- static uint32_t tokudb_checkpointing_period;
- static uint32_t tokudb_fsync_log_period;
- uint32_t tokudb_write_status_frequency;
+ 
+ #if defined(_WIN32)
+ extern "C" {
 --- mariadb-10.0.12/storage/tokudb/PerconaFT/buildheader/make_tdb.cc.omv~	2014-06-24 15:49:52.238540785 +0200
 +++ mariadb-10.0.12/storage/tokudb/PerconaFT/buildheader/make_tdb.cc	2014-06-24 15:54:45.800670404 +0200
 @@ -143,6 +143,10 @@ static void sort_and_dump_fields (const
@@ -35,4 +35,15 @@
 +    }
      printf("};\n");
  }
+ 
+--- mariadb-10.1.16/storage/tokudb/hatoku_hton.h.orig	2016-07-26 12:30:12.371710467 +0100
++++ mariadb-10.1.16/storage/tokudb/hatoku_hton.h	2016-07-26 12:30:28.752486063 +0100
+@@ -183,7 +183,7 @@
+ 
+ extern HASH tokudb_open_tables;
+ extern tokudb::thread::mutex_t tokudb_mutex;
+-extern const char* tokudb_hton_name;
++extern const char* const tokudb_hton_name;
+ extern int tokudb_hton_initialized;
+ extern tokudb::thread::rwlock_t tokudb_hton_initialized_lock;
  

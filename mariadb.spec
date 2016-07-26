@@ -26,7 +26,7 @@ Source1000: %{name}.rpmlintrc
 # Don't strip -Wformat from --cflags -- -Werror=format-string without -Wformat
 # means trouble
 Patch0:	mariadb-10.0.8-fix-mysql_config.patch
-Patch1: mariadb-10.0.12-clang.patch
+Patch1: mariadb-10.1.16-clang.patch
 Patch2: mariadb-10.1.5-compatibility-with-llvm-ar.patch
 Patch3: mariadb-10.1.1-dont-check-null-on-parameters-declared-nonnull.patch
 Patch4: mariadb-10.1.5-force-bfd-for-mysqlclient.patch
@@ -34,7 +34,6 @@ Patch4: mariadb-10.1.5-force-bfd-for-mysqlclient.patch
 #Patch7: mariadb-10.1.5-fix-version-script-for-gold.patch
 %endif
 Patch6:	mariadb-10.1.6-fix_atomic_check.patch
-Patch7: mariadb-10.1.11-clang.patch
 Patch8: mariadb-scripts.patch
 Requires: %{name}-server = %{EVRD}
 Requires: %{name}-client = %{EVRD}
