@@ -148,11 +148,13 @@ Plugins for the MariaDB database.
 %files plugin
 %{_libdir}/mysql/plugin/adt_null.so
 %{_libdir}/mysql/plugin/auth_0x0100.so
+%{_libdir}/mysql/plugin/auth_ed25519.so
 %{_libdir}/mysql/plugin/auth_gssapi.so
 %{_libdir}/mysql/plugin/auth_gssapi_client.so
 %{_libdir}/mysql/plugin/auth_pam.so
 %{_libdir}/mysql/plugin/auth_socket.so
 %{_libdir}/mysql/plugin/auth_test_plugin.so
+%{_libdir}/mysql/plugin/client_ed25519.so
 %{_libdir}/mysql/plugin/cracklib_password_check.so
 %{_libdir}/mysql/plugin/daemon_example.ini
 %{_libdir}/mysql/plugin/dialog.so
