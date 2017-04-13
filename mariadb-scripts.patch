@@ -1,13 +1,13 @@
 diff -Naur mariadb-10.1.12/scripts/CMakeLists.txt mariadb-10.1.12.tpg/scripts/CMakeLists.txt
 --- mariadb-10.1.12/scripts/CMakeLists.txt	2016-02-24 14:25:23.000000000 +0000
 +++ mariadb-10.1.12.tpg/scripts/CMakeLists.txt	2016-03-03 20:09:51.679855641 +0000
-@@ -320,6 +320,31 @@
-       COMPONENT ${${file}_COMPONENT}
-      )
-   ENDFOREACH()
+@@ -320,6 +320,33 @@
+  EXECUTE_PROCESS(
+   COMMAND chmod +x ${CMAKE_CURRENT_BINARY_DIR}/make_binary_distribution
+ )
 +
 +  # files for systemd
-+  SET(SYSTEMD_SCRIPTS
++  SET(SYSTEMD_INST_SCRIPTS
 +    mysql.tmpfiles.d
 +    mysql.service
 +    mysql@.service
@@ -18,15 +18,17 @@ diff -Naur mariadb-10.1.12/scripts/CMakeLists.txt mariadb-10.1.12.tpg/scripts/CM
 +    mysql-check-upgrade
 +    mysql-scripts-common
 +  )
-+  FOREACH(file ${SYSTEMD_SCRIPTS})
-+    IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${file}.sh)
-+      CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/${file}.sh
-+        ${CMAKE_CURRENT_BINARY_DIR}/${file} ESCAPE_QUOTES @ONLY)
-+    ELSEIF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${file}.in)
-+      CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/${file}.in
-+        ${CMAKE_CURRENT_BINARY_DIR}/${file} ESCAPE_QUOTES @ONLY)
++  FOREACH(sysdfile ${SYSTEMD_INST_SCRIPTS})
++    SET(INFILE ${CMAKE_CURRENT_SOURCE_DIR}/${sysdfile}.in)
++    SET(SHFILE ${CMAKE_CURRENT_SOURCE_DIR}/${sysdfile}.sh)
++    IF(EXISTS ${SHFILE})
++      CONFIGURE_FILE(${SHFILE}
++        ${CMAKE_CURRENT_BINARY_DIR}/${sysdfile} ESCAPE_QUOTES @ONLY)
++    ELSEIF(EXISTS ${INFILE})
++      CONFIGURE_FILE(${INFILE}
++        ${CMAKE_CURRENT_BINARY_DIR}/${sysdfile} ESCAPE_QUOTES @ONLY)
 +    ELSE()
-+      MESSAGE(FATAL_ERROR "Can not find ${file}.sh or ${file}.in in "
++      MESSAGE(FATAL_ERROR "Can not find ${SHFILE} or ${INFILE} in "
 +        "${CMAKE_CURRENT_SOURCE_DIR}" )
 +    ENDIF()
 +  ENDFOREACH()
