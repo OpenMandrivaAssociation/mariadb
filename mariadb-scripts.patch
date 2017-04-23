@@ -1,10 +1,9 @@
-diff -Naur mariadb-10.1.12/scripts/CMakeLists.txt mariadb-10.1.12.tpg/scripts/CMakeLists.txt
---- mariadb-10.1.12/scripts/CMakeLists.txt	2016-02-24 14:25:23.000000000 +0000
-+++ mariadb-10.1.12.tpg/scripts/CMakeLists.txt	2016-03-03 20:09:51.679855641 +0000
-@@ -320,6 +320,33 @@
-  EXECUTE_PROCESS(
-   COMMAND chmod +x ${CMAKE_CURRENT_BINARY_DIR}/make_binary_distribution
- )
+--- mariadb-10.1.22/scripts/CMakeLists.txt.orig	2017-04-23 09:36:36.593968137 +0100
++++ mariadb-10.1.22/scripts/CMakeLists.txt	2017-04-23 09:37:12.659574135 +0100
+@@ -252,6 +252,34 @@
+   DESTINATION ${INSTALL_SCRIPTDIR}
+   COMPONENT Server
+   )
 +
 +  # files for systemd
 +  SET(SYSTEMD_INST_SCRIPTS
@@ -32,6 +31,7 @@ diff -Naur mariadb-10.1.12/scripts/CMakeLists.txt mariadb-10.1.12.tpg/scripts/CM
 +        "${CMAKE_CURRENT_SOURCE_DIR}" )
 +    ENDIF()
 +  ENDFOREACH()
++
  ENDIF()
  
- # Configure two scripts from one 'in' file.
+ SET(prefix "${CMAKE_INSTALL_PREFIX}")
