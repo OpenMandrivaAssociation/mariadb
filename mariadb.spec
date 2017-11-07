@@ -71,6 +71,8 @@ BuildRequires:	pkgconfig(libpcre)
 BuildRequires:	pam-devel
 # For plugin/ha_oqgraph.so
 BuildRequires:	boost-devel
+# For JDBC plugins
+BuildRequires:	java-1.8.0-openjdk-devel
 Obsoletes: mysql < 5.7
 Provides: mysql = 5.7
 
