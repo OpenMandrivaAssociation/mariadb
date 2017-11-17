@@ -38,6 +38,7 @@ Patch8: mariadb-scripts.patch
 Patch9: https://jira.mariadb.org/secure/attachment/43539/get_dh2048-openssl-1.1.patch
 Patch10: https://jira.mariadb.org/secure/attachment/43540/md5_input.patch
 Patch11: mariadb-10.1.28-openssl-1.1.patch
+Patch12: cmake-pcre.cmake.patch
 Requires: %{name}-server = %{EVRD}
 Requires: %{name}-client = %{EVRD}
 BuildRequires:	bison
