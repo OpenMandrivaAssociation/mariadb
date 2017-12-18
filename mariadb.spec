@@ -53,6 +53,7 @@ BuildRequires:	stdc++-devel
 BuildRequires:	readline-devel
 BuildRequires:	xfsprogs-devel
 BuildRequires:	jemalloc-devel
+BuildRequires:	pkgconfig(libxml-2.0)
 BuildRequires:	pkgconfig(ncursesw)
 BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pkgconfig(zlib)
