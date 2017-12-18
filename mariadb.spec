@@ -574,8 +574,10 @@ sed -i -e "s,/usr/lib/systemd/system,%{_systemunitdir},g" cmake/install_layout.c
 	-DWITH_READLINE:BOOL=ON \
 	-DWITH_LIBEVENT=system \
 	-DINSTALL_SYSTEMD_systemunitdir_RPM="%{_systemunitdir}" \
-	-DCOMPILATION_COMMENT="%{_vendor} MariaDB Server"
-
+	-DCOMPILATION_COMMENT="%{_vendor} MariaDB Server" ||:
+cat /builddir/build/BUILD/mariadb-10.1.29/build/CMakeFiles/CMakeOutput.log	
+cat /builddir/build/BUILD/mariadb-10.1.29/build/CMakeFiles/CMakeError.log
+exit 1
 # Used by logformat during build
 export LD_LIBRARY_PATH=`pwd`/storage/tokudb/PerconaFT/portability:$LD_LIBRARY_PATH
 %make -k || make
