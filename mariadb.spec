@@ -39,6 +39,7 @@ Patch9: https://jira.mariadb.org/secure/attachment/43539/get_dh2048-openssl-1.1.
 Patch10: https://jira.mariadb.org/secure/attachment/43540/md5_input.patch
 Patch11: mariadb-10.1.28-openssl-1.1.patch
 Patch12: cmake-pcre.cmake.patch
+Patch12: 0002-mroonga-after-merge-CMakeLists.txt-fixes.patch
 Requires: %{name}-server = %{EVRD}
 Requires: %{name}-client = %{EVRD}
 BuildRequires:	bison
@@ -574,10 +575,8 @@ sed -i -e "s,/usr/lib/systemd/system,%{_systemunitdir},g" cmake/install_layout.c
 	-DWITH_READLINE:BOOL=ON \
 	-DWITH_LIBEVENT=system \
 	-DINSTALL_SYSTEMD_systemunitdir_RPM="%{_systemunitdir}" \
-	-DCOMPILATION_COMMENT="%{_vendor} MariaDB Server" ||:
-cat /builddir/build/BUILD/mariadb-10.1.29/build/CMakeFiles/CMakeOutput.log	
-cat /builddir/build/BUILD/mariadb-10.1.29/build/CMakeFiles/CMakeError.log
-exit 1
+	-DCOMPILATION_COMMENT="%{_vendor} MariaDB Server"
+
 # Used by logformat during build
 export LD_LIBRARY_PATH=`pwd`/storage/tokudb/PerconaFT/portability:$LD_LIBRARY_PATH
 %make -k || make
