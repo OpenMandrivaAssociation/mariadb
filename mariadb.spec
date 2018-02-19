@@ -7,7 +7,7 @@
 
 Summary: The MariaDB database, a drop-in replacement for MySQL
 Name: mariadb
-Version: 10.1.29
+Version: 10.3.4
 Release: 1
 URL: http://mariadb.org/
 License: GPL
@@ -29,17 +29,11 @@ Patch0:	mariadb-10.0.8-fix-mysql_config.patch
 Patch1: mariadb-10.1.16-clang.patch
 Patch2: mariadb-10.1.5-compatibility-with-llvm-ar.patch
 Patch3: mariadb-10.1.1-dont-check-null-on-parameters-declared-nonnull.patch
-Patch4: mariadb-10.1.5-force-bfd-for-mysqlclient.patch
 %ifnarch %ix86 x86_64
 #Patch7: mariadb-10.1.5-fix-version-script-for-gold.patch
 %endif
-Patch6:	mariadb-10.1.6-fix_atomic_check.patch
 Patch8: mariadb-scripts.patch
-Patch9: https://jira.mariadb.org/secure/attachment/43539/get_dh2048-openssl-1.1.patch
-Patch10: https://jira.mariadb.org/secure/attachment/43540/md5_input.patch
-Patch11: mariadb-10.1.28-openssl-1.1.patch
 Patch12: cmake-pcre.cmake.patch
-Patch13: 0002-mroonga-after-merge-CMakeLists.txt-fixes.patch
 Requires: %{name}-server = %{EVRD}
 Requires: %{name}-client = %{EVRD}
 BuildRequires:	bison
@@ -82,12 +76,33 @@ Provides: mysql = 5.7
 %description
 The MariaDB database, a drop-in replacement for MySQL.
 
-%libpackage mysqlclient %{libmajor}
+%define libname %mklibname mariadb 3
+%define oldlibname %mklibname mysqlclient %{libmajor}
+%if "%_lib" == "lib64"
+%define archmarker ()(64bit)
+%else
+%define archmarker %{nil}
+%endif
+
+%package -n %{libname}
+Summary: The MariaDB core library
+Group: System/Libraries
+%rename %oldlibname
+Provides: libmysqlclient.so.%{libmajor}%{archmarker}
+Provides: libmysqlclient_r.so.%{libmajor}%{archmarker}
+
+%description -n %{libname}
+The MariaDB core library
+
+%files -n %{libname}
+%{_libdir}/libmariadb.so.3
+%{_libdir}/libmysqlclient.so.%{libmajor}*
 %{_libdir}/libmysqlclient_r.so.%{libmajor}*
 
-%libpackage mysqld %{libmajor}
+%libpackage mysqld 19
 
-%define devpackage %mklibname -d mysqlclient
+%define devpackage %mklibname -d mariadb
+%define olddevpackage %mklibname -d mysqlclient
 
 %package -n %{devpackage}
 Summary: Development files for the MariaDB database
@@ -95,11 +110,17 @@ Provides: %{name}-devel = %{EVRD}
 Provides: %{mklibname -d mysqlclient_r} = %{EVRD}
 Provides: %{mklibname -d mysqld} = %{EVRD}
 Requires: %{mklibname mysqlclient 18} = %{EVRD}
-Requires: %{mklibname mysqld 18} = %{EVRD}
+Requires: %{mklibname mysqld 19} = %{EVRD}
 Requires: %{name}-common = %{EVRD}
 Obsoletes: %{mklibname -d mysql} < %{EVRD}
 Provides: %{mklibname -d mysql} = %{EVRD}
 %rename mysql-devel
+%rename %{olddevpackage}
+%if "%_lib" == "lib64"
+Provides: devel(libmysqlclient(64bit))
+%else
+Provides: devel(libmysqlclient)
+%endif
 Group: Development/Other
 
 %description -n %{devpackage}
@@ -127,6 +148,7 @@ Static libraries for the MariaDB database.
 %files -n %{staticpackage}
 %{_libdir}/libmysqlclient.a
 %{_libdir}/libmysqlclient_r.a
+%{_libdir}/libmariadbclient.a
 %{_libdir}/libmysqlservices.a
 
 %define staticembpackage %mklibname -d -s mysqld
@@ -173,10 +195,10 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/ha_example.so
 %{_libdir}/mysql/plugin/ha_federated.so
 %{_libdir}/mysql/plugin/ha_federatedx.so
+%{_libdir}/mysql/plugin/ha_rocksdb.so
 %{_libdir}/mysql/plugin/ha_sphinx.so
 %{_libdir}/mysql/plugin/ha_spider.so
 %{_libdir}/mysql/plugin/ha_test_sql_discovery.so
-%{_libdir}/mysql/plugin/ha_innodb.so
 %{_libdir}/mysql/plugin/ha_mroonga.so
 %{_libdir}/mysql/plugin/handlersocket.so
 %{_libdir}/mysql/plugin/libdaemon_example.so
@@ -189,10 +211,10 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/qa_auth_server.so
 %{_libdir}/mysql/plugin/query_cache_info.so
 %{_libdir}/mysql/plugin/query_response_time.so
-%{_libdir}/mysql/plugin/semisync_master.so
-%{_libdir}/mysql/plugin/semisync_slave.so
 %{_libdir}/mysql/plugin/server_audit.so
+%{_libdir}/mysql/plugin/sha256_password.so
 %{_libdir}/mysql/plugin/sql_errlog.so
+%{_libdir}/mysql/plugin/test_versioning.so
 %{_mandir}/man1/mysql_plugin.1*
 %{_libdir}/mysql/plugin/debug_key_management.so
 %{_libdir}/mysql/plugin/example_key_management.so
@@ -221,7 +243,6 @@ for both hard disk drives and flash memory.
 %ifarch x86_64
 %files plugin-tokudb
 %{_libdir}/mysql/plugin/ha_tokudb.so
-%config(noreplace) %{_sysconfdir}/my.cnf.d/tokudb.cnf
 %{_bindir}/tokuftdump
 %{_bindir}/tokuft_logprint
 %{_mandir}/man1/tokuft_logdump.1*
@@ -282,8 +303,12 @@ package '%{name}'.
 %{_datadir}/mysql/maria_add_gis_sp.sql
 %{_datadir}/mysql/maria_add_gis_sp_bootstrap.sql
 %{_datadir}/mysql/mroonga
+%{_datadir}/groonga
+%{_datadir}/groonga-normalizer-mysql
 %{_presetdir}/86-mariadb.preset
 %{_tmpfilesdir}/%{name}.conf
+%{_tmpfilesdir}/tmpfiles.conf
+%{_prefix}/lib/sysusers.d/sysusers.conf
 %{_mandir}/man8/*
 %dir %{_libdir}/mysql
 %dir %{_libdir}/mysql/plugin
@@ -307,13 +332,12 @@ package '%{name}'.
 %{_bindir}/mysql_convert_table_format
 %{_bindir}/mysql_fix_extensions
 %{_bindir}/mysql_install_db
+%{_bindir}/mysql_ldb
 %{_bindir}/mysql_plugin
 %{_bindir}/mysql_secure_installation
 %{_bindir}/mysql_setpermission
 %{_bindir}/mysql_tzinfo_to_sql
 %{_bindir}/mysql_upgrade
-%{_bindir}/mysql_zap
-%{_bindir}/mysqlbug
 %{_bindir}/mysqld_multi
 %{_bindir}/mysqld_safe
 %{_bindir}/mysqld_safe_helper
@@ -323,6 +347,7 @@ package '%{name}'.
 %{_bindir}/replace
 %{_bindir}/resolve_stack_dump
 %{_bindir}/resolveip
+%{_bindir}/sst_dump
 %{_bindir}/wsrep_*
 %{_sbindir}/mysqld
 %{_bindir}/mariadb-service-convert
@@ -363,8 +388,6 @@ package '%{name}'.
 %{_mandir}/man1/mysql_setpermission.1*
 %{_mandir}/man1/mysql_tzinfo_to_sql.1*
 %{_mandir}/man1/mysql_upgrade.1*
-%{_mandir}/man1/mysql_zap.1*
-%{_mandir}/man1/mysqlbug.1*
 %{_mandir}/man1/mysqld_multi.1*
 %{_mandir}/man1/my_safe_process.1*
 %{_mandir}/man1/mysqld_safe.1*
@@ -403,7 +426,7 @@ Requires: %{name}-common-binaries = %{EVRD}
 Common files needed by both the MariaDB server and client.
 
 %files common
-%doc README COPYING
+%doc COPYING
 %config(noreplace) %{_sysconfdir}/my.cnf
 %dir %{_sysconfdir}/my.cnf.d
 %dir %{_datadir}/mysql
@@ -417,6 +440,7 @@ Common files needed by both the MariaDB server and client.
 %{_datadir}/mysql/french
 %{_datadir}/mysql/german
 %{_datadir}/mysql/greek
+%{_datadir}/mysql/hindi
 %{_datadir}/mysql/hungarian
 %{_datadir}/mysql/italian
 %{_datadir}/mysql/japanese
@@ -436,6 +460,7 @@ Common files needed by both the MariaDB server and client.
 # We put this into -common for now because it is needed for both
 # -server (used by mysqld_safe) and by -devel (configure scripts calling
 # it, e.g. php)
+%{_bindir}/mariadb_config
 %{_bindir}/mysql_config
 
 %package common-binaries
@@ -575,7 +600,12 @@ sed -i -e "s,/usr/lib/systemd/system,%{_systemunitdir},g" cmake/install_layout.c
 	-DWITH_READLINE:BOOL=ON \
 	-DWITH_LIBEVENT=system \
 	-DINSTALL_SYSTEMD_systemunitdir_RPM="%{_systemunitdir}" \
-	-DCOMPILATION_COMMENT="%{_vendor} MariaDB Server"
+	-DCOMPILATION_COMMENT="%{_vendor} MariaDB Server" \
+	-DCONC_WITH_CURL:BOOL=ON \
+	-DCONC_WITH_SSL:BOOL=ON \
+	-DLOAD_LOCAL_INFILE:BOOL=ON \
+	-DLZ4_LIBS=%{_libdir}/liblz4.so \
+	-DWITH_MYSQLCOMPAT:BOOL=ON
 
 # Used by logformat during build
 export LD_LIBRARY_PATH=`pwd`/storage/tokudb/PerconaFT/portability:$LD_LIBRARY_PATH
@@ -627,6 +657,10 @@ rm -f	%{buildroot}%{_datadir}/mysql/config.huge.ini \
 	%{buildroot}%{_datadir}/mysql/ndb-config-2-node.ini \
 	%{buildroot}%{_datadir}/mysql/SELinux/RHEL4/mysql.fc \
 	%{buildroot}%{_datadir}/mysql/SELinux/RHEL4/mysql.te
+
+# for compatibility
+ln -s libmariadb.so.3 %{buildroot}%{_libdir}/libmysqlclient_r.so.18
+ln -s libmariadb.so.3 %{buildroot}%{_libdir}/libmysqlclient.so.18
 
 %files
 # meta package
