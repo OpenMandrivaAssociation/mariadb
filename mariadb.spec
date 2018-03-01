@@ -25,7 +25,7 @@ Source9: mysql@.service.in
 Source1000: %{name}.rpmlintrc
 # Don't strip -Wformat from --cflags -- -Werror=format-string without -Wformat
 # means trouble
-Patch0:	mariadb-10.0.8-fix-mysql_config.patch
+Patch0: mariadb-10.0.8-fix-mysql_config.patch
 Patch1: mariadb-10.1.16-clang.patch
 Patch2: mariadb-10.1.5-compatibility-with-llvm-ar.patch
 Patch3: mariadb-10.1.1-dont-check-null-on-parameters-declared-nonnull.patch
@@ -305,7 +305,6 @@ package '%{name}'.
 %{_datadir}/mysql/mroonga
 %{_datadir}/groonga
 %{_datadir}/groonga-normalizer-mysql
-%{_presetdir}/86-mariadb.preset
 %{_tmpfilesdir}/%{name}.conf
 %{_tmpfilesdir}/tmpfiles.conf
 %{_prefix}/lib/sysusers.d/sysusers.conf
@@ -620,11 +619,6 @@ rm -f %{buildroot}%{_sbindir}/rcmysql
 install -D -p -m 644 build/scripts/mysql.service %{buildroot}%{_systemunitdir}/%{name}.service
 install -D -p -m 644 build/scripts/mysql@.service %{buildroot}%{_systemunitdir}/%{name}@.service
 install -D -p -m 0644 build/scripts/mysql.tmpfiles.d %{buildroot}%{_tmpfilesdir}/%{name}.conf
-
-install -d %{buildroot}%{_presetdir}
-cat > %{buildroot}%{_presetdir}/86-mariadb.preset << EOF
-enable mariadb.service
-EOF
 
 # helper scripts for service starting
 install -D -p -m 755 build/scripts/mysql-prepare-db-dir %{buildroot}%{_sbindir}/mysql-prepare-db-dir
