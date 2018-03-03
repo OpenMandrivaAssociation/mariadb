@@ -278,7 +278,6 @@ package '%{name}'.
 %{_datadir}/mysql/maria_add_gis_sp.sql
 %{_datadir}/mysql/maria_add_gis_sp_bootstrap.sql
 %{_datadir}/mysql/mroonga
-%{_presetdir}/86-mariadb.preset
 %{_tmpfilesdir}/%{name}.conf
 %{_mandir}/man8/*
 %dir %{_libdir}/mysql
@@ -586,11 +585,6 @@ rm -f %{buildroot}%{_sbindir}/rcmysql
 install -D -p -m 644 build/scripts/mysql.service %{buildroot}%{_systemunitdir}/%{name}.service
 install -D -p -m 644 build/scripts/mysql@.service %{buildroot}%{_systemunitdir}/%{name}@.service
 install -D -p -m 0644 build/scripts/mysql.tmpfiles.d %{buildroot}%{_tmpfilesdir}/%{name}.conf
-
-install -d %{buildroot}%{_presetdir}
-cat > %{buildroot}%{_presetdir}/86-mariadb.preset << EOF
-enable mariadb.service
-EOF
 
 # helper scripts for service starting
 install -D -p -m 755 build/scripts/mysql-prepare-db-dir %{buildroot}%{_sbindir}/mysql-prepare-db-dir
