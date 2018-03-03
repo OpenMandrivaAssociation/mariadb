@@ -622,5 +622,11 @@ rm -f	%{buildroot}%{_datadir}/mysql/config.huge.ini \
 	%{buildroot}%{_datadir}/mysql/SELinux/RHEL4/mysql.fc \
 	%{buildroot}%{_datadir}/mysql/SELinux/RHEL4/mysql.te
 
+%ifarch %{ix86}
+# not needed for i586
+rm -f %{buildroot}%{_mandir}/man1/tokuft_logdump.1* \
+      %{buildroot}%{_mandir}/man1/tokuftdump.1*
+%endif
+
 %files
 # meta package
