@@ -591,11 +591,6 @@ install -D -p -m 644 build/scripts/mysql.service %{buildroot}%{_systemunitdir}/%
 install -D -p -m 644 build/scripts/mysql@.service %{buildroot}%{_systemunitdir}/%{name}@.service
 install -D -p -m 0644 build/scripts/mysql.tmpfiles.d %{buildroot}%{_tmpfilesdir}/%{name}.conf
 
-install -d %{buildroot}%{_presetdir}
-cat > %{buildroot}%{_presetdir}/86-mariadb.preset << EOF
-enable mariadb.service
-EOF
-
 # helper scripts for service starting
 install -D -p -m 755 build/scripts/mysql-prepare-db-dir %{buildroot}%{_sbindir}/mysql-prepare-db-dir
 install -p -m 755 build/scripts/mysql-wait-ready %{buildroot}%{_sbindir}/mysql-wait-ready
