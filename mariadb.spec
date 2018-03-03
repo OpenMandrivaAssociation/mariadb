@@ -278,7 +278,11 @@ package '%{name}'.
 %{_datadir}/mysql/maria_add_gis_sp.sql
 %{_datadir}/mysql/maria_add_gis_sp_bootstrap.sql
 %{_datadir}/mysql/mroonga
+%{_datadir}/groonga
+%{_datadir}/groonga-normalizer-mysq
 %{_presetdir}/86-mariadb.preset
+%{_prefix}/lib/sysusers.d/sysusers.conf
+%{_tmpfilesdir}/tmpfiles.conf
 %{_tmpfilesdir}/%{name}.conf
 %{_mandir}/man8/*
 %dir %{_libdir}/mysql
