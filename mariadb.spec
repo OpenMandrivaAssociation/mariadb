@@ -7,7 +7,7 @@
 
 Summary: The MariaDB database, a drop-in replacement for MySQL
 Name: mariadb
-Version: 10.1.29
+Version: 10.1.31
 Release: 1
 URL: http://mariadb.org/
 License: GPL
@@ -35,9 +35,8 @@ Patch4: mariadb-10.1.5-force-bfd-for-mysqlclient.patch
 %endif
 Patch6:	mariadb-10.1.6-fix_atomic_check.patch
 Patch8: mariadb-scripts.patch
-Patch9: https://jira.mariadb.org/secure/attachment/43539/get_dh2048-openssl-1.1.patch
 Patch10: https://jira.mariadb.org/secure/attachment/43540/md5_input.patch
-Patch11: mariadb-10.1.28-openssl-1.1.patch
+Patch11: revert-liblz4-fix.patch
 Requires: %{name}-server = %{EVRD}
 Requires: %{name}-client = %{EVRD}
 BuildRequires:	bison
