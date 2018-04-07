@@ -7,7 +7,7 @@
 
 Summary: The MariaDB database, a drop-in replacement for MySQL
 Name: mariadb
-Version: 10.3.4
+Version: 10.3.5
 Release: 1
 URL: http://mariadb.org/
 License: GPL
@@ -26,7 +26,7 @@ Source1000: %{name}.rpmlintrc
 # Don't strip -Wformat from --cflags -- -Werror=format-string without -Wformat
 # means trouble
 Patch0: mariadb-10.0.8-fix-mysql_config.patch
-Patch1: mariadb-10.1.16-clang.patch
+##Patch1: mariadb-10.1.16-clang.patch
 Patch2: mariadb-10.1.5-compatibility-with-llvm-ar.patch
 Patch3: mariadb-10.1.1-dont-check-null-on-parameters-declared-nonnull.patch
 %ifnarch %ix86 x86_64
@@ -77,7 +77,9 @@ Provides: mysql = 5.7
 The MariaDB database, a drop-in replacement for MySQL.
 
 %define libname %mklibname mariadb 3
+%define dlibname %mklibname mariadbd 19
 %define oldlibname %mklibname mysqlclient %{libmajor}
+%define olddlibname %mklibname mysqld 19
 %if "%_lib" == "lib64"
 %define archmarker ()(64bit)
 %else
@@ -99,7 +101,18 @@ The MariaDB core library
 %{_libdir}/libmysqlclient.so.%{libmajor}*
 %{_libdir}/libmysqlclient_r.so.%{libmajor}*
 
-%libpackage mysqld 19
+%package -n %{dlibname}
+Summary: The MariaDB daemon library
+Group: System/Libraries
+%rename %olddlibname
+Provides: libmysqld.so.19%{archmarker}
+
+%description -n %{dlibname}
+The MariaDB daemon library
+
+%files -n %{dlibname}
+%{_libdir}/libmariadbd.so.19
+%{_libdir}/libmysqld.so.19
 
 %define devpackage %mklibname -d mariadb
 %define olddevpackage %mklibname -d mysqlclient
@@ -149,6 +162,7 @@ Static libraries for the MariaDB database.
 %{_libdir}/libmysqlclient.a
 %{_libdir}/libmysqlclient_r.a
 %{_libdir}/libmariadbclient.a
+%{_libdir}/libmariadbd.a
 %{_libdir}/libmysqlservices.a
 
 %define staticembpackage %mklibname -d -s mysqld
@@ -289,6 +303,7 @@ package '%{name}'.
 
 %files server
 %{_bindir}/mariabackup
+%{_bindir}/myrocks_hotbackup
 %{_bindir}/mbstream
 %dir %{_datadir}/mysql
 %{_datadir}/mysql/errmsg-utf8.txt
@@ -416,7 +431,6 @@ Tool to convert code written for mSQL to MySQL/MariaDB.
 %package common
 Summary: Common files needed by both the MariaDB server and client
 Group: System/Servers
-BuildArch: noarch
 Obsoletes: mysql-common < 5.7
 Provides: mysql-common = 5.7
 Requires: %{name}-common-binaries = %{EVRD}
@@ -516,6 +530,10 @@ MariaDB command line client.
 %prep
 %setup -q
 %apply_patches
+
+# MariaDB uses python2 scripts to autogenerate some sources...
+# Let's use python3 instead.
+find . -name "*.py" |xargs 2to3 -w
 
 cp %{SOURCE1} %{SOURCE2} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{SOURCE9} scripts
 
@@ -655,6 +673,7 @@ rm -f	%{buildroot}%{_datadir}/mysql/config.huge.ini \
 # for compatibility
 ln -s libmariadb.so.3 %{buildroot}%{_libdir}/libmysqlclient_r.so.18
 ln -s libmariadb.so.3 %{buildroot}%{_libdir}/libmysqlclient.so.18
+ln -s libmariadb.so.3 %{buildroot}%{_libdir}/libmysqld.so.19
 
 %files
 # meta package
