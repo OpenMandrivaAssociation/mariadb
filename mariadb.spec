@@ -8,7 +8,7 @@
 Summary: The MariaDB database, a drop-in replacement for MySQL
 Name: mariadb
 Version: 10.3.6
-Release: 1
+Release: 2
 URL: http://mariadb.org/
 License: GPL
 Group: System/Servers
@@ -61,6 +61,8 @@ BuildRequires:	pkgconfig(krb5-gssapi)
 BuildRequires:	pkgconfig(com_err)
 # For _tmpfilesdir macro
 BuildRequires:	systemd
+# For _pre_useradd and friends
+BuildRequires:	rpm-helper
 BuildRequires:	cracklib-devel
 BuildRequires:	lzo-devel
 BuildRequires:	wrap-devel
