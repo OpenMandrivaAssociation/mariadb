@@ -683,6 +683,12 @@ rm -f	%{buildroot}%{_datadir}/mysql/config.huge.ini \
 	%{buildroot}%{_datadir}/mysql/SELinux/RHEL4/mysql.fc \
 	%{buildroot}%{_datadir}/mysql/SELinux/RHEL4/mysql.te
 
+%ifnarch x86_64
+# TokuDB is x86_64 specific for now -- so its man pages are uselsss
+rm -f	%{buildroot}%{_mandir}/man1/tokuft_logdump.1* \
+	%{buildroot}%{_mandir}/man1/tokuftdump.1*
+%endif
+
 # for compatibility
 ln -s libmariadb.so.3 %{buildroot}%{_libdir}/libmysqlclient_r.so.18
 ln -s libmariadb.so.3 %{buildroot}%{_libdir}/libmysqlclient.so.18
