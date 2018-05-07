@@ -316,6 +316,8 @@ package '%{name}'.
 %{_bindir}/mariabackup
 %ifarch x86_64
 %{_bindir}/myrocks_hotbackup
+%{_bindir}/mysql_ldb
+%{_bindir}/sst_dump
 %endif
 %{_bindir}/mbstream
 %dir %{_datadir}/mysql
@@ -359,7 +361,6 @@ package '%{name}'.
 %{_bindir}/mysql_convert_table_format
 %{_bindir}/mysql_fix_extensions
 %{_bindir}/mysql_install_db
-%{_bindir}/mysql_ldb
 %{_bindir}/mysql_plugin
 %{_bindir}/mysql_secure_installation
 %{_bindir}/mysql_setpermission
@@ -374,7 +375,6 @@ package '%{name}'.
 %{_bindir}/replace
 %{_bindir}/resolve_stack_dump
 %{_bindir}/resolveip
-%{_bindir}/sst_dump
 %{_bindir}/wsrep_*
 %{_sbindir}/mysqld
 %{_bindir}/mariadb-service-convert
