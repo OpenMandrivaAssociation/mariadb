@@ -5,10 +5,13 @@
 %bcond_without pcre
 %define _disable_lto 1
 
+%global __requires_exclude ^perl\\((hostnames|lib::mtr|lib::v1|mtr_|My::)
+%global __provides_exclude_from ^(%{_datadir}/(mysql|mysql-test)/.*|%{_libdir}/%{pkg_name}/plugin/.*\\.so)$
+
 Summary: The MariaDB database, a drop-in replacement for MySQL
 Name: mariadb
 Version: 10.3.6
-Release: 2
+Release: 3
 URL: http://mariadb.org/
 License: GPL
 Group: System/Servers
