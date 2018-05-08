@@ -11,7 +11,7 @@
 Summary: The MariaDB database, a drop-in replacement for MySQL
 Name: mariadb
 Version: 10.3.6
-Release: 4
+Release: 5
 URL: http://mariadb.org/
 License: GPL
 Group: System/Servers
@@ -569,29 +569,29 @@ autoconf
 cd -
 
 %build
-%ifnarch aarch64 %{ix86} x86_64
+export CFLAGS="%{optflags} -fno-strict-aliasing"
+export CXXFLAGS="%{optflags} -fno-strict-aliasing"
+
+# Change to 0 when not building with clang for whatever reason
+%if 1
 export CC="%{__cc} -Wno-unknown-warning-option -Wno-extern-c-compat -Qunused-arguments"
 export CXX="%{__cxx} -Wno-unknown-warning-option -Wno-extern-c-compat -Qunused-arguments"
-export CFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=pointer-bool-conversion -Wno-error=missing-field-initializers"
-export CXXFLAGS="%{optflags} -fno-strict-aliasing -Wno-error=pointer-bool-conversion -Wno-error=missing-field-initializers -fcxx-exceptions"
+export CFLAGS="$CFLAGS -Wno-error=pointer-bool-conversion -Wno-error=missing-field-initializers"
+export CXXFLAGS="$CFLAGS -Wno-error=pointer-bool-conversion -Wno-error=missing-field-initializers -fcxx-exceptions"
 %else
 # clang 3.7 on i586 fails to build libmysqlclient lib correctly
 # ld.gold gives assert in operator() symtab.cc:1656
 # ld.bfd gives div error or symver error
 export CC=gcc
 export CXX=g++
-%ifarch x86_64
-export CFLAGS="%{optflags} -fno-strict-aliasing"
-export CXXFLAGS="%{optflags} -fno-strict-aliasing"
-%endif
 %endif
 
 # Get rid of gcc specific flags when using clang
 if echo $CC |grep -q gcc; then
-export CFLAGS="$CFLAGS -Wno-error=maybe-uninitialized"
-export CXXFLAGS="$CXXFLAGS -Wno-error=maybe-uninitialized"
+	export CFLAGS="$CFLAGS -Wno-error=maybe-uninitialized"
+	export CXXFLAGS="$CXXFLAGS -Wno-error=maybe-uninitialized"
 else
-sed -i -e 's,-Wstrict-null-sentinel,,;s,-Wtrampolines,,;s,-Wlogical-op,,' storage/tokudb/PerconaFT/cmake_modules/TokuSetupCompiler.cmake
+	sed -i -e 's,-Wstrict-null-sentinel,,;s,-Wtrampolines,,;s,-Wlogical-op,,' storage/tokudb/PerconaFT/cmake_modules/TokuSetupCompiler.cmake
 fi
 
 # aliasing rule violations at least in storage/tokudb/PerconaFT/ft/dbufio.cc
