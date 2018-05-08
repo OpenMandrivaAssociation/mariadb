@@ -11,7 +11,7 @@
 Summary: The MariaDB database, a drop-in replacement for MySQL
 Name: mariadb
 Version: 10.3.6
-Release: 5
+Release: 6
 URL: http://mariadb.org/
 License: GPL
 Group: System/Servers
@@ -33,6 +33,10 @@ Patch0: mariadb-10.0.8-fix-mysql_config.patch
 Patch2: mariadb-10.1.5-compatibility-with-llvm-ar.patch
 Patch3: mariadb-10.1.1-dont-check-null-on-parameters-declared-nonnull.patch
 Patch4: mariadb-10.3.6-jni-fixes.patch
+# Upstream disables rocksdb on x86_32 because the build process seems to
+# hang on their builders. It doesn't on ours, so let's get rid of the
+# paranoia...
+Patch5: mariadb-10.3.6-enable-rocksdb-on-x86_32.patch
 %ifnarch %ix86 x86_64
 #Patch7: mariadb-10.1.5-fix-version-script-for-gold.patch
 %endif
@@ -94,6 +98,23 @@ The MariaDB database, a drop-in replacement for MySQL.
 %else
 %define archmarker %{nil}
 %endif
+
+%package rocksdb
+Summary: RocksDB backend for MariaDB
+Group: System/Servers
+Requires: %{name} = %{EVRD}
+Requires: %{name}-server = %{EVRD}
+
+%description rocksdb
+RocksDB backend for MariaDB.
+
+RocksDB is a high performance embedded database for key-value data.
+
+%files rocksdb
+%{_libdir}/mysql/plugin/ha_rocksdb.so
+%{_bindir}/myrocks_hotbackup
+%{_bindir}/mysql_ldb
+%{_bindir}/sst_dump
 
 %package -n %{libname}
 Summary: The MariaDB core library
@@ -219,9 +240,6 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/ha_example.so
 %{_libdir}/mysql/plugin/ha_federated.so
 %{_libdir}/mysql/plugin/ha_federatedx.so
-%ifarch x86_64 aarch64
-%{_libdir}/mysql/plugin/ha_rocksdb.so
-%endif
 %{_libdir}/mysql/plugin/ha_sphinx.so
 %{_libdir}/mysql/plugin/ha_spider.so
 %{_libdir}/mysql/plugin/ha_test_sql_discovery.so
@@ -305,6 +323,7 @@ Requires: %{name}-plugin = %{EVRD}
 Obsoletes: mysql-server < 5.7
 Provides: mysql-server = 5.7
 Requires(post,preun): rpm-helper
+Suggests: %{name}-rocksdb = %{EVRD}
 
 %description server
 The MariaDB server. For a full MariaDB database server, install
@@ -315,11 +334,6 @@ package '%{name}'.
 
 %files server
 %{_bindir}/mariabackup
-%ifarch x86_64 aarch64
-%{_bindir}/myrocks_hotbackup
-%{_bindir}/mysql_ldb
-%{_bindir}/sst_dump
-%endif
 %{_bindir}/mbstream
 %dir %{_datadir}/mysql
 %{_datadir}/mysql/errmsg-utf8.txt

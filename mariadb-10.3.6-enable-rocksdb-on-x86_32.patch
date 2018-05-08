@@ -1,0 +1,16 @@
+diff -up mariadb-10.3.6/storage/rocksdb/CMakeLists.txt.omv~ mariadb-10.3.6/storage/rocksdb/CMakeLists.txt
+--- mariadb-10.3.6/storage/rocksdb/CMakeLists.txt.omv~	2018-05-08 18:36:04.510932053 +0200
++++ mariadb-10.3.6/storage/rocksdb/CMakeLists.txt	2018-05-08 18:36:12.179757531 +0200
+@@ -20,12 +20,6 @@ IF(HAVE_SCHED_GETCPU)
+ ENDIF()
+ 
+ 
+-# We've had our builders hang during the build process. This prevents MariaRocks
+-# to be built on 32 bit intel OS kernels.
+-IF(CMAKE_SYSTEM_PROCESSOR MATCHES "i[36]86")
+-  SKIP_ROCKSDB_PLUGIN("Intel 32 bit not supported.")
+-ENDIF()
+-
+ # Due to retrieved data being incorrect endian
+ include(TestBigEndian)
+ test_big_endian(BIG_ENDIAN)
