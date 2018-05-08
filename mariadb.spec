@@ -218,7 +218,7 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/ha_example.so
 %{_libdir}/mysql/plugin/ha_federated.so
 %{_libdir}/mysql/plugin/ha_federatedx.so
-%ifarch x86_64
+%ifarch x86_64 aarch64
 %{_libdir}/mysql/plugin/ha_rocksdb.so
 %endif
 %{_libdir}/mysql/plugin/ha_sphinx.so
@@ -314,7 +314,7 @@ package '%{name}'.
 
 %files server
 %{_bindir}/mariabackup
-%ifarch x86_64
+%ifarch x86_64 aarch64
 %{_bindir}/myrocks_hotbackup
 %{_bindir}/mysql_ldb
 %{_bindir}/sst_dump
