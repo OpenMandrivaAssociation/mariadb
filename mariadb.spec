@@ -586,18 +586,16 @@ cd -
 export CFLAGS="%{optflags} -fno-strict-aliasing"
 export CXXFLAGS="%{optflags} -fno-strict-aliasing"
 
-# Change to 0 when not building with clang for whatever reason
-%if 1
+%ifarch %{ix86}
+# clang 7.0-331113 on i686 fails to build myISAMMRG
+# Inconsistent CFA register and/or offset between pred and succ
+export CC=gcc
+export CXX=g++
+%else
 export CC="%{__cc} -Wno-unknown-warning-option -Wno-extern-c-compat -Qunused-arguments"
 export CXX="%{__cxx} -Wno-unknown-warning-option -Wno-extern-c-compat -Qunused-arguments"
 export CFLAGS="$CFLAGS -Wno-error=pointer-bool-conversion -Wno-error=missing-field-initializers"
 export CXXFLAGS="$CFLAGS -Wno-error=pointer-bool-conversion -Wno-error=missing-field-initializers -fcxx-exceptions"
-%else
-# clang 3.7 on i586 fails to build libmysqlclient lib correctly
-# ld.gold gives assert in operator() symtab.cc:1656
-# ld.bfd gives div error or symver error
-export CC=gcc
-export CXX=g++
 %endif
 
 # Get rid of gcc specific flags when using clang
