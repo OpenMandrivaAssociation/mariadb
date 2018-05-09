@@ -11,7 +11,7 @@
 Summary: The MariaDB database, a drop-in replacement for MySQL
 Name: mariadb
 Version: 10.3.6
-Release: 6
+Release: 7
 URL: http://mariadb.org/
 License: GPL
 Group: System/Servers
@@ -155,6 +155,8 @@ Provides: %{mklibname -d mysqld} = %{EVRD}
 Requires: %{mklibname mysqlclient 18} = %{EVRD}
 Requires: %{mklibname mysqld 19} = %{EVRD}
 Requires: %{name}-common = %{EVRD}
+# Can't use -lmariadb without -lz
+Requires: pkgconfig(zlib)
 Obsoletes: %{mklibname -d mysql} < %{EVRD}
 Provides: %{mklibname -d mysql} = %{EVRD}
 %rename mysql-devel
