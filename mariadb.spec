@@ -10,8 +10,8 @@
 
 Summary: The MariaDB database, a drop-in replacement for MySQL
 Name: mariadb
-Version: 10.3.6
-Release: 7
+Version: 10.3.7
+Release: 1
 URL: http://mariadb.org/
 License: GPL
 Group: System/Servers
@@ -404,9 +404,11 @@ package '%{name}'.
 %{_systemunitdir}/*.service
 %dir %{_systemunitdir}/mariadb@bootstrap.service.d
 %{_systemunitdir}/mariadb@bootstrap.service.d/*.conf
+%{_sysconfdir}/systemd/system/mariadb.service.d
 %dir %{_datadir}/mysql/systemd
 %{_datadir}/mysql/systemd/*.service
 %{_datadir}/mysql/systemd/*.conf
+%{_datadir}/mysql/mysql_test_db.sql
 %doc %{_docdir}/%{name}-%{version}
 %attr(711,%{muser},%{muser}) /srv/mysql
 %attr(711,%{muser},%{muser}) %{_localstatedir}/log/mysqld
