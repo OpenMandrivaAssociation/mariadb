@@ -288,6 +288,7 @@ for both hard disk drives and flash memory.
 # As of 10.0.6, tokudb is x86_64 only
 %ifarch x86_64
 %files plugin-tokudb
+%{_sysconfdir}/systemd/system/mariadb.service.d
 %{_libdir}/mysql/plugin/ha_tokudb.so
 %{_bindir}/tokuftdump
 %{_bindir}/tokuft_logprint
@@ -404,7 +405,6 @@ package '%{name}'.
 %{_systemunitdir}/*.service
 %dir %{_systemunitdir}/mariadb@bootstrap.service.d
 %{_systemunitdir}/mariadb@bootstrap.service.d/*.conf
-%{_sysconfdir}/systemd/system/mariadb.service.d
 %dir %{_datadir}/mysql/systemd
 %{_datadir}/mysql/systemd/*.service
 %{_datadir}/mysql/systemd/*.conf
