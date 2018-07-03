@@ -6,11 +6,12 @@
 %define _disable_lto 1
 
 %global __requires_exclude ^perl\\((hostnames|lib::mtr|lib::v1|mtr_|My::)
-%global __provides_exclude_from ^(%{_datadir}/(mysql|mysql-test)/.*|%{_libdir}/%{pkg_name}/plugin/.*\\.so)$
+%global __provides_exclude_from ^%{_datadir}/(mysql|mysql-test)/
+#global __provides_exclude_from ^(%{_datadir}/(mysql|mysql-test)/.*|%{_libdir}/%{pkg_name}/plugin/.*\\.so)$
 
 Summary: The MariaDB database, a drop-in replacement for MySQL
 Name: mariadb
-Version: 10.3.7
+Version: 10.3.8
 Release: 1
 URL: http://mariadb.org/
 License: GPL
@@ -546,6 +547,7 @@ MariaDB command line client.
 %{_bindir}/mysqlshow
 %{_bindir}/mysqlslap
 %{_bindir}/mysql_waitpid
+%{_bindir}/test-connect-t
 %{_mandir}/man1/mysql.1*
 %{_mandir}/man1/mysqlaccess.1*
 %{_mandir}/man1/mysqladmin.1*
