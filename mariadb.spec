@@ -220,7 +220,6 @@ for both hard disk drives and flash memory.
 %config(noreplace) %{_sysconfdir}/my.cnf.d/tokudb.cnf
 %{_bindir}/tokuftdump
 %{_bindir}/tokuft_logprint
-%{_mandir}/man1/tokuft_logprint.1*
 %{_mandir}/man1/tokuftdump.1*
 %endif
 
@@ -383,6 +382,7 @@ package '%{name}'.
 %{_mandir}/man1/wsrep_sst_xtrabackup.1*
 %{_mandir}/man1/wsrep_sst_rsync_wan.1*
 %{_mandir}/man1/wsrep_sst_mariabackup.1*
+%{_mandir}/man1/tokuft_logprint.1*
 
 %package msql2mysql
 Summary: Tool to convert code written for mSQL to MySQL/MariaDB
