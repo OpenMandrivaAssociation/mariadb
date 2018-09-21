@@ -7,7 +7,7 @@
 
 Summary: The MariaDB database, a drop-in replacement for MySQL
 Name: mariadb
-Version: 10.1.31
+Version: 10.1.36
 Release: 1
 URL: http://mariadb.org/
 License: GPL
@@ -33,10 +33,9 @@ Patch4: mariadb-10.1.5-force-bfd-for-mysqlclient.patch
 %ifnarch %ix86 x86_64
 #Patch7: mariadb-10.1.5-fix-version-script-for-gold.patch
 %endif
-Patch6:	mariadb-10.1.6-fix_atomic_check.patch
 Patch8: mariadb-scripts.patch
 Patch10: https://jira.mariadb.org/secure/attachment/43540/md5_input.patch
-Patch11: revert-liblz4-fix.patch
+#Patch11: revert-liblz4-fix.patch
 Requires: %{name}-server = %{EVRD}
 Requires: %{name}-client = %{EVRD}
 BuildRequires:	bison
@@ -163,6 +162,7 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/daemon_example.ini
 %{_libdir}/mysql/plugin/dialog.so
 %{_libdir}/mysql/plugin/dialog_examples.so
+%{_libdir}/mysql/plugin/disks.so
 %{_libdir}/mysql/plugin/ha_archive.so
 %{_libdir}/mysql/plugin/ha_blackhole.so
 %{_libdir}/mysql/plugin/ha_connect.so
@@ -220,7 +220,7 @@ for both hard disk drives and flash memory.
 %config(noreplace) %{_sysconfdir}/my.cnf.d/tokudb.cnf
 %{_bindir}/tokuftdump
 %{_bindir}/tokuft_logprint
-%{_mandir}/man1/tokuft_logdump.1*
+%{_mandir}/man1/tokuft_logprint.1*
 %{_mandir}/man1/tokuftdump.1*
 %endif
 
@@ -348,7 +348,9 @@ package '%{name}'.
 %{_mandir}/man1/galera_new_cluster.1*
 %{_mandir}/man1/galera_recovery.1*
 %{_mandir}/man1/innochecksum.1*
+%{_mandir}/man1/mariabackup.1*
 %{_mandir}/man1/mariadb-service-convert.1*
+%{_mandir}/man1/mbstream.1*
 %{_mandir}/man1/myisam_ftdump.1*
 %{_mandir}/man1/myisamchk.1*
 %{_mandir}/man1/myisamlog.1*
@@ -356,6 +358,7 @@ package '%{name}'.
 %{_mandir}/man1/mysql.server.1*
 %{_mandir}/man1/mysql_config.1*
 %{_mandir}/man1/mysql_convert_table_format.1*
+%{_mandir}/man1/mysql_embedded.1*
 %{_mandir}/man1/mysql_fix_extensions.1*
 %{_mandir}/man1/mysql_install_db.1*
 %{_mandir}/man1/mysql_secure_installation.1*
@@ -378,6 +381,8 @@ package '%{name}'.
 %{_mandir}/man1/wsrep_sst_rsync.1*
 %{_mandir}/man1/wsrep_sst_xtrabackup-v2.1*
 %{_mandir}/man1/wsrep_sst_xtrabackup.1*
+%{_mandir}/man1/wsrep_sst_rsync_wan.1*
+%{_mandir}/man1/wsrep_sst_mariabackup.1*
 
 %package msql2mysql
 Summary: Tool to convert code written for mSQL to MySQL/MariaDB
