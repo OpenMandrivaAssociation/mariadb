@@ -11,7 +11,7 @@
 
 Summary: The MariaDB database, a drop-in replacement for MySQL
 Name: mariadb
-Version: 10.3.8
+Version: 10.3.9
 Release: 1
 URL: http://mariadb.org/
 License: GPL
@@ -33,7 +33,6 @@ Patch0: mariadb-10.0.8-fix-mysql_config.patch
 ##Patch1: mariadb-10.1.16-clang.patch
 Patch2: mariadb-10.1.5-compatibility-with-llvm-ar.patch
 Patch3: mariadb-10.1.1-dont-check-null-on-parameters-declared-nonnull.patch
-Patch4: mariadb-10.3.6-jni-fixes.patch
 # Upstream disables rocksdb on x86_32 because the build process seems to
 # hang on their builders. It doesn't on ours, so let's get rid of the
 # paranoia...
@@ -231,6 +230,7 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/auth_pam.so
 %{_libdir}/mysql/plugin/auth_socket.so
 %{_libdir}/mysql/plugin/auth_test_plugin.so
+%{_libdir}/mysql/plugin/ha_tokudb.so
 %{_libdir}/mysql/plugin/client_ed25519.so
 %{_libdir}/mysql/plugin/cracklib_password_check.so
 %{_libdir}/mysql/plugin/daemon_example.ini
@@ -287,14 +287,13 @@ improvements, offers online schema modifications, and reduces slave lag
 for both hard disk drives and flash memory.
 
 # As of 10.0.6, tokudb is x86_64 only
-%ifarch x86_64
+%ifarch x86_64 znver1
 %files plugin-tokudb
 %{_sysconfdir}/systemd/system/mariadb.service.d
+%{_sysconfdir}/systemd/system/mariadb.service.d/tokudb.conf
 %{_libdir}/mysql/plugin/ha_tokudb.so
 %{_bindir}/tokuftdump
 %{_bindir}/tokuft_logprint
-%{_mandir}/man1/tokuft_logdump.1*
-%{_mandir}/man1/tokuftdump.1*
 %endif
 
 %package test
@@ -403,9 +402,9 @@ package '%{name}'.
 %{_sbindir}/mysql-check-socket
 %{_sbindir}/mysql-check-upgrade
 %{_sbindir}/mysql-scripts-common
-%{_systemunitdir}/*.service
-%dir %{_systemunitdir}/mariadb@bootstrap.service.d
-%{_systemunitdir}/mariadb@bootstrap.service.d/*.conf
+%{_unitdir}/*.service
+%dir %{_unitdir}/mariadb@bootstrap.service.d
+%{_unitdir}/mariadb@bootstrap.service.d/*.conf
 %dir %{_datadir}/mysql/systemd
 %{_datadir}/mysql/systemd/*.service
 %{_datadir}/mysql/systemd/*.conf
@@ -624,8 +623,8 @@ fi
 %endif
 export LDFLAGS="$LDFLAGS -fuse-ld=bfd"
 
-# (tpg) install services into %_systemunitdir
-sed -i -e "s,/usr/lib/systemd/system,%{_systemunitdir},g" cmake/install_layout.cmake
+# (tpg) install services into %_unitdir
+sed -i -e "s,/usr/lib/systemd/system,%{_unitdir},g" cmake/install_layout.cmake
 
 # DISABLE_LIBMYSQLCLIENT_SYMBOL_VERSIONING breaks binary compatibility
 # with some other distributions, but fixes the loading
@@ -648,7 +647,7 @@ sed -i -e "s,/usr/lib/systemd/system,%{_systemunitdir},g" cmake/install_layout.c
 	-DWITH_EMBEDDED_SERVER:BOOL=ON \
 	-DWITH_READLINE:BOOL=ON \
 	-DWITH_LIBEVENT=system \
-	-DINSTALL_SYSTEMD_systemunitdir_RPM="%{_systemunitdir}" \
+	-DINSTALL_SYSTEMD_unitdir_RPM="%{_unitdir}" \
 	-DCOMPILATION_COMMENT="%{_vendor} MariaDB Server" \
 	-DCONC_WITH_CURL:BOOL=ON \
 	-DCONC_WITH_SSL:BOOL=ON \
@@ -666,8 +665,8 @@ export LD_LIBRARY_PATH=`pwd`/storage/tokudb/PerconaFT/portability:$LD_LIBRARY_PA
 # systemd integration
 rm -rf %{buildroot}%{_sysconfdir}/init.d
 rm -f %{buildroot}%{_sbindir}/rcmysql
-install -D -p -m 644 build/scripts/mysql.service %{buildroot}%{_systemunitdir}/%{name}.service
-install -D -p -m 644 build/scripts/mysql@.service %{buildroot}%{_systemunitdir}/%{name}@.service
+install -D -p -m 644 build/scripts/mysql.service %{buildroot}%{_unitdir}/%{name}.service
+install -D -p -m 644 build/scripts/mysql@.service %{buildroot}%{_unitdir}/%{name}@.service
 install -D -p -m 0644 build/scripts/mysql.tmpfiles.d %{buildroot}%{_tmpfilesdir}/%{name}.conf
 
 # helper scripts for service starting

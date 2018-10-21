@@ -1,5 +1,5 @@
---- mariadb-10.1.5/cmake/merge_archives_unix.cmake.in.omv~	2015-07-15 10:31:57.362788294 +0200
-+++ mariadb-10.1.5/cmake/merge_archives_unix.cmake.in	2015-07-15 10:32:06.973779330 +0200
+--- mariadb-10.1.5/cmake/merge_archives_unix.cmake.omv~	2015-07-15 10:31:57.362788294 +0200
++++ mariadb-10.1.5/cmake/merge_archives_unix.cmake  2015-07-15 10:32:06.973779330 +0200
 @@ -51,7 +51,7 @@ ENDFOREACH()
  FILE(TO_NATIVE_PATH ${TARGET_LOCATION} ${TARGET_LOCATION})
  # Now pack the objects into library with ar.
