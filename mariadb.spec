@@ -33,6 +33,7 @@ Patch0: mariadb-10.0.8-fix-mysql_config.patch
 ##Patch1: mariadb-10.1.16-clang.patch
 Patch2: mariadb-10.1.5-compatibility-with-llvm-ar.patch
 Patch3: mariadb-10.1.1-dont-check-null-on-parameters-declared-nonnull.patch
+#Patch4: mariadb-10.3.6-jni-fixes.patch
 # Upstream disables rocksdb on x86_32 because the build process seems to
 # hang on their builders. It doesn't on ours, so let's get rid of the
 # paranoia...
@@ -290,10 +291,13 @@ for both hard disk drives and flash memory.
 %ifarch x86_64 znver1
 %files plugin-tokudb
 %{_sysconfdir}/systemd/system/mariadb.service.d
-%{_sysconfdir}/systemd/system/mariadb.service.d/tokudb.conf
 %{_libdir}/mysql/plugin/ha_tokudb.so
 %{_bindir}/tokuftdump
 %{_bindir}/tokuft_logprint
+%ifarch x86_64
+%{_mandir}/man1/tokuft_logdump.1*
+%{_mandir}/man1/tokuftdump.1*
+%endif
 %endif
 
 %package test
