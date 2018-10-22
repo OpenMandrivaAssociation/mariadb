@@ -231,7 +231,9 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/auth_pam.so
 %{_libdir}/mysql/plugin/auth_socket.so
 %{_libdir}/mysql/plugin/auth_test_plugin.so
+%ifarch x86_64 znver1
 %{_libdir}/mysql/plugin/ha_tokudb.so
+%endif
 %{_libdir}/mysql/plugin/client_ed25519.so
 %{_libdir}/mysql/plugin/cracklib_password_check.so
 %{_libdir}/mysql/plugin/daemon_example.ini
