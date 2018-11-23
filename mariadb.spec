@@ -11,8 +11,8 @@
 
 Summary: The MariaDB database, a drop-in replacement for MySQL
 Name: mariadb
-Version: 10.3.9
-Release: 2
+Version: 10.3.11
+Release: 1
 URL: http://mariadb.org/
 License: GPL
 Group: System/Servers
@@ -116,6 +116,7 @@ RocksDB is a high performance embedded database for key-value data.
 %{_bindir}/myrocks_hotbackup
 %{_bindir}/mysql_ldb
 %{_bindir}/sst_dump
+%{_mandir}/man1/mysql_ldb.1*
 
 %package -n %{libname}
 Summary: The MariaDB core library
@@ -177,6 +178,7 @@ Development files for the MariaDB database.
 %{_libdir}/*.so
 %{_datadir}/aclocal/mysql.m4
 %{_datadir}/pkgconfig/mariadb.pc
+%{_libdir}/pkgconfig/libmariadb.pc
 
 %define staticpackage %mklibname -d -s mysqlclient
 
@@ -296,6 +298,7 @@ for both hard disk drives and flash memory.
 %{_libdir}/mysql/plugin/ha_tokudb.so
 %{_bindir}/tokuftdump
 %{_bindir}/tokuft_logprint
+%{_mandir}/man1/tokuft_logprint.1*
 %ifarch x86_64
 %{_mandir}/man1/tokuft_logdump.1*
 %{_mandir}/man1/tokuftdump.1*
@@ -362,6 +365,8 @@ package '%{name}'.
 %{_tmpfilesdir}/%{name}.conf
 %{_tmpfilesdir}/tmpfiles.conf
 %{_prefix}/lib/sysusers.d/sysusers.conf
+%{_mandir}/man1/mariabackup.1*
+%{_mandir}/man1/mbstream.1*
 %{_mandir}/man8/*
 %dir %{_libdir}/mysql
 %dir %{_libdir}/mysql/plugin
@@ -454,6 +459,8 @@ package '%{name}'.
 %{_mandir}/man1/wsrep_sst_rsync.1*
 %{_mandir}/man1/wsrep_sst_xtrabackup-v2.1*
 %{_mandir}/man1/wsrep_sst_xtrabackup.1*
+%{_mandir}/man1/wsrep_sst_mariabackup.1*
+%{_mandir}/man1/wsrep_sst_rsync_wan.1*
 
 %package msql2mysql
 Summary: Tool to convert code written for mSQL to MySQL/MariaDB
@@ -541,6 +548,7 @@ MariaDB command line client.
 %files client
 %{_bindir}/mysql
 %{_bindir}/mysql_embedded
+%{_mandir}/man1/mysql_embedded.1*
 %{_bindir}/mysqlaccess
 %{_bindir}/mysqladmin
 %{_bindir}/mysqlbinlog
@@ -717,6 +725,11 @@ rm -f	%{buildroot}%{_mandir}/man1/tokuft_logdump.1* \
 ln -s libmariadb.so.3 %{buildroot}%{_libdir}/libmysqlclient_r.so.18
 ln -s libmariadb.so.3 %{buildroot}%{_libdir}/libmysqlclient.so.18
 ln -s libmariadb.so.3 %{buildroot}%{_libdir}/libmysqld.so.19
+
+# Fix bogus pkgconfig directory...
+%if "%{_lib}" != "lib"
+mv %{buildroot}%{_prefix}/lib/pkgconfig %{buildroot}%{_libdir}
+%endif
 
 %files
 # meta package
