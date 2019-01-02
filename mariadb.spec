@@ -38,7 +38,7 @@ Patch3: mariadb-10.1.1-dont-check-null-on-parameters-declared-nonnull.patch
 # hang on their builders. It doesn't on ours, so let's get rid of the
 # paranoia...
 Patch5: mariadb-10.3.6-enable-rocksdb-on-x86_32.patch
-%ifnarch %ix86 x86_64
+%ifnarch %ix86 %{x86_64}
 #Patch7: mariadb-10.1.5-fix-version-script-for-gold.patch
 %endif
 Patch8: mariadb-scripts.patch
@@ -233,7 +233,7 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/auth_pam.so
 %{_libdir}/mysql/plugin/auth_socket.so
 %{_libdir}/mysql/plugin/auth_test_plugin.so
-%ifarch x86_64 znver1
+%ifarch %{x86_64}
 %{_libdir}/mysql/plugin/ha_tokudb.so
 %endif
 %{_libdir}/mysql/plugin/client_ed25519.so
@@ -292,17 +292,14 @@ improvements, offers online schema modifications, and reduces slave lag
 for both hard disk drives and flash memory.
 
 # As of 10.0.6, tokudb is x86_64 only
-%ifarch x86_64 znver1
+%ifarch %{x86_64}
 %files plugin-tokudb
 %{_sysconfdir}/systemd/system/mariadb.service.d
 %{_libdir}/mysql/plugin/ha_tokudb.so
 %{_bindir}/tokuftdump
 %{_bindir}/tokuft_logprint
 %{_mandir}/man1/tokuft_logprint.1*
-%ifarch x86_64
-%{_mandir}/man1/tokuft_logdump.1*
 %{_mandir}/man1/tokuftdump.1*
-%endif
 %endif
 
 %package test
@@ -715,7 +712,7 @@ rm -f	%{buildroot}%{_datadir}/mysql/config.huge.ini \
 	%{buildroot}%{_datadir}/mysql/SELinux/RHEL4/mysql.fc \
 	%{buildroot}%{_datadir}/mysql/SELinux/RHEL4/mysql.te
 
-%ifnarch x86_64
+%ifnarch %{x86_64}
 # TokuDB is x86_64 specific for now -- so its man pages are uselsss
 rm -f	%{buildroot}%{_mandir}/man1/tokuft_logdump.1* \
 	%{buildroot}%{_mandir}/man1/tokuftdump.1*
