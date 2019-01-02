@@ -715,6 +715,7 @@ rm -f	%{buildroot}%{_datadir}/mysql/config.huge.ini \
 %ifnarch %{x86_64}
 # TokuDB is x86_64 specific for now -- so its man pages are uselsss
 rm -f	%{buildroot}%{_mandir}/man1/tokuft_logdump.1* \
+	%{buildroot}%{_mandir}/man1/tokuft_logprint.1* \
 	%{buildroot}%{_mandir}/man1/tokuftdump.1*
 %endif
 
