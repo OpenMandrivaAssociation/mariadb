@@ -11,7 +11,7 @@
 
 Summary: The MariaDB database, a drop-in replacement for MySQL
 Name: mariadb
-Version: 10.3.11
+Version: 10.3.13
 Release: 1
 URL: http://mariadb.org/
 License: GPL
@@ -236,6 +236,7 @@ Plugins for the MariaDB database.
 %ifarch %{x86_64}
 %{_libdir}/mysql/plugin/ha_tokudb.so
 %endif
+%{_libdir}/mysql/plugin/caching_sha2_password.so
 %{_libdir}/mysql/plugin/client_ed25519.so
 %{_libdir}/mysql/plugin/cracklib_password_check.so
 %{_libdir}/mysql/plugin/daemon_example.ini
@@ -454,8 +455,6 @@ package '%{name}'.
 %{_mandir}/man1/wsrep_sst_common.1*
 %{_mandir}/man1/wsrep_sst_mysqldump.1*
 %{_mandir}/man1/wsrep_sst_rsync.1*
-%{_mandir}/man1/wsrep_sst_xtrabackup-v2.1*
-%{_mandir}/man1/wsrep_sst_xtrabackup.1*
 %{_mandir}/man1/wsrep_sst_mariabackup.1*
 %{_mandir}/man1/wsrep_sst_rsync_wan.1*
 
@@ -723,11 +722,6 @@ rm -f	%{buildroot}%{_mandir}/man1/tokuft_logdump.1* \
 ln -s libmariadb.so.3 %{buildroot}%{_libdir}/libmysqlclient_r.so.18
 ln -s libmariadb.so.3 %{buildroot}%{_libdir}/libmysqlclient.so.18
 ln -s libmariadb.so.3 %{buildroot}%{_libdir}/libmysqld.so.19
-
-# Fix bogus pkgconfig directory...
-%if "%{_lib}" != "lib"
-mv %{buildroot}%{_prefix}/lib/pkgconfig %{buildroot}%{_libdir}
-%endif
 
 %files
 # meta package
