@@ -607,7 +607,7 @@ cd -
 export CFLAGS="%{optflags} -fno-strict-aliasing"
 export CXXFLAGS="%{optflags} -fno-strict-aliasing"
 
-%ifarch %{ix86}
+%ifarch %{ix86} riscv64
 # clang 7.0-331113 on i686 fails to build myISAMMRG
 # Inconsistent CFA register and/or offset between pred and succ
 export CC=gcc
