@@ -83,7 +83,9 @@ BuildRequires:	pam-devel
 # For plugin/ha_oqgraph.so
 BuildRequires:	boost-devel
 # For JDBC plugins
+%ifarch %{armx} x86_64 %{ix86} znver1
 BuildRequires:	java-1.8.0-openjdk-devel
+%endif
 Obsoletes: mysql < 5.7
 Provides: mysql = 5.7
 
@@ -276,7 +278,9 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/file_key_management.so
 %{_libdir}/mysql/plugin/simple_password_check.so
 %{_libdir}/mysql/plugin/wsrep_info.so
+%ifarch %{armx} x86_64 %{ix86} znver1
 %{_libdir}/mysql/plugin/JavaWrappers.jar
+%endif
 %{_libdir}/mysql/plugin/JdbcInterface.jar
 
 %package plugin-tokudb
