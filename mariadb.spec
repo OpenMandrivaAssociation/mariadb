@@ -606,6 +606,9 @@ cd -
 %build
 export CFLAGS="%{optflags} -fno-strict-aliasing"
 export CXXFLAGS="%{optflags} -fno-strict-aliasing"
+%ifarch riscv64
+export CXXFLAGS="%{optflags} -fno-strict-aliasing -latomic"
+%endif
 
 %ifarch %{ix86} riscv64
 # clang 7.0-331113 on i686 fails to build myISAMMRG
