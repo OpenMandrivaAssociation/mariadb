@@ -284,7 +284,7 @@ Plugins for the MariaDB database.
 %ifarch %{armx} x86_64 %{ix86} znver1
 %{_libdir}/mysql/plugin/JavaWrappers.jar
 %endif
-%{_libdir}/mysql/plugin/JdbcInterface.jar
+%optional %{_libdir}/mysql/plugin/JdbcInterface.jar
 
 %package plugin-tokudb
 Summary: The TokuDB storage engine plugin for MariaDB
