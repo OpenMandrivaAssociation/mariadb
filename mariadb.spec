@@ -180,7 +180,10 @@ Development files for the MariaDB database.
 %{_libdir}/*.so
 %{_datadir}/aclocal/mysql.m4
 %{_datadir}/pkgconfig/mariadb.pc
+# investigate
+%ifnarch riscv64
 %{_libdir}/pkgconfig/libmariadb.pc
+%endif
 
 %define staticpackage %mklibname -d -s mysqlclient
 
