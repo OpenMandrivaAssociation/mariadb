@@ -180,10 +180,7 @@ Development files for the MariaDB database.
 %{_libdir}/*.so
 %{_datadir}/aclocal/mysql.m4
 %{_datadir}/pkgconfig/mariadb.pc
-# investigate
-%ifnarch riscv64
 %{_libdir}/pkgconfig/libmariadb.pc
-%endif
 
 %define staticpackage %mklibname -d -s mysqlclient
 
@@ -734,6 +731,11 @@ rm -f	%{buildroot}%{_mandir}/man1/tokuft_logdump.1* \
 ln -s libmariadb.so.3 %{buildroot}%{_libdir}/libmysqlclient_r.so.18
 ln -s libmariadb.so.3 %{buildroot}%{_libdir}/libmysqlclient.so.18
 ln -s libmariadb.so.3 %{buildroot}%{_libdir}/libmysqld.so.19
+
+%ifarch riscv64
+mv %{buildroot}/usr/lib/pkgconfig/libmariadb.pc %{buildroot}/%{_libdir}/pkgconfig/
+rm -rf %{buildroot}/usr/lib/pkgconfig/
+%endif
 
 %files
 # meta package
