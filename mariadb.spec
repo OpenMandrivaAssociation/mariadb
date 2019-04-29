@@ -734,8 +734,8 @@ ln -s libmariadb.so.3 %{buildroot}%{_libdir}/libmysqld.so.19
 
 %ifarch riscv64
 mkdir -p %{buildroot}%{_libdir}/pkgconfig/
-rm -rf %{buildroot}/usr/lib/pkgconfig/
 mv %{buildroot}/usr/lib/pkgconfig/libmariadb.pc %{buildroot}/%{_libdir}/pkgconfig/
+rm -rf %{buildroot}/usr/lib/pkgconfig/
 %endif
 
 %files
