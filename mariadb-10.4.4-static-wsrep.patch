@@ -1,0 +1,20 @@
+diff -up mariadb-10.4.4/wsrep-lib/src/CMakeLists.txt.omv~ mariadb-10.4.4/wsrep-lib/src/CMakeLists.txt
+--- mariadb-10.4.4/wsrep-lib/src/CMakeLists.txt.omv~	2019-05-04 20:44:49.845671249 +0200
++++ mariadb-10.4.4/wsrep-lib/src/CMakeLists.txt	2019-05-04 20:44:57.070604478 +0200
+@@ -3,6 +3,7 @@
+ #
+ 
+ add_library(wsrep-lib
++  STATIC
+   client_state.cpp
+   exception.cpp
+   gtid.cpp
+diff -up mariadb-10.4.4/wsrep-lib/wsrep-API/CMakeLists.txt.omv~ mariadb-10.4.4/wsrep-lib/wsrep-API/CMakeLists.txt
+--- mariadb-10.4.4/wsrep-lib/wsrep-API/CMakeLists.txt.omv~	2019-05-04 20:45:08.740496692 +0200
++++ mariadb-10.4.4/wsrep-lib/wsrep-API/CMakeLists.txt	2019-05-04 20:45:11.886467648 +0200
+@@ -1,4 +1,4 @@
+-add_library(wsrep_api_v26
++add_library(wsrep_api_v26 STATIC
+   v26/wsrep_dummy.c
+   v26/wsrep_gtid.c
+   v26/wsrep_loader.c

@@ -42,6 +42,10 @@ Patch5: mariadb-10.3.6-enable-rocksdb-on-x86_32.patch
 #Patch7: mariadb-10.1.5-fix-version-script-for-gold.patch
 %endif
 Patch8: mariadb-scripts.patch
+# wsrep is built as a library, linked to, but never installed.
+# It also doesn't have soname info etc., so it should be a static
+# lib
+Patch9: mariadb-10.4.4-static-wsrep.patch
 Patch12: cmake-pcre.cmake.patch
 Requires: %{name}-server = %{EVRD}
 Requires: %{name}-client = %{EVRD}
@@ -577,9 +581,7 @@ MariaDB command line client.
 %{_mandir}/man1/mysql_waitpid.1*
 
 %prep
-%setup -q
-%apply_patches
-
+%autosetup -p1
 # MariaDB uses python2 scripts to autogenerate some sources...
 # Let's use python3 instead.
 find . -name "*.py" |xargs 2to3 -w
