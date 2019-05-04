@@ -88,7 +88,7 @@ BuildRequires:	pam-devel
 BuildRequires:	boost-devel
 # For JDBC plugins
 %ifarch %{armx} %{ix86} %{x86_64}
-BuildRequires:	jdk-current
+BuildRequires:	jdk-current jre-gui-current
 %endif
 Obsoletes: mysql < 5.7
 Provides: mysql = 5.7
