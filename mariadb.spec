@@ -11,7 +11,7 @@
 
 Summary: The MariaDB database, a drop-in replacement for MySQL
 Name: mariadb
-Version: 10.4.3
+Version: 10.4.4
 Release: 1
 URL: http://mariadb.org/
 License: GPL
@@ -83,8 +83,8 @@ BuildRequires:	pam-devel
 # For plugin/ha_oqgraph.so
 BuildRequires:	boost-devel
 # For JDBC plugins
-%ifarch %{armx} x86_64 %{ix86} znver1
-BuildRequires:	java-1.8.0-openjdk-devel
+%ifarch %{armx} %{ix86} %{x86_64}
+BuildRequires:	jdk-current
 %endif
 Obsoletes: mysql < 5.7
 Provides: mysql = 5.7
@@ -610,7 +610,9 @@ export CXXFLAGS="%{optflags} -fno-strict-aliasing"
 export CXXFLAGS="%{optflags} -fno-strict-aliasing -latomic"
 %endif
 
-%ifarch %{ix86} riscv64
+[ -e %{_sysconfdir}/profile.d/90java.sh ] && . %{_sysconfdir}/profile.d/90java.sh
+
+%ifarch riscv64
 # clang 7.0-331113 on i686 fails to build myISAMMRG
 # Inconsistent CFA register and/or offset between pred and succ
 export CC=gcc
