@@ -614,9 +614,9 @@ export CXXFLAGS="%{optflags} -fno-strict-aliasing -latomic"
 
 [ -e %{_sysconfdir}/profile.d/90java.sh ] && . %{_sysconfdir}/profile.d/90java.sh
 
-%ifarch riscv64
-# clang 7.0-331113 on i686 fails to build myISAMMRG
-# Inconsistent CFA register and/or offset between pred and succ
+%ifarch riscv64 %{ix86}
+# clang 8.0.1-0.359209.1 on x86_32
+# needs an extra -latomic for rocksdblib
 export CC=gcc
 export CXX=g++
 %else
