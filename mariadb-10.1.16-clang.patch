@@ -39,9 +39,9 @@
 --- mariadb-10.1.16/storage/tokudb/hatoku_hton.h.orig	2016-07-26 12:30:12.371710467 +0100
 +++ mariadb-10.1.16/storage/tokudb/hatoku_hton.h	2016-07-26 12:30:28.752486063 +0100
 @@ -183,7 +183,7 @@
+     return thd_kill_level(thd) != 0;
  }
  
- extern HASH tokudb_open_tables;
 -extern const char* tokudb_hton_name;
 +extern const char* const tokudb_hton_name;
  extern int tokudb_hton_initialized;
