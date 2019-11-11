@@ -11,7 +11,7 @@
 
 Summary: The MariaDB database, a drop-in replacement for MySQL
 Name: mariadb
-Version: 10.4.4
+Version: 10.4.10
 Release: 1
 URL: http://mariadb.org/
 License: GPL
@@ -121,6 +121,8 @@ RocksDB is a high performance embedded database for key-value data.
 %{_libdir}/mysql/plugin/ha_rocksdb.so
 %{_bindir}/myrocks_hotbackup
 %{_bindir}/mysql_ldb
+%{_bindir}/mariadb-ldb
+%{_mandir}/man1/mariadb-ldb.1*
 %{_bindir}/sst_dump
 %{_mandir}/man1/mysql_ldb.1*
 
@@ -325,9 +327,17 @@ MariaDB test suite.
 %files test
 %{_bindir}/mysqltest
 %{_bindir}/mysqltest_embedded
+%{_bindir}/mariadb-client-test-embedded
+%{_mandir}/man1/mariadb-client-test-embedded.1*
+%{_bindir}/mariadb-test
+%{_bindir}/mariadb-test-embedded
+%{_mandir}/man1/mariadb-test-embedded.1*
 %{_bindir}/mysql_client_test
+%{_bindir}/mariadb-client-test
+%{_mandir}/man1/mariadb-client-test.1*
 %{_bindir}/mysql_client_test_embedded
 %{_datadir}/mysql-test
+%{_mandir}/man1/mariadb-test.1*
 %{_mandir}/man1/mysql-stress-test.pl.1*
 %{_mandir}/man1/mysql-test-run.pl.1*
 %{_mandir}/man1/mysql_client_test.1*
@@ -354,6 +364,8 @@ package '%{name}'.
 
 %files server
 %{_bindir}/mariabackup
+%{_bindir}/mariadb-backup
+%{_mandir}/man1/mariadb-backup.1*
 %{_bindir}/mbstream
 %dir %{_datadir}/mysql
 %{_datadir}/mysql/errmsg-utf8.txt
@@ -396,17 +408,41 @@ package '%{name}'.
 %{_bindir}/myisamlog
 %{_bindir}/myisampack
 %{_bindir}/mysql_convert_table_format
+%{_bindir}/mariadb-convert-table-format
+%{_mandir}/man1/mariadb-convert-table-format.1*
 %{_bindir}/mysql_fix_extensions
+%{_bindir}/mariadb-fix-extensions
+%{_mandir}/man1/mariadb-fix-extensions.1*
 %{_bindir}/mysql_install_db
+%{_bindir}/mariadb-install-db
+%{_mandir}/man1/mariadb-install-db.1*
 %{_bindir}/mysql_plugin
+%{_bindir}/mariadb-plugin
+%{_mandir}/man1/mariadb-plugin.1*
 %{_bindir}/mysql_secure_installation
+%{_bindir}/mariadb-secure-installation
+%{_mandir}/man1/mariadb-secure-installation.1*
 %{_bindir}/mysql_setpermission
+%{_bindir}/mariadb-setpermission
+%{_mandir}/man1/mariadb-setpermission.1*
 %{_bindir}/mysql_tzinfo_to_sql
+%{_bindir}/mariadb-tzinfo-to-sql
+%{_mandir}/man1/mariadb-tzinfo-to-sql.1*
 %{_bindir}/mysql_upgrade
+%{_mandir}/man1/mariadb-upgrade.1*
+%{_bindir}/mariadb-upgrade
 %{_bindir}/mysqld_multi
+%{_bindir}/mariadbd-multi
+%{_mandir}/man1/mariadbd-multi.1*
 %{_bindir}/mysqld_safe
+%{_bindir}/mariadbd-safe
+%{_mandir}/man1/mariadbd-safe.1*
 %{_bindir}/mysqld_safe_helper
+%{_bindir}/mariadbd-safe-helper
+%{_mandir}/man1/mariadbd-safe-helper.1*
 %{_bindir}/mysqlhotcopy
+%{_bindir}/mariadb-hotcopy
+%{_mandir}/man1/mariadb-hotcopy.1*
 %{_bindir}/mytop
 %{_bindir}/perror
 %{_bindir}/replace
@@ -414,6 +450,9 @@ package '%{name}'.
 %{_bindir}/resolveip
 %{_bindir}/wsrep_*
 %{_sbindir}/mysqld
+%{_sbindir}/mariadbd
+%{_bindir}/mariadb
+%{_mandir}/man1/mariadb.1*
 %{_bindir}/mariadb-service-convert
 %{_sbindir}/mysql-prepare-db-dir
 %{_sbindir}/mysql-wait-ready
@@ -554,18 +593,42 @@ MariaDB command line client.
 %files client
 %{_bindir}/mysql
 %{_bindir}/mysql_embedded
+%{_bindir}/mariadb-embedded
+%{_mandir}/man1/mariadb-embedded.1*
 %{_mandir}/man1/mysql_embedded.1*
 %{_bindir}/mysqlaccess
+%{_bindir}/mariadb-access
+%{_mandir}/man1/mariadb-access.1*
 %{_bindir}/mysqladmin
+%{_bindir}/mariadb-admin
+%{_mandir}/man1/mariadb-admin.1*
 %{_bindir}/mysqlbinlog
+%{_bindir}/mariadb-binlog
+%{_mandir}/man1/mariadb-binlog.1*
 %{_bindir}/mysqlcheck
+%{_bindir}/mariadb-check
+%{_mandir}/man1/mariadb-check.1*
 %{_bindir}/mysqldump
+%{_bindir}/mariadb-dump
+%{_mandir}/man1/mariadb-dump.1*
 %{_bindir}/mysqldumpslow
+%{_bindir}/mariadb-dumpslow
+%{_mandir}/man1/mariadb-dumpslow.1*
 %{_bindir}/mysql_find_rows
+%{_bindir}/mariadb-find-rows
+%{_mandir}/man1/mariadb-find-rows.1*
 %{_bindir}/mysqlimport
+%{_bindir}/mariadb-import
+%{_mandir}/man1/mariadb-import.1*
 %{_bindir}/mysqlshow
+%{_bindir}/mariadb-show
+%{_mandir}/man1/mariadb-show.1*
 %{_bindir}/mysqlslap
+%{_bindir}/mariadb-slap
+%{_mandir}/man1/mariadb-slap.1*
 %{_bindir}/mysql_waitpid
+%{_mandir}/man1/mariadb-waitpid.1*
+%{_bindir}/mariadb-waitpid
 %{_bindir}/test-connect-t
 %{_mandir}/man1/mysql.1*
 %{_mandir}/man1/mysqlaccess.1*
