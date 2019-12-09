@@ -11,7 +11,7 @@
 
 Summary: The MariaDB database, a drop-in replacement for MySQL
 Name: mariadb
-Version: 10.4.10
+Version: 10.5.0
 Release: 1
 URL: http://mariadb.org/
 License: GPL
@@ -243,9 +243,6 @@ Plugins for the MariaDB database.
 %dir %{_libdir}/mysql/plugin/auth_pam_tool_dir
 %{_libdir}/mysql/plugin/auth_pam_tool_dir/auth_pam_tool
 %{_libdir}/mysql/plugin/auth_pam_v1.so
-%ifarch %{x86_64}
-%{_libdir}/mysql/plugin/ha_tokudb.so
-%endif
 %{_libdir}/mysql/plugin/caching_sha2_password.so
 %{_libdir}/mysql/plugin/client_ed25519.so
 %{_libdir}/mysql/plugin/cracklib_password_check.so
@@ -337,6 +334,8 @@ MariaDB test suite.
 %{_mandir}/man1/mariadb-client-test.1*
 %{_bindir}/mysql_client_test_embedded
 %{_datadir}/mysql-test
+%{_libdir}/mysql/plugin/func_test.so
+%{_libdir}/mysql/plugin/type_test.so
 %{_mandir}/man1/mariadb-test.1*
 %{_mandir}/man1/mysql-stress-test.pl.1*
 %{_mandir}/man1/mysql-test-run.pl.1*
@@ -726,6 +725,7 @@ sed -i -e "s,/usr/lib/systemd/system,%{_unitdir},g" cmake/install_layout.cmake
 	-DDISABLE_LIBMYSQLCLIENT_SYMBOL_VERSIONING:BOOL=ON \
 	-DINSTALL_PLUGINDIR="%{_libdir}/mysql/plugin" \
 	-DINSTALL_LIBDIR="%{_libdir}" \
+	-DPLUGIN_TOKUDB:BOOL=DYNAMIC \
 	-DMYSQL_DATADIR=/srv/mysql \
 	-DMYSQL_UNIX_ADDR=/run/mysqld/mysql.sock \
 	-DPID_FILE_DIR="/run/mysqld" \
