@@ -12,7 +12,7 @@
 Summary: The MariaDB database, a drop-in replacement for MySQL
 Name: mariadb
 Version: 10.5.0
-Release: 1
+Release: 3
 URL: http://mariadb.org/
 License: GPL
 Group: System/Servers
@@ -46,6 +46,7 @@ Patch8: mariadb-scripts.patch
 # It also doesn't have soname info etc., so it should be a static
 # lib
 Patch9: mariadb-10.4.4-static-wsrep.patch
+Patch10: mariadb-10.5.0-static-sql_builtins.patch
 Patch12: cmake-pcre.cmake.patch
 Requires: %{name}-server = %{EVRD}
 Requires: %{name}-client = %{EVRD}
