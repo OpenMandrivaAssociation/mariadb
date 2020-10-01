@@ -11,8 +11,8 @@
 
 Summary: The MariaDB database, a drop-in replacement for MySQL
 Name: mariadb
-Version: 10.5.0
-Release: 5
+Version: 10.5.5
+Release: 1
 URL: http://mariadb.org/
 License: GPL
 Group: System/Servers
