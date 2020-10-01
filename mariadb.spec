@@ -31,7 +31,7 @@ Source1000: %{name}.rpmlintrc
 # means trouble
 Patch0: mariadb-10.0.8-fix-mysql_config.patch
 ##Patch1: mariadb-10.1.16-clang.patch
-Patch2: mariadb-10.1.5-compatibility-with-llvm-ar.patch
+##Patch2: mariadb-10.1.5-compatibility-with-llvm-ar.patch
 Patch3: mariadb-10.1.1-dont-check-null-on-parameters-declared-nonnull.patch
 #Patch4: mariadb-10.3.6-jni-fixes.patch
 # Upstream disables rocksdb on x86_32 because the build process seems to
