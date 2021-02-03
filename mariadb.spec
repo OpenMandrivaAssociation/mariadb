@@ -5,7 +5,7 @@
 %bcond_without pcre
 %define _disable_lto 1
 
-%global __requires_exclude ^perl\\((hostnames|lib::mtr|lib::v1|mtr_|My::)
+%global __requires_exclude ^perl\\((hostnames|lib::mtr|lib::v1|mtr_|My::|wsrep)
 %global __provides_exclude_from ^%{_datadir}/(mysql|mysql-test)/
 #global __provides_exclude_from ^(%{_datadir}/(mysql|mysql-test)/.*|%{_libdir}/%{pkg_name}/plugin/.*\\.so)$
 
@@ -68,7 +68,7 @@ BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	systemtap
 BuildRequires:	libaio-devel
 BuildRequires:	stdc++-devel
-BuildRequires:	readline-devel
+BuildRequires:	pkgconfig(readline)
 BuildRequires:	xfsprogs-devel
 BuildRequires:	pkgconfig(jemalloc)
 BuildRequires:	pkgconfig(libxml-2.0)
@@ -83,11 +83,12 @@ BuildRequires:	pkgconfig(msgpack)
 BuildRequires:	pkgconfig(krb5-gssapi)
 BuildRequires:	pkgconfig(com_err)
 # For _tmpfilesdir macro
-BuildRequires:	systemd
+BuildRequires:	systemd-macros
 # For _pre_useradd and friends
 BuildRequires:	rpm-helper
 BuildRequires:	cracklib-devel
-BuildRequires:	lzo-devel
+BuildRequires:	pkgconfig(lzo2)
+BuildRequires:	pkgconfig(libzstd)
 BuildRequires:	wrap-devel
 %if %{with pcre}
 BuildRequires:	pkgconfig(libpcre2-8)
@@ -144,7 +145,7 @@ Provides: libmysqlclient.so.%{libmajor}%{archmarker}
 Provides: libmysqlclient_r.so.%{libmajor}%{archmarker}
 
 %description -n %{libname}
-The MariaDB core library
+The MariaDB core library.
 
 %files -n %{libname}
 %{_libdir}/libmariadb.so.3
@@ -158,7 +159,7 @@ Group: System/Libraries
 Provides: libmysqld.so.19%{archmarker}
 
 %description -n %{dlibname}
-The MariaDB daemon library
+The MariaDB daemon library.
 
 %files -n %{dlibname}
 %{_libdir}/libmariadbd.so.19
@@ -229,7 +230,7 @@ Group: Development/Other
 Requires: %{staticpackage} = %{EVRD}
 
 %description -n %{staticembpackage}
-Static libraries for the Embedded MariaDB database
+Static libraries for the Embedded MariaDB database.
 
 %files -n %{staticembpackage}
 %{_libdir}/libmysqld.a
@@ -375,19 +376,15 @@ package '%{name}'.
 %_pre_useradd %{muser} /srv/mysql /sbin/nologin
 
 %files server
-%{_libdir}/mysql/plugin/ha_s3.so
 %{_libdir}/mysql/plugin/test_sql_service.so
 %{_libdir}/mysql/plugin/type_mysql_json.so
 %{_mandir}/man1/aria_s3_copy.1*
 %{_mandir}/man1/mariadb-conv.1*
 %{_mandir}/man1/myrocks_hotbackup.1*
 %{_mandir}/man1/mytop.1*
-
-
 %{_prefix}/lib/sysusers.d/mariadb.conf
 %{_sysconfdir}/security/user_map.conf
 /%{_lib}/security/pam_user_map.so
-%{_bindir}/aria_s3_copy
 %{_bindir}/mariabackup
 %{_bindir}/mariadb-backup
 %{_bindir}/mariadb-conv
@@ -545,6 +542,7 @@ Group: System/Servers
 Obsoletes: mysql-common < 5.7
 Provides: mysql-common = 5.7
 Requires: %{name}-common-binaries = %{EVRD}
+Requires: %{name}-client = %{EVRD}
 
 %description common
 Common files needed by both the MariaDB server and client.
@@ -713,10 +711,10 @@ export CXXFLAGS="$CFLAGS -Wno-error=pointer-bool-conversion -Wno-error=missing-f
 
 # Get rid of gcc specific flags when using clang
 if echo $CC |grep -q gcc; then
-	export CFLAGS="$CFLAGS -Wno-error=maybe-uninitialized"
-	export CXXFLAGS="$CXXFLAGS -Wno-error=maybe-uninitialized"
+    export CFLAGS="$CFLAGS -Wno-error=maybe-uninitialized"
+    export CXXFLAGS="$CXXFLAGS -Wno-error=maybe-uninitialized"
 else
-	sed -i -e 's,-Wstrict-null-sentinel,,;s,-Wtrampolines,,;s,-Wlogical-op,,' storage/tokudb/PerconaFT/cmake_modules/TokuSetupCompiler.cmake
+    sed -i -e 's,-Wstrict-null-sentinel,,;s,-Wtrampolines,,;s,-Wlogical-op,,' storage/tokudb/PerconaFT/cmake_modules/TokuSetupCompiler.cmake
 fi
 
 # aliasing rule violations at least in storage/tokudb/PerconaFT/ft/dbufio.cc
