@@ -252,7 +252,8 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/auth_gssapi_client.so
 %{_libdir}/mysql/plugin/auth_test_plugin.so
 %{_libdir}/mysql/plugin/auth_pam.so
-%dir %{_libdir}/mysql/plugin/auth_pam_tool_dir
+# Change from root:root to mysql:mysql, so it can be accessed by the server
+%attr(0755,mysql,mysql) %dir %{_libdir}/mysql/plugin/auth_pam_tool_dir
 %{_libdir}/mysql/plugin/auth_pam_tool_dir/auth_pam_tool
 %{_libdir}/mysql/plugin/auth_pam_v1.so
 %{_libdir}/mysql/plugin/caching_sha2_password.so
