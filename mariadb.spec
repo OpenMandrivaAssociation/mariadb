@@ -90,7 +90,7 @@ BuildRequires:	cracklib-devel
 BuildRequires:	lzo-devel
 BuildRequires:	wrap-devel
 %if %{with pcre}
-BuildRequires:	pkgconfig(libpcre)
+BuildRequires:	pkgconfig(libpcre2-8)
 %endif
 # For plugin/auth_pam.so
 BuildRequires:	pam-devel
