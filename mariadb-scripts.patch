@@ -1,37 +1,41 @@
---- mariadb-10.1.22/scripts/CMakeLists.txt.orig	2017-04-23 09:36:36.593968137 +0100
-+++ mariadb-10.1.22/scripts/CMakeLists.txt	2017-04-23 09:37:12.659574135 +0100
-@@ -252,6 +252,34 @@
-   DESTINATION ${INSTALL_SCRIPTDIR}
-   COMPONENT Server
-   )
+We have some downstream patches and other scripts that include variables to
+be expanded by cmake. Cmake needs to know about them, so adding them manually.
+
+ # Install libgcc as  mylibgcc.a
+--- mariadb-10.5.5/scripts/CMakeLists.txt.old	2020-09-24 10:13:35.272589689 +0200
++++ mariadb-10.5.5/scripts/CMakeLists.txt	2020-09-24 10:17:31.428985798 +0200
+@@ -377,6 +377,34 @@
+       INSTALL_LINK(${file} ${binname} ${INSTALL_BINDIR} ${${file}_COMPONENT})
+     ENDIF()
+   ENDFOREACH()
 +
 +  # files for systemd
-+  SET(SYSTEMD_INST_SCRIPTS
++  SET(SYSTEMD_SCRIPTS
 +    mysql.tmpfiles.d
 +    mysql.service
 +    mysql@.service
 +    mysql-prepare-db-dir
-+    mysql-wait-ready
-+    mysql-wait-stop
 +    mysql-check-socket
 +    mysql-check-upgrade
 +    mysql-scripts-common
++    mysql_config_multilib
++    clustercheck
++    galera_new_cluster
++    my.cnf
 +  )
-+  FOREACH(sysdfile ${SYSTEMD_INST_SCRIPTS})
-+    SET(INFILE ${CMAKE_CURRENT_SOURCE_DIR}/${sysdfile}.in)
-+    SET(SHFILE ${CMAKE_CURRENT_SOURCE_DIR}/${sysdfile}.sh)
-+    IF(EXISTS ${SHFILE})
-+      CONFIGURE_FILE(${SHFILE}
-+        ${CMAKE_CURRENT_BINARY_DIR}/${sysdfile} ESCAPE_QUOTES @ONLY)
-+    ELSEIF(EXISTS ${INFILE})
-+      CONFIGURE_FILE(${INFILE}
-+        ${CMAKE_CURRENT_BINARY_DIR}/${sysdfile} ESCAPE_QUOTES @ONLY)
++  FOREACH(file ${SYSTEMD_SCRIPTS})
++    IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${file}.sh)
++      CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/${file}.sh
++        ${CMAKE_CURRENT_BINARY_DIR}/${file} ESCAPE_QUOTES @ONLY)
++    ELSEIF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${file}.in)
++      CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/${file}.in
++        ${CMAKE_CURRENT_BINARY_DIR}/${file} ESCAPE_QUOTES @ONLY)
 +    ELSE()
-+      MESSAGE(FATAL_ERROR "Can not find ${SHFILE} or ${INFILE} in "
++      MESSAGE(FATAL_ERROR "Can not find ${file}.sh or ${file}.in in "
 +        "${CMAKE_CURRENT_SOURCE_DIR}" )
 +    ENDIF()
 +  ENDFOREACH()
 +
  ENDIF()
  
- SET(prefix "${CMAKE_INSTALL_PREFIX}")
+ # Install libgcc as  mylibgcc.a
