@@ -68,7 +68,7 @@ BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	systemtap
 BuildRequires:	libaio-devel
 BuildRequires:	stdc++-devel
-BuildRequires:	readline-devel
+BuildRequires:	pkgconfig(readline)
 BuildRequires:	xfsprogs-devel
 BuildRequires:	pkgconfig(jemalloc)
 BuildRequires:	pkgconfig(libxml-2.0)
@@ -83,11 +83,12 @@ BuildRequires:	pkgconfig(msgpack)
 BuildRequires:	pkgconfig(krb5-gssapi)
 BuildRequires:	pkgconfig(com_err)
 # For _tmpfilesdir macro
-BuildRequires:	systemd
+BuildRequires:	systemd-macros
 # For _pre_useradd and friends
 BuildRequires:	rpm-helper
 BuildRequires:	cracklib-devel
 BuildRequires:	pkgconfig(lzo2)
+BuildRequires:	pkgconfig(libzstd)
 BuildRequires:	wrap-devel
 %if %{with pcre}
 BuildRequires:	pkgconfig(libpcre2-8)
@@ -375,7 +376,6 @@ package '%{name}'.
 %_pre_useradd %{muser} /srv/mysql /sbin/nologin
 
 %files server
-%{_libdir}/mysql/plugin/ha_s3.so
 %{_libdir}/mysql/plugin/test_sql_service.so
 %{_libdir}/mysql/plugin/type_mysql_json.so
 %{_mandir}/man1/aria_s3_copy.1*
@@ -385,7 +385,6 @@ package '%{name}'.
 %{_prefix}/lib/sysusers.d/mariadb.conf
 %{_sysconfdir}/security/user_map.conf
 /%{_lib}/security/pam_user_map.so
-%{_bindir}/aria_s3_copy
 %{_bindir}/mariabackup
 %{_bindir}/mariadb-backup
 %{_bindir}/mariadb-conv
