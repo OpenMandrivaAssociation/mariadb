@@ -377,6 +377,7 @@ package '%{name}'.
 %_pre_useradd %{muser} /srv/mysql /sbin/nologin
 
 %files server
+%optional %{_libdir}/mysql/plugin/ha_s3.so
 %{_libdir}/mysql/plugin/test_sql_service.so
 %{_libdir}/mysql/plugin/type_mysql_json.so
 %{_mandir}/man1/aria_s3_copy.1*
@@ -386,6 +387,7 @@ package '%{name}'.
 %{_prefix}/lib/sysusers.d/mariadb.conf
 %{_sysconfdir}/security/user_map.conf
 /%{_lib}/security/pam_user_map.so
+%optional %{_bindir}/aria_s3_copy
 %{_bindir}/mariabackup
 %{_bindir}/mariadb-backup
 %{_bindir}/mariadb-conv
