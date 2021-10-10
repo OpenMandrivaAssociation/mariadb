@@ -19,30 +19,32 @@ Group:		System/Servers
 Source0:	http://mirrors.n-ix.net/mariadb/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 Source1:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql_config_multilib.sh
 Source2:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/my.cnf.in
-Source3:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql.tmpfiles.d.in
+Source3:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb.tmpfiles.d.in
 Source4:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql.service.in
-Source5:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql-prepare-db-dir.sh
-Source6:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql-check-socket.sh
-Source7:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql-scripts-common.sh
-Source8:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql-check-upgrade.sh
+Source5:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-prepare-db-dir.sh
+Source6:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-check-socket.sh
+Source7:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-scripts-common.sh
+Source8:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-check-upgrade.sh
 Source9:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql@.service.in
 Source10:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/clustercheck.sh
+Source20:	mariadb.sysusers
 Source1000:	%{name}.rpmlintrc
 # Fedora patches
-# logrotate fix
+#   Patch4: Red Hat distributions specific logrotate fix
+#   it would be big unexpected change, if we start shipping it now. Better wait for MariaDB 10.2
 Patch4:		https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-logrotate.patch
-# add to the CMake file all files where we want macros to be expanded
+#   Patch7: add to the CMake file all files where we want macros to be expanded
 Patch7:		https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-scripts.patch
-# pre-configure to comply with guidelines
+#   Patch9: pre-configure to comply with guidelines
 Patch9:		https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-ownsetup.patch
-# Fix cipher name in the SSL Cipher name test
+#   Patch10: Fix cipher name in the SSL Cipher name test
 Patch10:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-ssl-cipher-tests.patch
-# Use PCDIR CMake option, if configured
+#   Patch11: Use PCDIR CMake option, if configured
 Patch11:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-pcdir.patch
-# Add option to edit groonga's and groonga-normalizer-mysql install path
+#   Patch15:  Add option to edit groonga's and groonga-normalizer-mysql install path
 Patch15:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-groonga.patch
-#   Patch16: Workaround for "chown 0" with priviledges dropped to "mysql" user
-Patch16:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-auth_pam_tool_dir.patch
+#   Patch16:  Fix port bug in mysql_setpermission perl script
+Patch16:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-scripts-setpermission.patch
 
 # OpenMandriva patches
 # Don't strip -Wformat from --cflags -- -Werror=format-string without -Wformat
@@ -85,8 +87,6 @@ BuildRequires:	pkgconfig(krb5-gssapi)
 BuildRequires:	pkgconfig(com_err)
 # For _tmpfilesdir macro
 BuildRequires:	systemd-rpm-macros
-# For _pre_useradd and friends
-BuildRequires:	rpm-helper
 BuildRequires:	cracklib-devel
 BuildRequires:	pkgconfig(lzo2)
 BuildRequires:	pkgconfig(libzstd)
@@ -135,9 +135,9 @@ RocksDB is a high performance embedded database for key-value data.
 %{_bindir}/myrocks_hotbackup
 %{_bindir}/mysql_ldb
 %{_bindir}/mariadb-ldb
-%{_mandir}/man1/mariadb-ldb.1*
+%doc %{_mandir}/man1/mariadb-ldb.1*
 %{_bindir}/sst_dump
-%{_mandir}/man1/mysql_ldb.1*
+%doc %{_mandir}/man1/mysql_ldb.1*
 
 %package -n %{libname}
 Summary:	The MariaDB core library
@@ -201,7 +201,7 @@ Development files for the MariaDB database.
 %{_datadir}/aclocal/mysql.m4
 %{_libdir}/pkgconfig/libmariadb.pc
 %{_libdir}/pkgconfig/mariadb.pc
-%{_mandir}/man1/mariadb_config.1*
+%doc %{_mandir}/man1/mariadb_config.1*
 
 %define staticpackage %mklibname -d -s mysqlclient
 
@@ -291,7 +291,7 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/sha256_password.so
 %{_libdir}/mysql/plugin/sql_errlog.so
 %{_libdir}/mysql/plugin/test_versioning.so
-%{_mandir}/man1/mysql_plugin.1*
+%doc %{_mandir}/man1/mysql_plugin.1*
 %{_libdir}/mysql/plugin/debug_key_management.so
 %{_libdir}/mysql/plugin/example_key_management.so
 %{_libdir}/mysql/plugin/file_key_management.so
@@ -341,24 +341,24 @@ MariaDB test suite.
 %{_bindir}/mysqltest
 %{_bindir}/mysqltest_embedded
 %{_bindir}/mariadb-client-test-embedded
-%{_mandir}/man1/mariadb-client-test-embedded.1*
+%doc %{_mandir}/man1/mariadb-client-test-embedded.1*
 %{_bindir}/mariadb-test
 %{_bindir}/mariadb-test-embedded
-%{_mandir}/man1/mariadb-test-embedded.1*
+%doc %{_mandir}/man1/mariadb-test-embedded.1*
 %{_bindir}/mysql_client_test
 %{_bindir}/mariadb-client-test
-%{_mandir}/man1/mariadb-client-test.1*
+%doc %{_mandir}/man1/mariadb-client-test.1*
 %{_bindir}/mysql_client_test_embedded
 %{_datadir}/mysql-test
 %{_libdir}/mysql/plugin/func_test.so
 %{_libdir}/mysql/plugin/type_test.so
-%{_mandir}/man1/mariadb-test.1*
-%{_mandir}/man1/mysql-stress-test.pl.1*
-%{_mandir}/man1/mysql-test-run.pl.1*
-%{_mandir}/man1/mysql_client_test.1*
-%{_mandir}/man1/mysql_client_test_embedded.1*
-%{_mandir}/man1/mysqltest.1*
-%{_mandir}/man1/mysqltest_embedded.1*
+%doc %{_mandir}/man1/mariadb-test.1*
+%doc %{_mandir}/man1/mysql-stress-test.pl.1*
+%doc %{_mandir}/man1/mysql-test-run.pl.1*
+%doc %{_mandir}/man1/mysql_client_test.1*
+%doc %{_mandir}/man1/mysql_client_test_embedded.1*
+%doc %{_mandir}/man1/mysqltest.1*
+%doc %{_mandir}/man1/mysqltest_embedded.1*
 
 %package server
 Summary:	MariaDB server
@@ -376,7 +376,7 @@ The MariaDB server. For a full MariaDB database server, install
 package '%{name}'.
 
 %pre server
-%_pre_useradd %{muser} /srv/mysql /sbin/nologin
+%sysusers_create_package %{name} %{SOURCE20}
 
 %files server
 %optional %{_libdir}/mysql/plugin/ha_s3.so
@@ -409,6 +409,7 @@ package '%{name}'.
 %{_datadir}/mysql/mroonga
 %{_datadir}/groonga
 %{_datadir}/groonga-normalizer-mysql
+%{_sysusersdir}/%{name}.conf
 %{_tmpfilesdir}/%{name}.conf
 %doc %{_mandir}/man1/mariabackup.1*
 %doc %{_mandir}/man1/mbstream.1*
@@ -434,7 +435,7 @@ package '%{name}'.
 %{_bindir}/myisampack
 %{_bindir}/mysql_convert_table_format
 %{_bindir}/mariadb-convert-table-format
-%{_mandir}/man1/mariadb-convert-table-format.1*
+%doc %{_mandir}/man1/mariadb-convert-table-format.1*
 %{_bindir}/mysql_fix_extensions
 %{_bindir}/mariadb-fix-extensions
 %doc %{_mandir}/man1/mariadb-fix-extensions.1*
@@ -479,10 +480,10 @@ package '%{name}'.
 %{_bindir}/mariadb
 %doc %{_mandir}/man1/mariadb.1*
 %{_bindir}/mariadb-service-convert
-%{_sbindir}/mysql-prepare-db-dir
-%{_sbindir}/mysql-check-socket
-%{_sbindir}/mysql-check-upgrade
-%{_sbindir}/mysql-scripts-common
+%{_sbindir}/mariadb-prepare-db-dir
+%{_sbindir}/mariadb-check-socket
+%{_sbindir}/mariadb-check-upgrade
+%{_sbindir}/mariadb-scripts-common
 %{_unitdir}/*.service
 %dir %{_unitdir}/mariadb@bootstrap.service.d
 %{_unitdir}/mariadb@bootstrap.service.d/*.conf
@@ -539,7 +540,7 @@ Tool to convert code written for mSQL to MySQL/MariaDB.
 
 %files msql2mysql
 %{_bindir}/msql2mysql
-%{_mandir}/man1/msql2mysql.1*
+%doc %{_mandir}/man1/msql2mysql.1*
 
 %package common
 Summary:	Common files needed by both the MariaDB server and client
@@ -768,7 +769,7 @@ sed -i -e "s,/usr/lib/systemd/system,%{_unitdir},g" cmake/install_layout.cmake
 	-DWITH_MYSQLCOMPAT:BOOL=ON
 
 # Used by logformat during build
-export LD_LIBRARY_PATH=`pwd`/storage/tokudb/PerconaFT/portability:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$(pwd)/storage/tokudb/PerconaFT/portability:$LD_LIBRARY_PATH
 %make -k || make
 
 %install
@@ -779,13 +780,14 @@ rm -rf %{buildroot}%{_sysconfdir}/init.d
 rm -f %{buildroot}%{_sbindir}/rcmysql
 install -D -p -m 644 build/scripts/mysql.service %{buildroot}%{_unitdir}/%{name}.service
 install -D -p -m 644 build/scripts/mysql@.service %{buildroot}%{_unitdir}/%{name}@.service
-install -D -p -m 0644 build/scripts/mysql.tmpfiles.d %{buildroot}%{_tmpfilesdir}/%{name}.conf
+install -D -p -m 0644 build/scripts/mariadb.tmpfiles.d %{buildroot}%{_tmpfilesdir}/%{name}.conf
+install -D -p -m 0644 %{SOURCE20} %{buildroot}%{_sysusersdir}/%{name}.conf
 
 # helper scripts for service starting
-install -D -p -m 755 build/scripts/mysql-prepare-db-dir %{buildroot}%{_sbindir}/mysql-prepare-db-dir
-install -p -m 755 build/scripts/mysql-check-socket %{buildroot}%{_sbindir}/mysql-check-socket
-install -p -m 755 build/scripts/mysql-check-upgrade %{buildroot}%{_sbindir}/mysql-check-upgrade
-install -p -m 644 build/scripts/mysql-scripts-common %{buildroot}%{_sbindir}/mysql-scripts-common
+install -D -p -m 755 build/scripts/mariadb-prepare-db-dir %{buildroot}%{_sbindir}/mariadb-prepare-db-dir
+install -p -m 755 build/scripts/mariadb-check-socket %{buildroot}%{_sbindir}/mariadb-check-socket
+install -p -m 755 build/scripts/mariadb-check-upgrade %{buildroot}%{_sbindir}/mariadb-check-upgrade
+install -p -m 644 build/scripts/mariadb-scripts-common %{buildroot}%{_sbindir}/mariadb-scripts-common
 
 # Fix bogus doc installation
 mkdir -p %{buildroot}%{_docdir}/%{name}-%{version}

@@ -26,9 +26,15 @@ Update 6/2018
   beeing able to send the SIGHUP to the process and read the mysqld pid file, which root can.
 * Submited as PR: https://github.com/MariaDB/server/pull/807
 
---- mariadb-10.5.4/support-files/mysql-log-rotate.sh.old	2020-09-16 13:36:57.247955135 +0200
-+++ mariadb-10.5.4/support-files/mysql-log-rotate.sh	2020-09-16 13:40:59.744220908 +0200
-@@ -3,23 +3,10 @@
+Update 02/2021
+* Enhance the script as proposed in:
+  https://mariadb.com/kb/en/rotating-logs-on-unix-and-linux/
+* Discussion continues in:
+  https://jira.mariadb.org/browse/MDEV-16621
+
+--- mariadb-10.5.8/support-files/mysql-log-rotate.sh	2021-02-12 08:37:47.857289694 +0100
++++ mariadb-10.5.8/support-files/mysql-log-rotate.sh_pacthed	2021-02-12 08:40:26.420372325 +0100
+@@ -3,35 +3,22 @@
  # in the [mysqld] section as follows:
  #
  # [mysqld]
@@ -55,10 +61,12 @@ Update 6/2018
          notifempty
          daily
          rotate 3
-@@ -27,11 +14,9 @@
+         missingok
          compress
++        delaycompress
++        sharedscripts
      postrotate
-	# just if mariadbd is really running
+ 	# just if mariadbd is really running
 -	if test -x @bindir@/mysqladmin && \
 -	   @bindir@/mysqladmin ping &>/dev/null
 -	then

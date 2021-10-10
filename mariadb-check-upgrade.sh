@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source "`dirname ${BASH_SOURCE[0]}`/mysql-scripts-common"
+source "`dirname ${BASH_SOURCE[0]}`/mariadb-scripts-common"
 
 upgrade_info_file="$datadir/mysql_upgrade_info"
 version=0
@@ -25,14 +25,14 @@ if [ $version -ne $thisversion ] ; then
     fi
 
     cat <<EOF >&2
-The datadir located at $datadir needs to be upgraded using 'mysql_upgrade' tool. This can be done using the following steps:
+The datadir located at $datadir needs to be upgraded using 'mariadb-upgrade' tool. This can be done using the following steps:
 
-  1. Back-up your data before with 'mysql_upgrade'
-  2. Start the database daemon using 'service @DAEMON_NAME@ start'
-  3. Run 'mysql_upgrade' with a database user that has sufficient privileges
+  1. Back-up your data before with 'mariadb-upgrade'
+  2. Start the database daemon using 'systemctl start @DAEMON_NAME@.service'
+  3. Run 'mariadb-upgrade' with a database user that has sufficient privileges
 
-Read more about 'mysql_upgrade' usage at:
-https://mariadb.com/kb/en/mariadb/documentation/sql-commands/table-commands/mysql_upgrade/
+Read more about 'mariadb-upgrade' usage at:
+https://mariadb.com/kb/en/mysql_upgrade/
 EOF
 fi
 

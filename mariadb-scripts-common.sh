@@ -1,11 +1,11 @@
 #!/bin/sh
 
-# Some useful functions used in other MySQL helper scripts
+# Some useful functions used in other MariaDB helper scripts
 # This scripts defines variables datadir, errlogfile, socketfile
 
 export LC_ALL=C
 
-# extract value of a MySQL option from config files
+# extract value of a MariaDB option from config files
 # Usage: get_mysql_option VARNAME DEFAULT SECTION [ SECTION, ... ]
 # result is returned in $result
 # We use my_print_defaults which prints all options from multiple files,
@@ -25,7 +25,7 @@ get_mysql_option(){
 	fi
 }
 
-# For the case of running more instances via systemd, scrits that source
+# For the case of running more instances via systemd, scripts that source
 # this file can get --default-group-suffix or similar option as the first
 # argument. The utility my_print_defaults needs to use it as well, so the
 # scripts sourcing this file work with the same options as the daemon.
@@ -35,20 +35,20 @@ while echo "$1" | grep -q '^--defaults' ; do
 	shift
 done
 
-# Defaults here had better match what mysqld_safe will default to
+# Defaults here had better match what mariadbd-safe will default to
 # The option values are generally defined on three important places
 # on the default installation:
-#  1) default values are hardcoded in the code of mysqld daemon or
-#     mysqld_safe script
+#  1) default values are hardcoded in the code of mariadbd daemon or
+#     mariadbd-safe script
 #  2) configurable values are defined in @sysconfdir@/my.cnf
 #  3) default values for helper scripts are specified bellow
 # So, in case values are defined in my.cnf, we need to get that value.
 # In case they are not defined in my.cnf, we need to get the same value
 # in the daemon, as in the helper scripts. Thus, default values here
-# must correspond with values defined in mysqld_safe script and source
+# must correspond with values defined in mariadbd-safe script and source
 # code itself.
 
-server_sections="mysqld_safe mysqld server mysqld-@MAJOR_VERSION@.@MINOR_VERSION@ mariadb mariadb-@MAJOR_VERSION@.@MINOR_VERSION@ client-server"
+server_sections="mysqld_safe mysqld server mysqld-@MAJOR_VERSION@.@MINOR_VERSION@ mariadb mariadb-@MAJOR_VERSION@.@MINOR_VERSION@ mariadbd mariadbd-@MAJOR_VERSION@.@MINOR_VERSION@ client-server galera"
 
 get_mysql_option "$server_sections" datadir "@MYSQL_DATADIR@"
 datadir="$result"

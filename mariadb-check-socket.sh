@@ -5,7 +5,7 @@
 # positive result when starting and mysqld_safe could remove
 # a socket file, which is actually being used by a different daemon.
 
-source "`dirname ${BASH_SOURCE[0]}`/mysql-scripts-common"
+source "`dirname ${BASH_SOURCE[0]}`/mariadb-scripts-common"
 
 if test -e "$socketfile" ; then
     echo "Socket file $socketfile exists." >&2
@@ -25,9 +25,9 @@ if test -e "$socketfile" ; then
     fi
 
     # some process uses the socket file
-    response=`@bindir@/mysqladmin --no-defaults --socket="$socketfile" --user=UNKNOWN_MYSQL_USER --connect-timeout="${CHECKSOCKETTIMEOUT:-10}" ping 2>&1`
+    response=`@bindir@/mariadb-admin --no-defaults --socket="$socketfile" --user=UNKNOWN_MYSQL_USER --connect-timeout="${CHECKSOCKETTIMEOUT:-10}" ping 2>&1`
     if [ $? -eq 0 ] || echo "$response" | grep -q "Access denied for user" ; then
-        echo "Is another MySQL daemon already running with the same unix socket?" >&2
+        echo "Is another MariaDB daemon already running with the same unix socket?" >&2
         echo "Please, stop the process using the socket $socketfile or remove the file manually to start the service." >&2
         exit 1
     fi

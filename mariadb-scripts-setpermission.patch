@@ -1,0 +1,30 @@
+This patch fixes bug in mysql_setpermission perl script
+by adding conditionally port information to connections parameters.
+
+More information about this bug: https://bugzilla.redhat.com/show_bug.cgi?id=1976224
+
+This bug has been fixed in upstream.
+Patch can be removed when new version with fix is released.
+
+https://github.com/MariaDB/server/pull/1896
+
+--- mariadb/scripts/mysql_setpermission_a.sh	2068-11-11 14:01:07.762595716 +0100
++++ mariadb/scripts/mysql_setpermission.sh	2070-11-11 14:33:05.224012458 +0100
+@@ -105,11 +105,15 @@
+ 
+ if ($opt_socket and -S $opt_socket)
+ {
+-    $dsn .= "${prefix}_socket=$opt_socket";
++  $dsn .= "${prefix}_socket=$opt_socket";
+ }
+ else
+ {
+-  $dsn .= "host=$sqlhost;port=$opt_port";
++  $dsn .= "host=$sqlhost";
++  if ($sqlhost ne "localhost")
++  {
++    $dsn .= ";port=$opt_port";
++  }
+ }
+ 
+ # make the connection to MariaDB

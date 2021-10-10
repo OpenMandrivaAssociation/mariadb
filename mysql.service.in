@@ -1,32 +1,24 @@
 # It's not recommended to modify this file in-place, because it will be
 # overwritten during package upgrades.  If you want to customize, the
-# best way is to create a file "/etc/systemd/system/@DAEMON_NAME@.service",
-# containing
-#	.include /usr/lib/systemd/system/@DAEMON_NAME@.service
-#	...make your changes here...
-# or create a file "/etc/systemd/system/@DAEMON_NAME@.service.d/foo.conf",
-# which doesn't need to include ".include" call and which will be parsed
-# after the file @DAEMON_NAME@.service itself is parsed.
+# best way is to:
+#
+# root> systemctl edit @DAEMON_NAME@.service
+#
+# Then add additonal directives under a section (probably [Service]).
 #
 # For more info about custom unit files, see systemd.unit(5) or
 # http://fedoraproject.org/wiki/Systemd#How_do_I_customize_a_unit_file.2F_add_a_custom_unit_file.3F
-
-# For example, if you want to increase mysql's open-files-limit to 10000,
-# you need to increase systemd's LimitNOFILE setting, so create a file named
-# "/etc/systemd/system/@DAEMON_NAME@.service.d/limits.conf" containing:
+#
+# For example, if you want to increase MariaDB's open-files-limit to 10000,
+# you need to increase systemd's LimitNOFILE setting, use the contents below:
+#
 #	[Service]
 #	LimitNOFILE=10000
-
-# Note: /usr/lib/... is recommended in the .include line though /lib/...
-# still works.
-# Don't forget to reload systemd daemon after you change unit configuration:
-# root> systemctl --system daemon-reload
-
-# Use [mysqld.INSTANCENAME] as sections in my.cnf to configure this instance.
+#
 
 [Unit]
 Description=@NICE_PROJECT_NAME@ @MAJOR_VERSION@.@MINOR_VERSION@ database server
-Documentation=man:mysqld(8)
+Documentation=man:mariadbd(8)
 Documentation=https://mariadb.com/kb/en/library/systemd/
 After=network.target
 
@@ -40,20 +32,19 @@ Type=notify
 User=mysql
 Group=mysql
 
-ExecStartPre=@libexecdir@/mysql-check-socket
+ExecStartPre=@libexecdir@/mariadb-check-socket
 # '%n' expands to 'Full unit name'; man systemd.unit
-ExecStartPre=@libexecdir@/mysql-prepare-db-dir %n
+ExecStartPre=@libexecdir@/mariadb-prepare-db-dir %n
 # MYSQLD_OPTS here is for users to set in /etc/systemd/system/@DAEMON_NAME@@.service.d/MY_SPECIAL.conf
 # Note: we set --basedir to prevent probes that might trigger SELinux alarms,
 # per bug #547485
-ExecStart=@libexecdir@/mysqld --basedir=@prefix@ $MYSQLD_OPTS $_WSREP_NEW_CLUSTER
-ExecStartPost=@libexecdir@/mysql-check-upgrade
+ExecStart=@libexecdir@/mariadbd --basedir=@prefix@ $MYSQLD_OPTS $_WSREP_NEW_CLUSTER
+ExecStartPost=@libexecdir@/mariadb-check-upgrade
 
 # Setting this to true can break replication and the Type=notify settings
-# See also bind-address mysqld option.
+# See also bind-address MariaDB option.
 PrivateNetwork=false
 
-KillMode=process
 KillSignal=SIGTERM
 
 # Don't want to see an automated SIGKILL ever
