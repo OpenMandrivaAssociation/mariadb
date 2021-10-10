@@ -9,56 +9,56 @@
 %global __provides_exclude_from ^%{_datadir}/(mysql|mysql-test)/
 #global __provides_exclude_from ^(%{_datadir}/(mysql|mysql-test)/.*|%{_libdir}/%{pkg_name}/plugin/.*\\.so)$
 
-Summary: The MariaDB database, a drop-in replacement for MySQL
-Name: mariadb
-Version: 10.5.8
-Release: 1
-URL: http://mariadb.org/
-License: GPL
-Group: System/Servers
-Source0: http://mirrors.n-ix.net/mariadb/mariadb-%{version}/source/mariadb-%{version}.tar.gz
-Source1: https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql_config_multilib.sh
-Source2: https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/my.cnf.in
-Source3: https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql.tmpfiles.d.in
-Source4: https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql.service.in
-Source5: https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql-prepare-db-dir.sh
-Source6: https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql-check-socket.sh
-Source7: https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql-scripts-common.sh
-Source8: https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql-check-upgrade.sh
-Source9: https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql@.service.in
-Source10: https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/clustercheck.sh
-Source1000: %{name}.rpmlintrc
+Summary:	The MariaDB database, a drop-in replacement for MySQL
+Name:		mariadb
+Version:	10.5.12
+Release:	1
+URL:		http://mariadb.org/
+License:	GPL
+Group:		System/Servers
+Source0:	http://mirrors.n-ix.net/mariadb/mariadb-%{version}/source/mariadb-%{version}.tar.gz
+Source1:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql_config_multilib.sh
+Source2:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/my.cnf.in
+Source3:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql.tmpfiles.d.in
+Source4:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql.service.in
+Source5:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql-prepare-db-dir.sh
+Source6:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql-check-socket.sh
+Source7:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql-scripts-common.sh
+Source8:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql-check-upgrade.sh
+Source9:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql@.service.in
+Source10:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/clustercheck.sh
+Source1000:	%{name}.rpmlintrc
 # Fedora patches
 # logrotate fix
-Patch4:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-logrotate.patch
+Patch4:		https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-logrotate.patch
 # add to the CMake file all files where we want macros to be expanded
-Patch7: https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-scripts.patch
+Patch7:		https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-scripts.patch
 # pre-configure to comply with guidelines
-Patch9:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-ownsetup.patch
+Patch9:		https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-ownsetup.patch
 # Fix cipher name in the SSL Cipher name test
-Patch10: https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-ssl-cipher-tests.patch
+Patch10:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-ssl-cipher-tests.patch
 # Use PCDIR CMake option, if configured
-Patch11: https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-pcdir.patch
+Patch11:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-pcdir.patch
 # Add option to edit groonga's and groonga-normalizer-mysql install path
-Patch15: https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-groonga.patch
+Patch15:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-groonga.patch
 #   Patch16: Workaround for "chown 0" with priviledges dropped to "mysql" user
-Patch16: https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-auth_pam_tool_dir.patch
+Patch16:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-auth_pam_tool_dir.patch
 
 # OpenMandriva patches
 # Don't strip -Wformat from --cflags -- -Werror=format-string without -Wformat
 # means trouble
-Patch100: mariadb-10.0.8-fix-mysql_config.patch
-Patch101: mariadb-10.1.1-dont-check-null-on-parameters-declared-nonnull.patch
+Patch100:	mariadb-10.0.8-fix-mysql_config.patch
+Patch101:	mariadb-10.1.1-dont-check-null-on-parameters-declared-nonnull.patch
 # Upstream disables rocksdb on x86_32 because the build process seems to
 # hang on their builders. It doesn't on ours, so let's get rid of the
 # paranoia...
-Patch102: mariadb-10.3.6-enable-rocksdb-on-x86_32.patch
+Patch102:	mariadb-10.3.6-enable-rocksdb-on-x86_32.patch
 # wsrep is built as a library, linked to, but never installed.
 # It also doesn't have soname info etc., so it should be a static
 # lib
-Patch103: mariadb-10.4.4-static-wsrep.patch
-Requires: %{name}-server = %{EVRD}
-Requires: %{name}-client = %{EVRD}
+Patch103:	mariadb-10.4.4-static-wsrep.patch
+Requires:	%{name}-server = %{EVRD}
+Requires:	%{name}-client = %{EVRD}
 BuildRequires:	bison
 BuildRequires:	cmake
 BuildRequires:	dos2unix
@@ -84,7 +84,7 @@ BuildRequires:	pkgconfig(msgpack)
 BuildRequires:	pkgconfig(krb5-gssapi)
 BuildRequires:	pkgconfig(com_err)
 # For _tmpfilesdir macro
-BuildRequires:	systemd-macros
+BuildRequires:	systemd-rpm-macros
 # For _pre_useradd and friends
 BuildRequires:	rpm-helper
 BuildRequires:	cracklib-devel
@@ -100,10 +100,11 @@ BuildRequires:	pam-devel
 BuildRequires:	boost-devel
 # For JDBC plugins
 %ifarch %{armx} %{ix86} %{x86_64}
-BuildRequires:	jdk-current jre-gui-current
+BuildRequires:	jdk-current
+BuildRequires:	jre-gui-current
 %endif
-Obsoletes: mysql < 5.7
-Provides: mysql = 5.7
+Obsoletes:	mysql < 5.7
+Provides:	mysql = 5.7
 
 %description
 The MariaDB database, a drop-in replacement for MySQL.
@@ -119,10 +120,10 @@ The MariaDB database, a drop-in replacement for MySQL.
 %endif
 
 %package rocksdb
-Summary: RocksDB backend for MariaDB
-Group: System/Servers
-Requires: %{name} = %{EVRD}
-Requires: %{name}-server = %{EVRD}
+Summary:	RocksDB backend for MariaDB
+Group:		System/Servers
+Requires:	%{name} = %{EVRD}
+Requires:	%{name}-server = %{EVRD}
 
 %description rocksdb
 RocksDB backend for MariaDB.
@@ -139,11 +140,11 @@ RocksDB is a high performance embedded database for key-value data.
 %{_mandir}/man1/mysql_ldb.1*
 
 %package -n %{libname}
-Summary: The MariaDB core library
-Group: System/Libraries
+Summary:	The MariaDB core library
+Group:		System/Libraries
 %rename %oldlibname
-Provides: libmysqlclient.so.%{libmajor}%{archmarker}
-Provides: libmysqlclient_r.so.%{libmajor}%{archmarker}
+Provides:	libmysqlclient.so.%{libmajor}%{archmarker}
+Provides:	libmysqlclient_r.so.%{libmajor}%{archmarker}
 
 %description -n %{libname}
 The MariaDB core library.
@@ -154,10 +155,10 @@ The MariaDB core library.
 %{_libdir}/libmysqlclient_r.so.%{libmajor}*
 
 %package -n %{dlibname}
-Summary: The MariaDB daemon library
-Group: System/Libraries
+Summary:	The MariaDB daemon library
+Group:		System/Libraries
 %rename %olddlibname
-Provides: libmysqld.so.19%{archmarker}
+Provides:	libmysqld.so.19%{archmarker}
 
 %description -n %{dlibname}
 The MariaDB daemon library.
@@ -170,25 +171,25 @@ The MariaDB daemon library.
 %define olddevpackage %mklibname -d mysqlclient
 
 %package -n %{devpackage}
-Summary: Development files for the MariaDB database
-Provides: %{name}-devel = %{EVRD}
-Provides: %{mklibname -d mysqlclient_r} = %{EVRD}
-Provides: %{mklibname -d mysqld} = %{EVRD}
-Requires: %{mklibname mysqlclient 18} = %{EVRD}
-Requires: %{mklibname mysqld 19} = %{EVRD}
-Requires: %{name}-common = %{EVRD}
+Summary:	Development files for the MariaDB database
+Group:	Development/Other
+Provides:	%{name}-devel = %{EVRD}
+Provides:	%{mklibname -d mysqlclient_r} = %{EVRD}
+Provides:	%{mklibname -d mysqld} = %{EVRD}
+Requires:	%{mklibname mysqlclient 18} = %{EVRD}
+Requires:	%{mklibname mysqld 19} = %{EVRD}
+Requires:	%{name}-common = %{EVRD}
 # Can't use -lmariadb without -lz
-Requires: pkgconfig(zlib)
-Obsoletes: %{mklibname -d mysql} < %{EVRD}
-Provides: %{mklibname -d mysql} = %{EVRD}
+Requires:	pkgconfig(zlib)
+Obsoletes:	%{mklibname -d mysql} < %{EVRD}
+Provides:	%{mklibname -d mysql} = %{EVRD}
 %rename mysql-devel
 %rename %{olddevpackage}
 %if "%_lib" == "lib64"
-Provides: devel(libmysqlclient(64bit))
+Provides:	devel(libmysqlclient(64bit))
 %else
-Provides: devel(libmysqlclient)
+Provides:	devel(libmysqlclient)
 %endif
-Group: Development/Other
 
 %description -n %{devpackage}
 Development files for the MariaDB database.
@@ -205,12 +206,12 @@ Development files for the MariaDB database.
 %define staticpackage %mklibname -d -s mysqlclient
 
 %package -n %{staticpackage}
-Summary: Static libraries for the MariaDB database
-Requires: %{devpackage} = %{EVRD}
-Provides: %{name}-static-devel = %{EVRD}
-Group: Development/Other
-Obsoletes: mysql-static-devel < 5.7
-Provides: mysql-static-devel = 5.7
+Summary:	Static libraries for the MariaDB database
+Requires:	%{devpackage} = %{EVRD}
+Provides:	%{name}-static-devel = %{EVRD}
+Group:		Development/Other
+Obsoletes:	mysql-static-devel < 5.7
+Provides:	mysql-static-devel = 5.7
 
 %description -n %{staticpackage}
 Static libraries for the MariaDB database.
@@ -225,10 +226,10 @@ Static libraries for the MariaDB database.
 %define staticembpackage %mklibname -d -s mysqld
 
 %package -n %{staticembpackage}
-Summary: Static libraries for the Embedded MariaDB database
-Provides: %{name}-embedded-static-devel = %{EVRD}
-Group: Development/Other
-Requires: %{staticpackage} = %{EVRD}
+Summary:	Static libraries for the Embedded MariaDB database
+Provides:	%{name}-embedded-static-devel = %{EVRD}
+Group:		Development/Other
+Requires:	%{staticpackage} = %{EVRD}
 
 %description -n %{staticembpackage}
 Static libraries for the Embedded MariaDB database.
@@ -237,11 +238,11 @@ Static libraries for the Embedded MariaDB database.
 %{_libdir}/libmysqld.a
 
 %package plugin
-Summary: MariaDB plugins
-Group: Databases
-Obsoletes: mysql-plugin < 5.7
-Provides: mysql-plugin = 5.7
-Conflicts: mysql-server <= 5.5.30-3
+Summary:	MariaDB plugins
+Group:		Databases
+Obsoletes:	mysql-plugin < 5.7
+Provides:	mysql-plugin = 5.7
+Conflicts:	mysql-server <= 5.5.30-3
 
 %description plugin
 Plugins for the MariaDB database.
@@ -302,9 +303,9 @@ Plugins for the MariaDB database.
 %optional %{_libdir}/mysql/plugin/JdbcInterface.jar
 
 %package plugin-tokudb
-Summary: The TokuDB storage engine plugin for MariaDB
-Requires: %{name}-server = %{EVRD}
-Group: Databases
+Summary:	The TokuDB storage engine plugin for MariaDB
+Requires:	%{name}-server = %{EVRD}
+Group:		Databases
 
 %description plugin-tokudb
 The TokuDB storage engine plugin for MariaDB.
@@ -323,15 +324,15 @@ for both hard disk drives and flash memory.
 %{_libdir}/mysql/plugin/ha_tokudb.so
 %{_bindir}/tokuftdump
 %{_bindir}/tokuft_logprint
-%{_mandir}/man1/tokuft_logprint.1*
-%{_mandir}/man1/tokuftdump.1*
+%doc %{_mandir}/man1/tokuft_logprint.1*
+%doc %{_mandir}/man1/tokuftdump.1*
 %endif
 
 %package test
-Summary: MariaDB test suite
-Group: System/Servers
-Obsoletes: mysql-test < 5.7
-Provides: mysql-test = 5.7
+Summary:	MariaDB test suite
+Group:		System/Servers
+Obsoletes:	mysql-test < 5.7
+Provides:	mysql-test = 5.7
 
 %description test
 MariaDB test suite.
@@ -360,14 +361,15 @@ MariaDB test suite.
 %{_mandir}/man1/mysqltest_embedded.1*
 
 %package server
-Summary: MariaDB server
-Group: System/Servers
-Requires: %{name}-common = %{EVRD}
-Requires: %{name}-plugin = %{EVRD}
-Obsoletes: mysql-server < 5.7
-Provides: mysql-server = 5.7
-Requires(post,preun): rpm-helper
-Suggests: %{name}-rocksdb = %{EVRD}
+Summary:	MariaDB server
+Group:		System/Servers
+Requires:	%{name}-common = %{EVRD}
+Requires:	%{name}-plugin = %{EVRD}
+Obsoletes:	mysql-server < 5.7
+Provides:	mysql-server = 5.7
+%systemd_requires
+Requires(pre):	systemd
+Suggests:	%{name}-rocksdb = %{EVRD}
 
 %description server
 The MariaDB server. For a full MariaDB database server, install
@@ -380,10 +382,10 @@ package '%{name}'.
 %optional %{_libdir}/mysql/plugin/ha_s3.so
 %{_libdir}/mysql/plugin/test_sql_service.so
 %{_libdir}/mysql/plugin/type_mysql_json.so
-%{_mandir}/man1/aria_s3_copy.1*
-%{_mandir}/man1/mariadb-conv.1*
-%{_mandir}/man1/myrocks_hotbackup.1*
-%{_mandir}/man1/mytop.1*
+%doc %{_mandir}/man1/aria_s3_copy.1*
+%doc %{_mandir}/man1/mariadb-conv.1*
+%doc %{_mandir}/man1/myrocks_hotbackup.1*
+%doc %{_mandir}/man1/mytop.1*
 %{_prefix}/lib/sysusers.d/mariadb.conf
 %{_sysconfdir}/security/user_map.conf
 /%{_lib}/security/pam_user_map.so
@@ -391,7 +393,7 @@ package '%{name}'.
 %{_bindir}/mariabackup
 %{_bindir}/mariadb-backup
 %{_bindir}/mariadb-conv
-%{_mandir}/man1/mariadb-backup.1*
+%doc %{_mandir}/man1/mariadb-backup.1*
 %{_bindir}/mbstream
 %dir %{_datadir}/mysql
 %{_datadir}/mysql/errmsg-utf8.txt
@@ -408,9 +410,9 @@ package '%{name}'.
 %{_datadir}/groonga
 %{_datadir}/groonga-normalizer-mysql
 %{_tmpfilesdir}/%{name}.conf
-%{_mandir}/man1/mariabackup.1*
-%{_mandir}/man1/mbstream.1*
-%{_mandir}/man8/*
+%doc %{_mandir}/man1/mariabackup.1*
+%doc %{_mandir}/man1/mbstream.1*
+%doc %{_mandir}/man8/*
 %dir %{_libdir}/mysql
 %dir %{_libdir}/mysql/plugin
 %{_sysconfdir}/logrotate.d/mysql
@@ -435,37 +437,37 @@ package '%{name}'.
 %{_mandir}/man1/mariadb-convert-table-format.1*
 %{_bindir}/mysql_fix_extensions
 %{_bindir}/mariadb-fix-extensions
-%{_mandir}/man1/mariadb-fix-extensions.1*
+%doc %{_mandir}/man1/mariadb-fix-extensions.1*
 %{_bindir}/mysql_install_db
 %{_bindir}/mariadb-install-db
-%{_mandir}/man1/mariadb-install-db.1*
+%doc %{_mandir}/man1/mariadb-install-db.1*
 %{_bindir}/mysql_plugin
 %{_bindir}/mariadb-plugin
-%{_mandir}/man1/mariadb-plugin.1*
+%doc %{_mandir}/man1/mariadb-plugin.1*
 %{_bindir}/mysql_secure_installation
 %{_bindir}/mariadb-secure-installation
-%{_mandir}/man1/mariadb-secure-installation.1*
+%doc %{_mandir}/man1/mariadb-secure-installation.1*
 %{_bindir}/mysql_setpermission
 %{_bindir}/mariadb-setpermission
-%{_mandir}/man1/mariadb-setpermission.1*
+%doc %{_mandir}/man1/mariadb-setpermission.1*
 %{_bindir}/mysql_tzinfo_to_sql
 %{_bindir}/mariadb-tzinfo-to-sql
-%{_mandir}/man1/mariadb-tzinfo-to-sql.1*
+%doc %{_mandir}/man1/mariadb-tzinfo-to-sql.1*
 %{_bindir}/mysql_upgrade
-%{_mandir}/man1/mariadb-upgrade.1*
+%doc %{_mandir}/man1/mariadb-upgrade.1*
 %{_bindir}/mariadb-upgrade
 %{_bindir}/mysqld_multi
 %{_bindir}/mariadbd-multi
-%{_mandir}/man1/mariadbd-multi.1*
+%doc %{_mandir}/man1/mariadbd-multi.1*
 %{_bindir}/mysqld_safe
 %{_bindir}/mariadbd-safe
-%{_mandir}/man1/mariadbd-safe.1*
+%doc %{_mandir}/man1/mariadbd-safe.1*
 %{_bindir}/mysqld_safe_helper
 %{_bindir}/mariadbd-safe-helper
-%{_mandir}/man1/mariadbd-safe-helper.1*
+%doc %{_mandir}/man1/mariadbd-safe-helper.1*
 %{_bindir}/mysqlhotcopy
 %{_bindir}/mariadb-hotcopy
-%{_mandir}/man1/mariadb-hotcopy.1*
+%doc %{_mandir}/man1/mariadb-hotcopy.1*
 %{_bindir}/mytop
 %{_bindir}/perror
 %{_bindir}/replace
@@ -475,7 +477,7 @@ package '%{name}'.
 %{_sbindir}/mysqld
 %{_sbindir}/mariadbd
 %{_bindir}/mariadb
-%{_mandir}/man1/mariadb.1*
+%doc %{_mandir}/man1/mariadb.1*
 %{_bindir}/mariadb-service-convert
 %{_sbindir}/mysql-prepare-db-dir
 %{_sbindir}/mysql-check-socket
@@ -491,46 +493,46 @@ package '%{name}'.
 %doc %{_docdir}/%{name}-%{version}
 %attr(711,%{muser},%{muser}) /srv/mysql
 %attr(711,%{muser},%{muser}) %{_localstatedir}/log/mysqld
-%{_mandir}/man1/aria_chk.1*
-%{_mandir}/man1/aria_dump_log.1*
-%{_mandir}/man1/aria_ftdump.1*
-%{_mandir}/man1/aria_pack.1*
-%{_mandir}/man1/aria_read_log.1*
-%{_mandir}/man1/galera_new_cluster.1*
-%{_mandir}/man1/galera_recovery.1*
-%{_mandir}/man1/innochecksum.1*
-%{_mandir}/man1/mariadb-service-convert.1*
-%{_mandir}/man1/myisam_ftdump.1*
-%{_mandir}/man1/myisamchk.1*
-%{_mandir}/man1/myisamlog.1*
-%{_mandir}/man1/myisampack.1*
-%{_mandir}/man1/mysql.server.1*
-%{_mandir}/man1/mysql_config.1*
-%{_mandir}/man1/mysql_convert_table_format.1*
-%{_mandir}/man1/mysql_fix_extensions.1*
-%{_mandir}/man1/mysql_install_db.1*
-%{_mandir}/man1/mysql_secure_installation.1*
-%{_mandir}/man1/mysql_setpermission.1*
-%{_mandir}/man1/mysql_tzinfo_to_sql.1*
-%{_mandir}/man1/mysql_upgrade.1*
-%{_mandir}/man1/mysqld_multi.1*
-%{_mandir}/man1/my_safe_process.1*
-%{_mandir}/man1/mysqld_safe.1*
-%{_mandir}/man1/mysqld_safe_helper.1*
-%{_mandir}/man1/mysqlhotcopy.1*
-%{_mandir}/man1/perror.1*
-%{_mandir}/man1/replace.1*
-%{_mandir}/man1/resolve_stack_dump.1*
-%{_mandir}/man1/resolveip.1*
-%{_mandir}/man1/wsrep_sst_common.1*
-%{_mandir}/man1/wsrep_sst_mysqldump.1*
-%{_mandir}/man1/wsrep_sst_rsync.1*
-%{_mandir}/man1/wsrep_sst_mariabackup.1*
-%{_mandir}/man1/wsrep_sst_rsync_wan.1*
+%doc %{_mandir}/man1/aria_chk.1*
+%doc %{_mandir}/man1/aria_dump_log.1*
+%doc %{_mandir}/man1/aria_ftdump.1*
+%doc %{_mandir}/man1/aria_pack.1*
+%doc %{_mandir}/man1/aria_read_log.1*
+%doc %{_mandir}/man1/galera_new_cluster.1*
+%doc %{_mandir}/man1/galera_recovery.1*
+%doc %{_mandir}/man1/innochecksum.1*
+%doc %{_mandir}/man1/mariadb-service-convert.1*
+%doc %{_mandir}/man1/myisam_ftdump.1*
+%doc %{_mandir}/man1/myisamchk.1*
+%doc %{_mandir}/man1/myisamlog.1*
+%doc %{_mandir}/man1/myisampack.1*
+%doc %{_mandir}/man1/mysql.server.1*
+%doc %{_mandir}/man1/mysql_config.1*
+%doc %{_mandir}/man1/mysql_convert_table_format.1*
+%doc %{_mandir}/man1/mysql_fix_extensions.1*
+%doc %{_mandir}/man1/mysql_install_db.1*
+%doc %{_mandir}/man1/mysql_secure_installation.1*
+%doc %{_mandir}/man1/mysql_setpermission.1*
+%doc %{_mandir}/man1/mysql_tzinfo_to_sql.1*
+%doc %{_mandir}/man1/mysql_upgrade.1*
+%doc %{_mandir}/man1/mysqld_multi.1*
+%doc %{_mandir}/man1/my_safe_process.1*
+%doc %{_mandir}/man1/mysqld_safe.1*
+%doc %{_mandir}/man1/mysqld_safe_helper.1*
+%doc %{_mandir}/man1/mysqlhotcopy.1*
+%doc %{_mandir}/man1/perror.1*
+%doc %{_mandir}/man1/replace.1*
+%doc %{_mandir}/man1/resolve_stack_dump.1*
+%doc %{_mandir}/man1/resolveip.1*
+%doc %{_mandir}/man1/wsrep_sst_common.1*
+%doc %{_mandir}/man1/wsrep_sst_mysqldump.1*
+%doc %{_mandir}/man1/wsrep_sst_rsync.1*
+%doc %{_mandir}/man1/wsrep_sst_mariabackup.1*
+%doc %{_mandir}/man1/wsrep_sst_rsync_wan.1*
 
 %package msql2mysql
-Summary: Tool to convert code written for mSQL to MySQL/MariaDB
-Group: Development/Other
+Summary:	Tool to convert code written for mSQL to MySQL/MariaDB
+Group:		Development/Other
 
 %description msql2mysql
 Tool to convert code written for mSQL to MySQL/MariaDB.
@@ -540,12 +542,12 @@ Tool to convert code written for mSQL to MySQL/MariaDB.
 %{_mandir}/man1/msql2mysql.1*
 
 %package common
-Summary: Common files needed by both the MariaDB server and client
-Group: System/Servers
-Obsoletes: mysql-common < 5.7
-Provides: mysql-common = 5.7
-Requires: %{name}-common-binaries = %{EVRD}
-Requires: %{name}-client = %{EVRD}
+Summary:	Common files needed by both the MariaDB server and client
+Group:		System/Servers
+Obsoletes:	mysql-common < 5.7
+Provides:	mysql-common = 5.7
+Requires:	%{name}-common-binaries = %{EVRD}
+Requires:	%{name}-client = %{EVRD}
 
 %description common
 Common files needed by both the MariaDB server and client.
@@ -590,25 +592,25 @@ Common files needed by both the MariaDB server and client.
 %{_bindir}/mysql_config
 
 %package common-binaries
-Summary: Common binary files needed by both the MariaDB server and client
-Group: System/Servers
-Obsoletes: mysql-common < 5.7
-Provides: mysql-common = 5.7
-Requires: %{name}-common = %{EVRD}
+Summary:	Common binary files needed by both the MariaDB server and client
+Group:		System/Servers
+Obsoletes:	mysql-common < 5.7
+Provides:	mysql-common = 5.7
+Requires:	%{name}-common = %{EVRD}
 
 %description common-binaries
 Common files needed by both the MariaDB server and client.
 
 %files common-binaries
 %{_bindir}/my_print_defaults
-%{_mandir}/man1/my_print_defaults.1*
+%doc %{_mandir}/man1/my_print_defaults.1*
 
 %package client
-Summary: MariaDB command line client
-Group: Databases
-Obsoletes: mysql-client < 5.7
-Provides: mysql-client = 5.7
-Conflicts: mysql-server <= 5.5.30-3
+Summary:	MariaDB command line client
+Group:		Databases
+Obsoletes:	mysql-client < 5.7
+Provides:	mysql-client = 5.7
+Conflicts:	mysql-server <= 5.5.30-3
 
 %description client
 MariaDB command line client.
@@ -617,54 +619,54 @@ MariaDB command line client.
 %{_bindir}/mysql
 %{_bindir}/mysql_embedded
 %{_bindir}/mariadb-embedded
-%{_mandir}/man1/mariadb-embedded.1*
-%{_mandir}/man1/mysql_embedded.1*
+%doc %{_mandir}/man1/mariadb-embedded.1*
+%doc %{_mandir}/man1/mysql_embedded.1*
 %{_bindir}/mysqlaccess
 %{_bindir}/mariadb-access
-%{_mandir}/man1/mariadb-access.1*
+%doc %{_mandir}/man1/mariadb-access.1*
 %{_bindir}/mysqladmin
 %{_bindir}/mariadb-admin
-%{_mandir}/man1/mariadb-admin.1*
+%doc %{_mandir}/man1/mariadb-admin.1*
 %{_bindir}/mysqlbinlog
 %{_bindir}/mariadb-binlog
-%{_mandir}/man1/mariadb-binlog.1*
+%doc %{_mandir}/man1/mariadb-binlog.1*
 %{_bindir}/mysqlcheck
 %{_bindir}/mariadb-check
-%{_mandir}/man1/mariadb-check.1*
+%doc %{_mandir}/man1/mariadb-check.1*
 %{_bindir}/mysqldump
 %{_bindir}/mariadb-dump
-%{_mandir}/man1/mariadb-dump.1*
+%doc %{_mandir}/man1/mariadb-dump.1*
 %{_bindir}/mysqldumpslow
 %{_bindir}/mariadb-dumpslow
-%{_mandir}/man1/mariadb-dumpslow.1*
+%doc %{_mandir}/man1/mariadb-dumpslow.1*
 %{_bindir}/mysql_find_rows
 %{_bindir}/mariadb-find-rows
-%{_mandir}/man1/mariadb-find-rows.1*
+%doc %{_mandir}/man1/mariadb-find-rows.1*
 %{_bindir}/mysqlimport
 %{_bindir}/mariadb-import
-%{_mandir}/man1/mariadb-import.1*
+%doc %{_mandir}/man1/mariadb-import.1*
 %{_bindir}/mysqlshow
 %{_bindir}/mariadb-show
-%{_mandir}/man1/mariadb-show.1*
+%doc %{_mandir}/man1/mariadb-show.1*
 %{_bindir}/mysqlslap
 %{_bindir}/mariadb-slap
-%{_mandir}/man1/mariadb-slap.1*
+%doc %{_mandir}/man1/mariadb-slap.1*
 %{_bindir}/mysql_waitpid
-%{_mandir}/man1/mariadb-waitpid.1*
+%doc %{_mandir}/man1/mariadb-waitpid.1*
 %{_bindir}/mariadb-waitpid
 %{_bindir}/test-connect-t
-%{_mandir}/man1/mysql.1*
-%{_mandir}/man1/mysqlaccess.1*
-%{_mandir}/man1/mysqladmin.1*
-%{_mandir}/man1/mysqlbinlog.1*
-%{_mandir}/man1/mysqlcheck.1*
-%{_mandir}/man1/mysqldump.1*
-%{_mandir}/man1/mysqldumpslow.1*
-%{_mandir}/man1/mysql_find_rows.1*
-%{_mandir}/man1/mysqlimport.1*
-%{_mandir}/man1/mysqlslap.1*
-%{_mandir}/man1/mysqlshow.1*
-%{_mandir}/man1/mysql_waitpid.1*
+%doc %{_mandir}/man1/mysql.1*
+%doc %{_mandir}/man1/mysqlaccess.1*
+%doc %{_mandir}/man1/mysqladmin.1*
+%doc %{_mandir}/man1/mysqlbinlog.1*
+%doc %{_mandir}/man1/mysqlcheck.1*
+%doc %{_mandir}/man1/mysqldump.1*
+%doc %{_mandir}/man1/mysqldumpslow.1*
+%doc %{_mandir}/man1/mysql_find_rows.1*
+%doc %{_mandir}/man1/mysqlimport.1*
+%doc %{_mandir}/man1/mysqlslap.1*
+%doc %{_mandir}/man1/mysqlshow.1*
+%doc %{_mandir}/man1/mysql_waitpid.1*
 
 %prep
 %autosetup -p1
