@@ -12,7 +12,7 @@
 
 Summary:	The MariaDB database, a drop-in replacement for MySQL
 Name:		mariadb
-Version:	10.5.12
+Version:	10.5.13
 Release:	1
 URL:		http://mariadb.org/
 License:	GPL
@@ -44,8 +44,6 @@ Patch10:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-ssl-ci
 Patch11:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-pcdir.patch
 #   Patch15:  Add option to edit groonga's and groonga-normalizer-mysql install path
 Patch15:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-groonga.patch
-#   Patch16:  Fix port bug in mysql_setpermission perl script
-Patch16:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-scripts-setpermission.patch
 
 # OpenMandriva patches
 # Don't strip -Wformat from --cflags -- -Werror=format-string without -Wformat
@@ -299,9 +297,11 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/simple_password_check.so
 %{_libdir}/mysql/plugin/wsrep_info.so
 %ifarch %{armx} x86_64 %{ix86} znver1
-%{_libdir}/mysql/plugin/JavaWrappers.jar
+%{_datadir}/mysql/JavaWrappers.jar
 %endif
-%optional %{_libdir}/mysql/plugin/JdbcInterface.jar
+%optional %{_datadir}/mysql/JdbcInterface.jar
+%optional %{_datadir}/mysql/Mongo2.jar
+%optional %{_datadir}/mysql/Mongo3.jar
 
 %package plugin-tokudb
 Summary:	The TokuDB storage engine plugin for MariaDB
@@ -387,7 +387,6 @@ package '%{name}'.
 %doc %{_mandir}/man1/mariadb-conv.1*
 %doc %{_mandir}/man1/myrocks_hotbackup.1*
 %doc %{_mandir}/man1/mytop.1*
-%{_prefix}/lib/sysusers.d/mariadb.conf
 %{_sysconfdir}/security/user_map.conf
 /%{_lib}/security/pam_user_map.so
 %optional %{_bindir}/aria_s3_copy
@@ -560,7 +559,6 @@ Common files needed by both the MariaDB server and client.
 %dir %{_sysconfdir}/my.cnf.d
 %dir %{_datadir}/mysql
 %{_sysconfdir}/my.cnf.d/*
-%{_datadir}/mysql/mysql_to_mariadb.sql
 %{_datadir}/mysql/english
 %{_datadir}/mysql/charsets
 %{_datadir}/mysql/czech
@@ -738,6 +736,9 @@ export LDFLAGS="$LDFLAGS -fuse-ld=bfd"
 
 # (tpg) install services into %_unitdir
 sed -i -e "s,/usr/lib/systemd/system,%{_unitdir},g" cmake/install_layout.cmake
+
+# (tpg) fix error: 'noreturn' attribute only applies to functions
+sed -i 's|WSREP_NORETURN|__attribute__((noreturn))|' wsrep-lib/include/wsrep/thread_service.hpp
 
 # DISABLE_LIBMYSQLCLIENT_SYMBOL_VERSIONING breaks binary compatibility
 # with some other distributions, but fixes the loading
