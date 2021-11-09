@@ -4,6 +4,7 @@
 %define muser mysql
 %bcond_without pcre
 %define _disable_lto 1
+%global optflags %{optflags} -O2
 
 %global __requires_exclude ^perl\\((hostnames|lib::mtr|lib::v1|mtr_|My::|wsrep)
 %global __provides_exclude_from ^%{_datadir}/(mysql|mysql-test)/
