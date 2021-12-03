@@ -12,8 +12,8 @@
 
 Summary:	The MariaDB database, a drop-in replacement for MySQL
 Name:		mariadb
-Version:	10.5.13
-Release:	2
+Version:	10.6.5
+Release:	1
 URL:		http://mariadb.org/
 License:	GPL
 Group:		System/Servers
@@ -49,7 +49,6 @@ Patch15:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-groong
 # Don't strip -Wformat from --cflags -- -Werror=format-string without -Wformat
 # means trouble
 Patch100:	mariadb-10.0.8-fix-mysql_config.patch
-Patch101:	mariadb-10.1.1-dont-check-null-on-parameters-declared-nonnull.patch
 # Upstream disables rocksdb on x86_32 because the build process seems to
 # hang on their builders. It doesn't on ours, so let's get rid of the
 # paranoia...
@@ -201,6 +200,7 @@ Development files for the MariaDB database.
 %{_libdir}/pkgconfig/libmariadb.pc
 %{_libdir}/pkgconfig/mariadb.pc
 %doc %{_mandir}/man1/mariadb_config.1*
+%doc %{_mandir}/man3/*.3*
 
 %define staticpackage %mklibname -d -s mysqlclient
 
@@ -302,32 +302,6 @@ Plugins for the MariaDB database.
 %optional %{_datadir}/mysql/JdbcInterface.jar
 %optional %{_datadir}/mysql/Mongo2.jar
 %optional %{_datadir}/mysql/Mongo3.jar
-
-%package plugin-tokudb
-Summary:	The TokuDB storage engine plugin for MariaDB
-Requires:	%{name}-server = %{EVRD}
-Group:		Databases
-
-%description plugin-tokudb
-The TokuDB storage engine plugin for MariaDB.
-
-TokuDB is a storage engine for MySQL and MariaDB that is specifically
-designed for high performance on write-intensive workloads.
-It achieves this via Fractal Tree indexing. TokuDB is a scalable, ACID
-and MVCC compliant storage engine that provides indexing-based query
-improvements, offers online schema modifications, and reduces slave lag
-for both hard disk drives and flash memory.
-
-# As of 10.0.6, tokudb is x86_64 only
-%ifarch %{x86_64}
-%files plugin-tokudb
-%{_sysconfdir}/systemd/system/mariadb.service.d
-%{_libdir}/mysql/plugin/ha_tokudb.so
-%{_bindir}/tokuftdump
-%{_bindir}/tokuft_logprint
-%doc %{_mandir}/man1/tokuft_logprint.1*
-%doc %{_mandir}/man1/tokuftdump.1*
-%endif
 
 %package test
 Summary:	MariaDB test suite
@@ -485,6 +459,7 @@ package '%{name}'.
 %{_sbindir}/mariadb-check-upgrade
 %{_sbindir}/mariadb-scripts-common
 %{_unitdir}/*.service
+%{_unitdir}/*.socket
 %dir %{_unitdir}/mariadb@bootstrap.service.d
 %{_unitdir}/mariadb@bootstrap.service.d/*.conf
 %dir %{_datadir}/mysql/systemd
@@ -530,6 +505,8 @@ package '%{name}'.
 %doc %{_mandir}/man1/wsrep_sst_rsync.1*
 %doc %{_mandir}/man1/wsrep_sst_mariabackup.1*
 %doc %{_mandir}/man1/wsrep_sst_rsync_wan.1*
+%{_datadir}/mysql/mysql_sys_schema.sql
+%{_datadir}/mysql/systemd
 
 %package msql2mysql
 Summary:	Tool to convert code written for mSQL to MySQL/MariaDB
@@ -679,24 +656,11 @@ cp %{SOURCE1} %{SOURCE2} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} 
 # Workarounds for bugs
 sed -i "s@data/test@\${INSTALL_MYSQLTESTDIR}@g" sql/CMakeLists.txt
 #sed -i "s/srv_buf_size/srv_sort_buf_size/" storage/innobase/row/row0log.cc
-if echo %{__cc} |grep -q clang; then
-sed -e 's, -fuse-linker-plugin,,' -i storage/tokudb/PerconaFT/cmake_modules/TokuSetupCompiler.cmake storage/tokudb/CMakeLists.txt
-fi
-# -flto doesn't work with the way tokudb builds static libraries
-sed -e 's, -flto,,' -i storage/tokudb/PerconaFT/cmake_modules/TokuSetupCompiler.cmake storage/tokudb/CMakeLists.txt
-
-# The version of xz bundled here comes with a version of libtool that doesn't support lto
-cd storage/tokudb/PerconaFT/third_party/xz-4.999.9beta
-libtoolize --force
-aclocal
-automake -a
-autoconf
-cd -
 
 %build
 export CFLAGS="%{optflags} -fno-strict-aliasing"
 export CXXFLAGS="%{optflags} -fno-strict-aliasing"
-%ifarch riscv64
+%ifarch %{riscv64}
 export CXXFLAGS="%{optflags} -fno-strict-aliasing -latomic"
 %endif
 
@@ -714,24 +678,10 @@ export CFLAGS="$CFLAGS -Wno-error=pointer-bool-conversion -Wno-error=missing-fie
 export CXXFLAGS="$CFLAGS -Wno-error=pointer-bool-conversion -Wno-error=missing-field-initializers -fcxx-exceptions"
 %endif
 
-# Get rid of gcc specific flags when using clang
 if echo $CC |grep -q gcc; then
     export CFLAGS="$CFLAGS -Wno-error=maybe-uninitialized"
     export CXXFLAGS="$CXXFLAGS -Wno-error=maybe-uninitialized"
-else
-    sed -i -e 's,-Wstrict-null-sentinel,,;s,-Wtrampolines,,;s,-Wlogical-op,,' storage/tokudb/PerconaFT/cmake_modules/TokuSetupCompiler.cmake
 fi
-
-# aliasing rule violations at least in storage/tokudb/PerconaFT/ft/dbufio.cc
-# -Wl,--hash-style=both is a workaround for a build failure caused by com_err incorrectly
-# thinking it doesn't know about the my_uni_ctype symbol when built with ld 2.24.51.0.3
-# and -Wl,--hash-style=gnu
-%ifarch %{ix86}
-#export LDFLAGS="%{ldflags} -Wl,--hash-style=both"
-%else
-#export LDFLAGS="%{ldflags} -Wl,--hash-style=both -flto"
-#export LDFLAGS="%{ldflags} -Wl,--hash-style=both"
-%endif
 export LDFLAGS="$LDFLAGS -fuse-ld=bfd"
 
 # (tpg) install services into %_unitdir
@@ -754,7 +704,6 @@ sed -i 's|WSREP_NORETURN|__attribute__((noreturn))|' wsrep-lib/include/wsrep/thr
 	-DDISABLE_LIBMYSQLCLIENT_SYMBOL_VERSIONING:BOOL=ON \
 	-DINSTALL_PLUGINDIR="%{_libdir}/mysql/plugin" \
 	-DINSTALL_LIBDIR="%{_libdir}" \
-	-DPLUGIN_TOKUDB:BOOL=DYNAMIC \
 	-DMYSQL_DATADIR=/srv/mysql \
 	-DMYSQL_UNIX_ADDR=/run/mysqld/mysql.sock \
 	-DPID_FILE_DIR="/run/mysqld" \
@@ -770,12 +719,10 @@ sed -i 's|WSREP_NORETURN|__attribute__((noreturn))|' wsrep-lib/include/wsrep/thr
 	-DLZ4_LIBS=%{_libdir}/liblz4.so \
 	-DWITH_MYSQLCOMPAT:BOOL=ON
 
-# Used by logformat during build
-export LD_LIBRARY_PATH=$(pwd)/storage/tokudb/PerconaFT/portability:$LD_LIBRARY_PATH
-%make -k || make
+%make_build -k || make
 
 %install
-%makeinstall_std -C build
+%make_install -C build
 
 # systemd integration
 rm -rf %{buildroot}%{_sysconfdir}/init.d
