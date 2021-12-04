@@ -761,8 +761,8 @@ rm -r %{buildroot}%{_datadir}/mysql/systemd
 rm %{buildroot}%{_unitdir}/{mysql,mysqld}.service
  
 # install systemd unit files and scripts for handling server startup
-install -D -p -m 644 %{_vpath_builddir}/scripts/mysql.service %{buildroot}%{_unitdir}/mariadb.service
-install -D -p -m 644 %{_vpath_builddir}/scripts/mysql@.service %{buildroot}%{_unitdir}/mariadb@.service
+install -D -p -m 644 build/scripts/mysql.service %{buildroot}%{_unitdir}/mariadb.service
+install -D -p -m 644 build/scripts/mysql@.service %{buildroot}%{_unitdir}/mariadb@.service
 
 # helper scripts for service starting
 install -D -p -m 755 build/scripts/mariadb-prepare-db-dir %{buildroot}%{_sbindir}/mariadb-prepare-db-dir
