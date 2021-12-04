@@ -8,11 +8,11 @@
 
 %global __requires_exclude ^perl\\((hostnames|lib::mtr|lib::v1|mtr_|My::|wsrep)
 %global __provides_exclude_from ^%{_datadir}/(mysql|mysql-test)/
-#global __provides_exclude_from ^(%{_datadir}/(mysql|mysql-test)/.*|%{_libdir}/%{pkg_name}/plugin/.*\\.so)$
+#global __provides_exclude_from ^(%{_datadir}/(mysql|mysql-test)/.*|%{_libdir}/%{name}/plugin/.*\\.so)$
 
 Summary:	The MariaDB database, a drop-in replacement for MySQL
 Name:		mariadb
-Version:	10.6.5
+Version:	10.7.1
 Release:	1
 URL:		http://mariadb.org/
 License:	GPL
@@ -31,6 +31,7 @@ Source10:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/clustercheck.
 Source20:	mariadb.sysusers
 Source1000:	%{name}.rpmlintrc
 # Fedora patches
+Patch1:		https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-openssl3.patch
 #   Patch4: Red Hat distributions specific logrotate fix
 #   it would be big unexpected change, if we start shipping it now. Better wait for MariaDB 10.2
 Patch4:		https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-logrotate.patch
@@ -78,6 +79,7 @@ BuildRequires:	pkgconfig(zlib)
 BuildRequires:	pkgconfig(libevent)
 BuildRequires:	pkgconfig(liblz4)
 BuildRequires:	pkgconfig(liblzma)
+BuildRequires:	pkgconfig(snappy)
 BuildRequires:	pkgconfig(libzmq)
 BuildRequires:	pkgconfig(libcurl)
 BuildRequires:	pkgconfig(msgpack)
@@ -290,6 +292,12 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/sha256_password.so
 %{_libdir}/mysql/plugin/sql_errlog.so
 %{_libdir}/mysql/plugin/test_versioning.so
+%{_libdir}/mysql/plugin/password_reuse_check.so
+%{_libdir}/mysql/plugin/provider_bzip2.so
+%{_libdir}/mysql/plugin/provider_lz4.so
+%{_libdir}/mysql/plugin/provider_lzma.so
+%{_libdir}/mysql/plugin/provider_lzo.so
+%{_libdir}/mysql/plugin/provider_snappy.so
 %doc %{_mandir}/man1/mysql_plugin.1*
 %{_libdir}/mysql/plugin/debug_key_management.so
 %{_libdir}/mysql/plugin/example_key_management.so
@@ -462,9 +470,6 @@ package '%{name}'.
 %{_unitdir}/*.socket
 %dir %{_unitdir}/mariadb@bootstrap.service.d
 %{_unitdir}/mariadb@bootstrap.service.d/*.conf
-%dir %{_datadir}/mysql/systemd
-%{_datadir}/mysql/systemd/*.service
-%{_datadir}/mysql/systemd/*.conf
 %{_datadir}/mysql/mysql_test_db.sql
 %doc %{_docdir}/%{name}-%{version}
 %attr(711,%{muser},%{muser}) /srv/mysql
@@ -506,7 +511,6 @@ package '%{name}'.
 %doc %{_mandir}/man1/wsrep_sst_mariabackup.1*
 %doc %{_mandir}/man1/wsrep_sst_rsync_wan.1*
 %{_datadir}/mysql/mysql_sys_schema.sql
-%{_datadir}/mysql/systemd
 
 %package msql2mysql
 Summary:	Tool to convert code written for mSQL to MySQL/MariaDB
@@ -694,7 +698,8 @@ sed -i 's|WSREP_NORETURN|__attribute__((noreturn))|' wsrep-lib/include/wsrep/thr
 # with some other distributions, but fixes the loading
 # of the Qt mysql plugin. Better fix wanted.
 
-%cmake	-DINSTALL_LAYOUT=RPM \
+%cmake	-DBUILD_CONFIG=mysql_release \
+	-DINSTALL_LAYOUT=RPM \
 	-DFEATURE_SET="community" \
 	-DWITH_SSL=system \
 	-DWITH_ZLIB=system \
@@ -702,7 +707,22 @@ sed -i 's|WSREP_NORETURN|__attribute__((noreturn))|' wsrep-lib/include/wsrep/thr
 	-DWITH_PCRE=system \
 %endif
 	-DDISABLE_LIBMYSQLCLIENT_SYMBOL_VERSIONING:BOOL=ON \
-	-DINSTALL_PLUGINDIR="%{_libdir}/mysql/plugin" \
+	-DINSTALL_SYSCONFDIR="%{_sysconfdir}" \
+	-DINSTALL_SYSCONF2DIR="%{_sysconfdir}/my.cnf.d" \
+	-DINSTALL_DOCDIR="share/doc/%{_pkgdocdirname}" \
+	-DINSTALL_DOCREADMEDIR="share/doc/%{_pkgdocdirname}" \
+	-DINSTALL_INCLUDEDIR=include/mysql \
+	-DINSTALL_INFODIR=share/info \
+	-DINSTALL_LIBDIR="%{_lib}" \
+	-DINSTALL_MANDIR=share/man \
+	-DINSTALL_MYSQLSHAREDIR=share/mysql \
+	-DINSTALL_MYSQLTESTDIR=share/mysql-test \
+	-DINSTALL_PLUGINDIR="%{_lib}/mysql/plugin" \
+	-DINSTALL_SBINDIR=sbin \
+	-DINSTALL_SCRIPTDIR=bin \
+	-DINSTALL_SUPPORTFILESDIR=share/mysql \
+	-DINSTALL_PCDIR=%{_lib}/pkgconfig \
+	-DINSTALL_PLUGINDIR="%{_lib}/mysql/plugin" \
 	-DINSTALL_LIBDIR="%{_libdir}" \
 	-DMYSQL_DATADIR=/srv/mysql \
 	-DMYSQL_UNIX_ADDR=/run/mysqld/mysql.sock \
@@ -717,7 +737,11 @@ sed -i 's|WSREP_NORETURN|__attribute__((noreturn))|' wsrep-lib/include/wsrep/thr
 	-DCONC_WITH_SSL:BOOL=ON \
 	-DLOAD_LOCAL_INFILE:BOOL=ON \
 	-DLZ4_LIBS=%{_libdir}/liblz4.so \
-	-DWITH_MYSQLCOMPAT:BOOL=ON
+	-DWITH_MYSQLCOMPAT:BOOL=ON \
+	-DWITH_WSREP:BOOL=ON \
+	-DWITH_EMBEDDED_SERVER:BOOL=ON \
+	-DWITH_MARIABACKUP:BOOL=ON \
+	-DPLUGIN_ROCKSDB=DYNAMIC
 
 %make_build -k || make
 
@@ -726,11 +750,19 @@ sed -i 's|WSREP_NORETURN|__attribute__((noreturn))|' wsrep-lib/include/wsrep/thr
 
 # systemd integration
 rm -rf %{buildroot}%{_sysconfdir}/init.d
-rm -f %{buildroot}%{_sbindir}/rcmysql
-install -D -p -m 644 build/scripts/mysql.service %{buildroot}%{_unitdir}/%{name}.service
-install -D -p -m 644 build/scripts/mysql@.service %{buildroot}%{_unitdir}/%{name}@.service
 install -D -p -m 0644 build/scripts/mariadb.tmpfiles.d %{buildroot}%{_tmpfilesdir}/%{name}.conf
 install -D -p -m 0644 %{SOURCE20} %{buildroot}%{_sysusersdir}/%{name}.conf
+
+# Remove upstream SysV init script and a symlink to that, we use systemd
+rm %{buildroot}%{_sbindir}/rcmysql
+rm -r %{buildroot}%{_datadir}/mysql/systemd
+# Our downstream Systemd service file have set aliases to the "mysql" names in the [Install] section.
+# They can be enabled / disabled by "systemctl enable / diable <service_name>"
+rm %{buildroot}%{_unitdir}/{mysql,mysqld}.service
+ 
+# install systemd unit files and scripts for handling server startup
+install -D -p -m 644 %{_vpath_builddir}/scripts/mysql.service %{buildroot}%{_unitdir}/mariadb.service
+install -D -p -m 644 %{_vpath_builddir}/scripts/mysql@.service %{buildroot}%{_unitdir}/mariadb@.service
 
 # helper scripts for service starting
 install -D -p -m 755 build/scripts/mariadb-prepare-db-dir %{buildroot}%{_sbindir}/mariadb-prepare-db-dir
@@ -761,13 +793,6 @@ rm -f	%{buildroot}%{_datadir}/mysql/config.huge.ini \
 	%{buildroot}%{_datadir}/mysql/ndb-config-2-node.ini \
 	%{buildroot}%{_datadir}/mysql/SELinux/RHEL4/mysql.fc \
 	%{buildroot}%{_datadir}/mysql/SELinux/RHEL4/mysql.te
-
-%ifnarch %{x86_64}
-# TokuDB is x86_64 specific for now -- so its man pages are uselsss
-rm -f	%{buildroot}%{_mandir}/man1/tokuft_logdump.1* \
-	%{buildroot}%{_mandir}/man1/tokuft_logprint.1* \
-	%{buildroot}%{_mandir}/man1/tokuftdump.1*
-%endif
 
 # for compatibility
 ln -s libmariadb.so.3 %{buildroot}%{_libdir}/libmysqlclient_r.so.18
