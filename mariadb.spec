@@ -12,7 +12,7 @@
 
 Summary:	The MariaDB database, a drop-in replacement for MySQL
 Name:		mariadb
-Version:	10.7.1
+Version:	10.9.1
 Release:	1
 URL:		http://mariadb.org/
 License:	GPL
@@ -31,7 +31,6 @@ Source10:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/clustercheck.
 Source20:	mariadb.sysusers
 Source1000:	%{name}.rpmlintrc
 # Fedora patches
-Patch1:		https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-openssl3.patch
 #   Patch4: Red Hat distributions specific logrotate fix
 #   it would be big unexpected change, if we start shipping it now. Better wait for MariaDB 10.2
 Patch4:		https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-logrotate.patch
@@ -43,8 +42,6 @@ Patch9:		https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-ownset
 Patch10:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-ssl-cipher-tests.patch
 #   Patch11: Use PCDIR CMake option, if configured
 Patch11:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-pcdir.patch
-#   Patch15:  Add option to edit groonga's and groonga-normalizer-mysql install path
-Patch15:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-groonga.patch
 
 # OpenMandriva patches
 # Don't strip -Wformat from --cflags -- -Werror=format-string without -Wformat
@@ -221,6 +218,7 @@ Static libraries for the MariaDB database.
 %files -n %{staticpackage}
 %{_libdir}/libmysqlclient.a
 %{_libdir}/libmysqlclient_r.a
+%{_libdir}/libmariadb.a
 %{_libdir}/libmariadbclient.a
 %{_libdir}/libmariadbd.a
 %{_libdir}/libmysqlservices.a
@@ -299,6 +297,8 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/provider_lzma.so
 %{_libdir}/mysql/plugin/provider_lzo.so
 %{_libdir}/mysql/plugin/provider_snappy.so
+%{_libdir}/mysql/plugin/hashicorp_key_management.so
+%{_libdir}/mysql/plugin/zstd.so
 %doc %{_mandir}/man1/mysql_plugin.1*
 %{_libdir}/mysql/plugin/debug_key_management.so
 %{_libdir}/mysql/plugin/example_key_management.so
@@ -334,6 +334,7 @@ MariaDB test suite.
 %doc %{_mandir}/man1/mariadb-client-test.1*
 %{_bindir}/mysql_client_test_embedded
 %{_datadir}/mysql-test
+%{_datadir}/mysql/mini-benchmark
 %{_libdir}/mysql/plugin/func_test.so
 %{_libdir}/mysql/plugin/type_test.so
 %doc %{_mandir}/man1/mariadb-test.1*
@@ -543,6 +544,8 @@ Common files needed by both the MariaDB server and client.
 %{_sysconfdir}/my.cnf.d/*
 %{_datadir}/mysql/english
 %{_datadir}/mysql/charsets
+%{_datadir}/mysql/bulgarian
+%{_datadir}/mysql/chinese
 %{_datadir}/mysql/czech
 %{_datadir}/mysql/danish
 %{_datadir}/mysql/dutch
@@ -719,7 +722,7 @@ sed -i 's|WSREP_NORETURN|__attribute__((noreturn))|' wsrep-lib/include/wsrep/thr
 	-DINSTALL_MYSQLSHAREDIR=share/mysql \
 	-DINSTALL_MYSQLTESTDIR=share/mysql-test \
 	-DINSTALL_PLUGINDIR="%{_lib}/mysql/plugin" \
-	-DINSTALL_SBINDIR=sbin \
+	-DINSTALL_SBINDIR=bin \
 	-DINSTALL_SCRIPTDIR=bin \
 	-DINSTALL_SUPPORTFILESDIR=share/mysql \
 	-DINSTALL_PCDIR=%{_lib}/pkgconfig \
