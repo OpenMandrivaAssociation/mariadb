@@ -68,6 +68,7 @@ BuildRequires:	libaio-devel
 BuildRequires:	stdc++-devel
 BuildRequires:	pkgconfig(readline)
 BuildRequires:	xfsprogs-devel
+BuildRequires:	pkgconfig(fmt)
 BuildRequires:	pkgconfig(jemalloc)
 BuildRequires:	pkgconfig(libxml-2.0)
 BuildRequires:	pkgconfig(ncursesw)
