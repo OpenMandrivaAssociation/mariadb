@@ -12,7 +12,7 @@
 
 Summary:	The MariaDB database, a drop-in replacement for MySQL
 Name:		mariadb
-Version:	10.9.1
+Version:	10.9.2
 Release:	1
 URL:		http://mariadb.org/
 License:	GPL
@@ -55,6 +55,8 @@ Patch102:	mariadb-10.3.6-enable-rocksdb-on-x86_32.patch
 # It also doesn't have soname info etc., so it should be a static
 # lib
 Patch103:	mariadb-10.4.4-static-wsrep.patch
+# Fix libcurl detection/linkage
+Patch104:	mariadb-10.9.2-fix-libcurl-detection.patch
 Requires:	%{name}-server = %{EVRD}
 Requires:	%{name}-client = %{EVRD}
 BuildRequires:	bison
