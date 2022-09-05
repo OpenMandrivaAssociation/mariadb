@@ -86,6 +86,7 @@ BuildRequires:	pkgconfig(libcurl)
 BuildRequires:	pkgconfig(msgpack)
 BuildRequires:	pkgconfig(krb5-gssapi)
 BuildRequires:	pkgconfig(com_err)
+BuildRequires:	pkgconfig(libssh2)
 # For _tmpfilesdir macro
 BuildRequires:	systemd-rpm-macros
 BuildRequires:	cracklib-devel
