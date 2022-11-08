@@ -12,7 +12,7 @@
 
 Summary:	The MariaDB database, a drop-in replacement for MySQL
 Name:		mariadb
-Version:	10.9.3
+Version:	10.9.4
 Release:	1
 URL:		http://mariadb.org/
 License:	GPL
@@ -750,7 +750,8 @@ sed -i 's|WSREP_NORETURN|__attribute__((noreturn))|' wsrep-lib/include/wsrep/thr
 	-DWITH_WSREP:BOOL=ON \
 	-DWITH_EMBEDDED_SERVER:BOOL=ON \
 	-DWITH_MARIABACKUP:BOOL=ON \
-	-DPLUGIN_ROCKSDB=DYNAMIC
+	-DPLUGIN_ROCKSDB=DYNAMIC \
+	-DCURL_LIBRARIES=-lcurl
 
 %make_build -k || make
 
