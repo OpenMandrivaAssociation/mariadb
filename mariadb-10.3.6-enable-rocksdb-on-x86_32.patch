@@ -1,9 +1,9 @@
-diff -up mariadb-10.3.8/storage/rocksdb/CMakeLists.txt.0005~ mariadb-10.3.8/storage/rocksdb/CMakeLists.txt
---- mariadb-10.3.8/storage/rocksdb/CMakeLists.txt.0005~	2018-07-03 18:54:59.680912603 +0200
-+++ mariadb-10.3.8/storage/rocksdb/CMakeLists.txt	2018-07-03 18:55:47.856909106 +0200
-@@ -23,12 +23,6 @@ IF(WITH_VALGRIND)
-   ADD_DEFINITIONS(-DROCKSDB_VALGRIND_RUN=1)
- ENDIF()
+diff -up mariadb-10.10.4/storage/rocksdb/CMakeLists.txt.7~ mariadb-10.10.4/storage/rocksdb/CMakeLists.txt
+--- mariadb-10.10.4/storage/rocksdb/CMakeLists.txt.7~	2023-05-12 19:44:57.801928373 +0200
++++ mariadb-10.10.4/storage/rocksdb/CMakeLists.txt	2023-05-12 19:45:35.012185272 +0200
+@@ -35,12 +35,6 @@ ADD_DEFINITIONS(-Duint32_t=u_int32_t)
+ ADD_DEFINITIONS(-Duint16_t=u_int16_t)
+ ADD_DEFINITIONS(-Duint8_t=u_int8_t)
  
 -# We've had our builders hang during the build process. This prevents MariaRocks
 -# to be built on 32 bit intel OS kernels.
