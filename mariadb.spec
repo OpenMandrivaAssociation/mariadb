@@ -12,7 +12,7 @@
 
 Summary:	The MariaDB database, a drop-in replacement for MySQL
 Name:		mariadb
-Version:	10.10.4
+Version:	11.1.2
 Release:	1
 URL:		http://mariadb.org/
 License:	GPL
@@ -372,6 +372,7 @@ package '%{name}'.
 %optional %{_libdir}/mysql/plugin/ha_s3.so
 %{_libdir}/mysql/plugin/test_sql_service.so
 %{_libdir}/mysql/plugin/type_mysql_json.so
+%{_libdir}/mysql/plugin/type_mysql_timestamp.so
 %doc %{_mandir}/man1/aria_s3_copy.1*
 %doc %{_mandir}/man1/mariadb-conv.1*
 %doc %{_mandir}/man1/myrocks_hotbackup.1*
@@ -387,10 +388,10 @@ package '%{name}'.
 %dir %{_datadir}/mysql
 %{_datadir}/mysql/errmsg-utf8.txt
 %{_datadir}/mysql/fill_help_tables.sql
-%{_datadir}/mysql/mysql_performance_tables.sql
-%{_datadir}/mysql/mysql_system_tables.sql
-%{_datadir}/mysql/mysql_system_tables_data.sql
-%{_datadir}/mysql/mysql_test_data_timezone.sql
+%{_datadir}/mysql/mariadb_performance_tables.sql
+%{_datadir}/mysql/mariadb_system_tables.sql
+%{_datadir}/mysql/mariadb_system_tables_data.sql
+%{_datadir}/mysql/mariadb_test_data_timezone.sql
 %{_datadir}/mysql/wsrep_notify
 %{_datadir}/mysql/*.cnf
 %{_datadir}/mysql/maria_add_gis_sp.sql
@@ -405,7 +406,8 @@ package '%{name}'.
 %doc %{_mandir}/man8/*
 %dir %{_libdir}/mysql
 %dir %{_libdir}/mysql/plugin
-%{_sysconfdir}/logrotate.d/mysql
+%{_sysconfdir}/logrotate.d/mariadb
+%{_datadir}/mysql/mariadb.logrotate
 %config(noreplace) %{_sysconfdir}/my.cnf.d/client.cnf
 %config(noreplace) %{_sysconfdir}/my.cnf.d/mysql-clients.cnf
 %config(noreplace) %{_sysconfdir}/my.cnf.d/server.cnf
@@ -477,7 +479,7 @@ package '%{name}'.
 %{_unitdir}/*.socket
 %dir %{_unitdir}/mariadb@bootstrap.service.d
 %{_unitdir}/mariadb@bootstrap.service.d/*.conf
-%{_datadir}/mysql/mysql_test_db.sql
+%{_datadir}/mysql/mariadb_test_db.sql
 %doc %{_docdir}/%{name}-%{version}
 %attr(711,%{muser},%{muser}) /srv/mysql
 %attr(711,%{muser},%{muser}) %{_localstatedir}/log/mysqld
@@ -517,7 +519,7 @@ package '%{name}'.
 %doc %{_mandir}/man1/wsrep_sst_rsync.1*
 %doc %{_mandir}/man1/wsrep_sst_mariabackup.1*
 %doc %{_mandir}/man1/wsrep_sst_rsync_wan.1*
-%{_datadir}/mysql/mysql_sys_schema.sql
+%{_datadir}/mysql/mariadb_sys_schema.sql
 
 %package msql2mysql
 Summary:	Tool to convert code written for mSQL to MySQL/MariaDB
@@ -556,6 +558,7 @@ Common files needed by both the MariaDB server and client.
 %{_datadir}/mysql/dutch
 %{_datadir}/mysql/estonian
 %{_datadir}/mysql/french
+%{_datadir}/mysql/georgian
 %{_datadir}/mysql/german
 %{_datadir}/mysql/greek
 %{_datadir}/mysql/hindi
@@ -572,6 +575,7 @@ Common files needed by both the MariaDB server and client.
 %{_datadir}/mysql/serbian
 %{_datadir}/mysql/slovak
 %{_datadir}/mysql/spanish
+%{_datadir}/mysql/swahili
 %{_datadir}/mysql/swedish
 %{_datadir}/mysql/ukrainian
 %{_datadir}/mysql/policy
@@ -662,7 +666,7 @@ MariaDB command line client.
 %autosetup -p1
 # MariaDB uses python2 scripts to autogenerate some sources...
 # Let's use python3 instead.
-find . -name "*.py" |xargs 2to3 -w
+#find . -name "*.py" |xargs 2to3 -w
 
 cp %{SOURCE1} %{SOURCE2} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{SOURCE9} %{SOURCE10} scripts
 

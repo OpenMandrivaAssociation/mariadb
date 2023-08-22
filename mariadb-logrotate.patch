@@ -1,38 +1,13 @@
-diff -up mariadb-10.9.1/support-files/mysql-log-rotate.sh.1~ mariadb-10.9.1/support-files/mysql-log-rotate.sh
---- mariadb-10.9.1/support-files/mysql-log-rotate.sh.1~	2022-06-20 21:32:30.280597649 +0200
-+++ mariadb-10.9.1/support-files/mysql-log-rotate.sh	2022-06-20 21:35:59.385655180 +0200
-@@ -3,29 +3,18 @@
- # in the [mysqld] section as follows:
- #
- # [mysqld]
--# log-error=@localstatedir@/mysqld.log
--#
--# If the root user has a password you have to create a
--# /root/.my.cnf configuration file with the following
--# content:
--#
--# [mysqladmin]
--# password = <secret> 
--# user= root
--#
--# where "<secret>" is the password. 
--#
--# ATTENTION: This /root/.my.cnf should be readable ONLY
--# for root !
-+# log-error=@LOG_LOCATION@
+diff -up mariadb-11.1.2/support-files/mariadb.logrotate.sh.1~ mariadb-11.1.2/support-files/mariadb.logrotate.sh
+--- mariadb-11.1.2/support-files/mariadb.logrotate.sh.1~	2023-08-22 11:51:48.811510712 +0200
++++ mariadb-11.1.2/support-files/mariadb.logrotate.sh	2023-08-22 11:52:21.833837663 +0200
+@@ -6,7 +6,8 @@
+ # Read https://mariadb.com/kb/en/error-log/ to learn more about logging and
+ # https://mariadb.com/kb/en/rotating-logs-on-unix-and-linux/ about rotating logs.
  
--@localstatedir@/mysqld.log {
--        # create 600 mysql mysql
-+@LOG_LOCATION@ {
-+        create 600 mysql mysql
-         su mysql mysql
-         notifempty
-         daily
-         rotate 3
-         missingok
-         compress
-+	delaycompress
-+	sharedscripts
-     postrotate
- 	# just if mariadbd is really running
- 	if test -x @bindir@/mysqladmin && \
+-@localstatedir@/mysqld.log @localstatedir@/mariadb.log @logdir@/*.log {
++@LOG_LOCATION@ @localstatedir@/mariadb.log @logdir@/*.log {
++  create 600 mysql mysql
+ 
+   # Depends on a mysql@localhost unix_socket authenticated user with RELOAD privilege
+   @su_user@
