@@ -12,7 +12,7 @@
 
 Summary:	The MariaDB database, a drop-in replacement for MySQL
 Name:		mariadb
-Version:	11.2.1
+Version:	11.2.2
 Release:	1
 URL:		http://mariadb.org/
 License:	GPL
@@ -83,7 +83,7 @@ BuildRequires:	pkgconfig(snappy)
 BuildRequires:	pkgconfig(bzip2)
 BuildRequires:	pkgconfig(libzmq)
 BuildRequires:	pkgconfig(libcurl)
-BuildRequires:	pkgconfig(msgpack)
+BuildRequires:	pkgconfig(msgpack-c)
 BuildRequires:	pkgconfig(krb5-gssapi)
 BuildRequires:	pkgconfig(com_err)
 BuildRequires:	pkgconfig(libssh2)
