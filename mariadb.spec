@@ -12,7 +12,7 @@
 
 Summary:	The MariaDB database, a drop-in replacement for MySQL
 Name:		mariadb
-Version:	11.2.2
+Version:	11.2.4
 Release:	1
 URL:		http://mariadb.org/
 License:	GPL
@@ -519,6 +519,8 @@ package '%{name}'.
 %doc %{_mandir}/man1/wsrep_sst_rsync.1*
 %doc %{_mandir}/man1/wsrep_sst_mariabackup.1*
 %doc %{_mandir}/man1/wsrep_sst_rsync_wan.1*
+%doc %{_mandir}/man1/wsrep_sst_backup.1.zst
+
 %{_datadir}/mysql/mariadb_sys_schema.sql
 
 %package msql2mysql
