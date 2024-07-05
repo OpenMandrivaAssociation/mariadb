@@ -12,7 +12,7 @@
 
 Summary:	The MariaDB database, a drop-in replacement for MySQL
 Name:		mariadb
-Version:	11.2.4
+Version:	11.4.2
 Release:	1
 URL:		http://mariadb.org/
 License:	GPL
@@ -310,9 +310,9 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/file_key_management.so
 %{_libdir}/mysql/plugin/simple_password_check.so
 %{_libdir}/mysql/plugin/wsrep_info.so
-%ifarch %{armx} x86_64 %{ix86} znver1
-%{_datadir}/mysql/JavaWrappers.jar
-%endif
+#ifarch %{armx} x86_64 %{ix86} znver1
+#{_datadir}/mysql/JavaWrappers.jar
+#endif
 %optional %{_datadir}/mysql/JdbcInterface.jar
 %optional %{_datadir}/mysql/Mongo2.jar
 %optional %{_datadir}/mysql/Mongo3.jar
@@ -386,7 +386,6 @@ package '%{name}'.
 %doc %{_mandir}/man1/mariadb-backup.1*
 %{_bindir}/mbstream
 %dir %{_datadir}/mysql
-%{_datadir}/mysql/errmsg-utf8.txt
 %{_datadir}/mysql/fill_help_tables.sql
 %{_datadir}/mysql/mariadb_performance_tables.sql
 %{_datadir}/mysql/mariadb_system_tables.sql
