@@ -1,0 +1,18 @@
+diff -up mariadb-11.7.2/cmake/libfmt.cmake.omv~ mariadb-11.7.2/cmake/libfmt.cmake
+--- mariadb-11.7.2/cmake/libfmt.cmake.omv~	2025-04-19 16:52:03.912500486 +0200
++++ mariadb-11.7.2/cmake/libfmt.cmake	2025-04-19 16:52:38.032768615 +0200
+@@ -31,12 +31,13 @@ MACRO (CHECK_LIBFMT)
+     "#define FMT_STATIC_THOUSANDS_SEPARATOR ','
+      #define FMT_HEADER_ONLY 1
+      #include <fmt/args.h>
++     #include <locale>
+      int main() {
+        using ArgStore= fmt::dynamic_format_arg_store<fmt::format_context>;
+        ArgStore arg_store;
+        int answer= 4321;
+        arg_store.push_back(answer);
+-       return fmt::vformat(\"{:L}\", arg_store).compare(\"4,321\");
++       return fmt::vformat(std::locale(\"en_US.UTF-8\"), \"{:L}\", arg_store).compare(\"4,321\");
+      }" HAVE_SYSTEM_LIBFMT)
+     SET(CMAKE_REQUIRED_INCLUDES)
+   ENDIF()
