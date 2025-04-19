@@ -12,7 +12,7 @@
 
 Summary:	The MariaDB database, a drop-in replacement for MySQL
 Name:		mariadb
-Version:	11.4.2
+Version:	11.7.2
 Release:	1
 URL:		https://mariadb.org/
 License:	GPL
@@ -57,6 +57,8 @@ Patch102:	mariadb-10.3.6-enable-rocksdb-on-x86_32.patch
 Patch103:	mariadb-10.4.4-static-wsrep.patch
 # Fix libcurl detection/linkage
 Patch104:	mariadb-10.9.2-fix-libcurl-detection.patch
+# Make compiling great again
+Patch105:	mariadb-11.7.2-compile.patch
 Requires:	%{name}-server = %{EVRD}
 Requires:	%{name}-client = %{EVRD}
 BuildRequires:	bison
@@ -260,6 +262,7 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/auth_gssapi_client.so
 %{_libdir}/mysql/plugin/auth_test_plugin.so
 %{_libdir}/mysql/plugin/auth_pam.so
+%{_libdir}/mysql/plugin/auth_parsec.so
 # Change from root:root to mysql:mysql, so it can be accessed by the server
 %attr(0755,mysql,mysql) %dir %{_libdir}/mysql/plugin/auth_pam_tool_dir
 %{_libdir}/mysql/plugin/auth_pam_tool_dir/auth_pam_tool
@@ -287,6 +290,7 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/metadata_lock_info.so
 %{_libdir}/mysql/plugin/mypluglib.so
 %{_libdir}/mysql/plugin/mysql_clear_password.so
+%{_libdir}/mysql/plugin/parsec.so
 %{_libdir}/mysql/plugin/qa_auth_client.so
 %{_libdir}/mysql/plugin/qa_auth_interface.so
 %{_libdir}/mysql/plugin/qa_auth_server.so
