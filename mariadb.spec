@@ -721,6 +721,7 @@ sed -i 's|WSREP_NORETURN|__attribute__((noreturn))|' wsrep-lib/include/wsrep/thr
 	-DFEATURE_SET="community" \
 	-DWITH_SSL=system \
 	-DWITH_ZLIB=system \
+	-DWITH_FMT=system \
 %if %{with pcre}
 	-DWITH_PCRE=system \
 %endif
