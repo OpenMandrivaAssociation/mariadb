@@ -12,7 +12,7 @@
 
 Summary:	The MariaDB database, a drop-in replacement for MySQL
 Name:		mariadb
-Version:	11.7.2
+Version:	11.8.2
 Release:	1
 URL:		https://mariadb.org/
 License:	GPL
@@ -59,7 +59,7 @@ Patch103:	mariadb-10.4.4-static-wsrep.patch
 Patch104:	mariadb-10.9.2-fix-libcurl-detection.patch
 # Make compiling great again
 Patch105:	mariadb-11.7.2-compile.patch
-Patch106:	mariadb-fix-fmt-detection.patch
+#Patch106:	mariadb-fix-fmt-detection.patch
 Requires:	%{name}-server = %{EVRD}
 Requires:	%{name}-client = %{EVRD}
 BuildRequires:	bison
