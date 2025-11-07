@@ -12,7 +12,7 @@
 
 Summary:	The MariaDB database, a drop-in replacement for MySQL
 Name:		mariadb
-Version:	11.8.2
+Version:	11.8.4
 Release:	1
 URL:		https://mariadb.org/
 License:	GPL
@@ -261,6 +261,7 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/auth_ed25519.so
 %{_libdir}/mysql/plugin/auth_gssapi.so
 %{_libdir}/mysql/plugin/auth_gssapi_client.so
+%{_libdir}/mysql/plugin/auth_mysql_sha2.so
 %{_libdir}/mysql/plugin/auth_test_plugin.so
 %{_libdir}/mysql/plugin/auth_pam.so
 %{_libdir}/mysql/plugin/auth_parsec.so
