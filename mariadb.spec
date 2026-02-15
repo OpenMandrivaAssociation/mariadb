@@ -13,7 +13,7 @@
 Summary:	The MariaDB database, a drop-in replacement for MySQL
 Name:		mariadb
 Version:	12.2.2
-Release:	1
+Release:	2
 URL:		https://mariadb.org/
 License:	GPL
 Group:		System/Servers
@@ -317,12 +317,27 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/file_key_management.so
 %{_libdir}/mysql/plugin/simple_password_check.so
 %{_libdir}/mysql/plugin/wsrep_info.so
-#ifarch %{armx} x86_64 %{ix86} znver1
-#{_datadir}/mysql/JavaWrappers.jar
-#endif
-%optional %{_datadir}/mysql/JdbcInterface.jar
-%optional %{_datadir}/mysql/Mongo2.jar
-%optional %{_datadir}/mysql/Mongo3.jar
+
+%package jdbc
+Summary:	MariaDB JDBC interface
+Group:		Databases
+
+%description jdbc
+MariaDB JDBC interface
+
+%files jdbc
+%{_datadir}/mysql/JdbcInterface.jar
+
+%package mongo
+Summary:	MariaDB MongoDB interface
+Group:		Databases
+
+%description mongo
+MariaDB MongoDB interface
+
+%files mongo
+%{_datadir}/mysql/Mongo2.jar
+%{_datadir}/mysql/Mongo3.jar
 
 %package test
 Summary:	MariaDB test suite
