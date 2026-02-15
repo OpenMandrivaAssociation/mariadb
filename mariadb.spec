@@ -12,12 +12,12 @@
 
 Summary:	The MariaDB database, a drop-in replacement for MySQL
 Name:		mariadb
-Version:	11.8.6
+Version:	12.2.2
 Release:	1
 URL:		https://mariadb.org/
 License:	GPL
 Group:		System/Servers
-Source0:	https://mirror.mva-n.net/mariadb//mariadb-%{version}/source/mariadb-%{version}.tar.gz
+Source0:	https://mirror1.hs-esslingen.de/pub/Mirrors/mariadb//mariadb-%{version}/source/mariadb-%{version}.tar.gz
 Source1:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql_config_multilib.sh
 Source2:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/my.cnf.in
 Source3:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb.tmpfiles.d.in
