@@ -26,11 +26,22 @@ After=network.target
 WantedBy=multi-user.target
 Alias=mysql.service
 Alias=mysqld.service
+Alias=mariadb.service
 
 [Service]
 Type=notify
 User=mysql
 Group=mysql
+
+RuntimeDirectory=mysqld
+RuntimeDirectoryMode=0755
+
+ProtectSystem=strict
+ReadWritePaths=/srv/mysql /run/mysqld
+ProtectHome=true
+NoNewPrivileges=true
+ProtectKernelModules=true
+ProtectControlGroups=true
 
 ExecStartPre=@libexecdir@/mariadb-check-socket
 # '%n' expands to 'Full unit name'; man systemd.unit

@@ -1,0 +1,27 @@
+From 87309d3d4bb8f48910d05b0ca5ee989bcdd6b053 Mon Sep 17 00:00:00 2001
+From: Sergei Golubchik <serg@mariadb.org>
+Date: Fri, 13 Feb 2026 15:22:57 +0100
+Subject: [PATCH] MDEV-38811 crash in information_schema.table_constraints when
+ --skip-grant-tables
+
+acl_get_all3() wasn't expecting --skip-grant-tables
+---
+ mysql-test/main/skip_grants.result | 40 +++++++++++++++++++++++++++++-
+ mysql-test/main/skip_grants.test   |  8 +++++-
+ sql/sql_acl.cc                     |  3 +++
+ 3 files changed, 49 insertions(+), 2 deletions(-)
+
+diff --git a/sql/sql_acl.cc b/sql/sql_acl.cc
+index 30ad5d6f40294..d7910024cb15a 100644
+--- a/sql/sql_acl.cc
++++ b/sql/sql_acl.cc
+@@ -3875,6 +3875,9 @@ privilege_t acl_get(const char *host, const char *ip,
+ privilege_t acl_get_all3(Security_context *sctx, const char *db,
+                          bool db_is_patern)
+ {
++  if (!initialized)
++    return DB_ACLS;
++
+   privilege_t access= acl_get(sctx->host, sctx->ip,
+                               sctx->priv_user, db, db_is_patern);
+   if (sctx->priv_role[0])

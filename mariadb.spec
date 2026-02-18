@@ -21,15 +21,18 @@ Source0:	https://mirror1.hs-esslingen.de/pub/Mirrors/mariadb//mariadb-%{version}
 Source1:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql_config_multilib.sh
 Source2:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/my.cnf.in
 Source3:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb.tmpfiles.d.in
-Source4:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql.service.in
+# The systemd unit files are *not* identical to Fedora's.
+Source4:	mysql.service.in
 Source5:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-prepare-db-dir.sh
 Source6:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-check-socket.sh
 Source7:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-scripts-common.sh
 Source8:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-check-upgrade.sh
-Source9:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mysql@.service.in
+Source9:	mysql@.service.in
 Source10:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/clustercheck.sh
 Source20:	mariadb.sysusers
 Source1000:	%{name}.rpmlintrc
+Patch1:		https://github.com/MariaDB/server/commit/87309d3d4.patch
+Patch2:		mariadb-omv-paths.patch
 # Fedora patches
 #   Patch4: Red Hat distributions specific logrotate fix
 #   it would be big unexpected change, if we start shipping it now. Better wait for MariaDB 10.2
