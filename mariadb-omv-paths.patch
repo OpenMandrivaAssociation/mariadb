@@ -1,7 +1,14 @@
-diff -up mariadb-12.2.2/cmake/install_layout.cmake.omv~ mariadb-12.2.2/cmake/install_layout.cmake
---- mariadb-12.2.2/cmake/install_layout.cmake.omv~	2026-02-18 17:05:58.258583976 +0100
-+++ mariadb-12.2.2/cmake/install_layout.cmake	2026-02-18 17:10:49.512454172 +0100
-@@ -157,13 +157,13 @@ SET(INSTALL_MYSQLTESTDIR_RPM
+diff -up mariadb-12.3.3/cmake/install_layout.cmake.omv~ mariadb-12.3.3/cmake/install_layout.cmake
+--- mariadb-12.3.3/cmake/install_layout.cmake.omv~	2026-08-25 12:00:00.000000000 +0000
++++ mariadb-12.3.3/cmake/install_layout.cmake	2026-08-25 12:00:00.000000000 +0000
+@@ -155,19 +155,19 @@ SET(INSTALL_INFODIR_RPM                 "share/info")
+ SET(INSTALL_MANDIR_RPM                  "share/man")
+ #
+ SET(INSTALL_SHAREDIR_RPM                "share")
+-SET(INSTALL_MYSQLSHAREDIR_RPM           "share/mariadb")
+-SET(INSTALL_MYSQLTESTDIR_RPM            "share/mariadb-test")
++SET(INSTALL_MYSQLSHAREDIR_RPM           "share/mysql")
++SET(INSTALL_MYSQLTESTDIR_RPM            "share/mysql-test")
  SET(INSTALL_SQLBENCHDIR_RPM             "")
 -SET(INSTALL_SUPPORTFILESDIR_RPM         "share/mariadb")
 +SET(INSTALL_SUPPORTFILESDIR_RPM         "share/mysql")
@@ -13,9 +20,11 @@ diff -up mariadb-12.2.2/cmake/install_layout.cmake.omv~ mariadb-12.2.2/cmake/ins
  SET(INSTALL_SYSTEMD_UNITDIR_RPM         "/usr/lib/systemd/system")
  SET(INSTALL_SYSTEMD_SYSUSERSDIR_RPM     "/usr/lib/sysusers.d")
  SET(INSTALL_SYSTEMD_TMPFILESDIR_RPM     "/usr/lib/tmpfiles.d")
--SET(INSTALL_RUNDATADIR_RPM              "/run/mariadb")
-+SET(INSTALL_RUNDATADIR_RPM              "/run/mysqld")
-+SET(INSTALL_UNIX_ADDRDIR_RPM            "${INSTALL_RUNDATADIR_RPM}/mysql.sock")
- SET(INSTALL_PAMDIR_RPM                  "/${INSTALL_LIBDIR_RPM}/security")
- SET(INSTALL_PAMDATADIR_RPM              "/etc/security")
- 
+-SET(INSTALL_RUNDIR_RPM                  "/run")
+-SET(INSTALL_PAMDIR_RPM                  "/usr/${INSTALL_LIBDIR_RPM}/security")
++SET(INSTALL_RUNDIR_RPM                  "/run/mysqld")
++SET(INSTALL_UNIX_ADDRDIR_RPM            "${INSTALL_RUNDIR_RPM}/mysql.sock")
++SET(INSTALL_PAMDIR_RPM                  "/${INSTALL_LIBDIR_RPM}/security")
+ IF(RPM MATCHES "^(opensuse|sles)([0-9]+)$")
+   IF(CMAKE_MATCH_2 LESS_EQUAL 1507)
+     SET(INSTALL_PAMDIR_RPM                  "/${INSTALL_LIBDIR_RPM}/security")

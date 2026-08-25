@@ -12,8 +12,8 @@
 
 Summary:	The MariaDB database, a drop-in replacement for MySQL
 Name:		mariadb
-Version:	12.2.2
-Release:	3
+Version:	12.3.3
+Release:	1
 URL:		https://mariadb.org/
 License:	GPL
 Group:		System/Servers
@@ -31,7 +31,6 @@ Source9:	mysql@.service.in
 Source10:	https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/clustercheck.sh
 Source20:	mariadb.sysusers
 Source1000:	%{name}.rpmlintrc
-Patch1:		https://github.com/MariaDB/server/commit/87309d3d4.patch
 Patch2:		mariadb-omv-paths.patch
 # Fedora patches
 #   Patch4: Red Hat distributions specific logrotate fix
@@ -148,6 +147,21 @@ RocksDB is a high performance embedded database for key-value data.
 %doc %{_mandir}/man1/mariadb-ldb.1*
 %{_bindir}/sst_dump
 %doc %{_mandir}/man1/mysql_ldb.1*
+
+%package duckdb
+Summary:	DuckDB analytical backend for MariaDB
+Group:		System/Servers
+Requires:	%{name} = %{EVRD}
+Requires:	%{name}-server = %{EVRD}
+
+%description duckdb
+DuckDB analytical backend for MariaDB.
+
+The DuckDB storage engine embeds DuckDB as a pluggable engine so
+analytical (OLAP) queries can run inside MariaDB.
+
+%files duckdb
+%optional %{_libdir}/mysql/plugin/ha_duckdb.so
 
 %package -n %{libname}
 Summary:	The MariaDB core library
@@ -290,6 +304,7 @@ Plugins for the MariaDB database.
 %{_libdir}/mysql/plugin/ha_spider.so
 %{_libdir}/mysql/plugin/ha_test_sql_discovery.so
 %{_libdir}/mysql/plugin/ha_mroonga.so
+%optional %{_libdir}/mysql/plugin/ha_videx.so
 %{_libdir}/mysql/plugin/handlersocket.so
 %{_libdir}/mysql/plugin/libdaemon_example.so
 %{_libdir}/mysql/plugin/locales.so
@@ -385,13 +400,11 @@ Provides:	mysql-server = 5.7
 %systemd_requires
 Requires(pre):	systemd
 Suggests:	%{name}-rocksdb = %{EVRD}
+Suggests:	%{name}-duckdb = %{EVRD}
 
 %description server
 The MariaDB server. For a full MariaDB database server, install
 package '%{name}'.
-
-%pre server
-%sysusers_create_package %{name} %{SOURCE20}
 
 %files server
 %optional %{_libdir}/mysql/plugin/ha_s3.so
@@ -674,6 +687,7 @@ MariaDB command line client.
 %{_bindir}/mysql_waitpid
 %doc %{_mandir}/man1/mariadb-waitpid.1*
 %{_bindir}/mariadb-waitpid
+%optional %{_bindir}/mariadb-migrate-config-file
 %{_bindir}/test-connect-t
 %doc %{_mandir}/man1/mysql.1*
 %doc %{_mandir}/man1/mysqlaccess.1*
