@@ -67,6 +67,7 @@ Requires:	%{name}-client = %{EVRD}
 BuildRequires:	bison
 BuildRequires:	cmake
 BuildRequires:	git-core
+BuildRequires:	libatomic-devel
 BuildRequires:	make
 BuildRequires:	dos2unix
 BuildRequires:	doxygen
