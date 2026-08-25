@@ -66,6 +66,7 @@ Requires:	%{name}-server = %{EVRD}
 Requires:	%{name}-client = %{EVRD}
 BuildRequires:	bison
 BuildRequires:	cmake
+BuildRequires:	git
 BuildRequires:	make
 BuildRequires:	dos2unix
 BuildRequires:	doxygen
