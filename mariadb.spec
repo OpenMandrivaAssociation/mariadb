@@ -384,6 +384,8 @@ MariaDB test suite.
 %{_datadir}/mysql/mini-benchmark
 %{_libdir}/mysql/plugin/func_test.so
 %{_libdir}/mysql/plugin/type_test.so
+%dir %{_libdir}/mysql/plugin/test_pam_modules
+%{_libdir}/mysql/plugin/test_pam_modules/pam_mariadb_mtr.so
 %doc %{_mandir}/man1/mariadb-test.1*
 %doc %{_mandir}/man1/mysql-stress-test.pl.1*
 %doc %{_mandir}/man1/mysql-test-run.pl.1*
@@ -518,6 +520,10 @@ package '%{name}'.
 %{_unitdir}/*.socket
 %dir %{_unitdir}/mariadb@bootstrap.service.d
 %{_unitdir}/mariadb@bootstrap.service.d/*.conf
+%dir %{_unitdir}/mariadb.service.d
+%{_unitdir}/mariadb.service.d/galera.conf
+%dir %{_datadir}/mysql/mariadb.service.d
+%{_datadir}/mysql/mariadb.service.d/galera.conf
 %{_datadir}/mysql/mariadb_test_db.sql
 %doc %{_docdir}/%{name}-%{version}
 %attr(711,%{muser},%{muser}) /srv/mysql
