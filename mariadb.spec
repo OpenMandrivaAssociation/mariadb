@@ -35,7 +35,7 @@ Patch2:		mariadb-omv-paths.patch
 # Fedora patches
 #   Patch4: Red Hat distributions specific logrotate fix
 #   it would be big unexpected change, if we start shipping it now. Better wait for MariaDB 10.2
-Patch4:		https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-logrotate.patch
+Patch4:		mariadb-logrotate.patch
 #   Patch7: add to the CMake file all files where we want macros to be expanded
 Patch7:		https://src.fedoraproject.org/rpms/mariadb/raw/rawhide/f/mariadb-scripts.patch
 #   Patch9: pre-configure to comply with guidelines
