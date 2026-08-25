@@ -1,7 +1,7 @@
-diff -up mariadb-10.9.2/plugin/hashicorp_key_management/CMakeLists.txt.omv~ mariadb-10.9.2/plugin/hashicorp_key_management/CMakeLists.txt
---- mariadb-10.9.2/plugin/hashicorp_key_management/CMakeLists.txt.omv~	2022-09-05 19:22:02.679871841 +0200
-+++ mariadb-10.9.2/plugin/hashicorp_key_management/CMakeLists.txt	2022-09-05 19:22:36.159428341 +0200
-@@ -12,7 +12,7 @@ set(CPACK_RPM_hashicorp-key-management_P
+diff -up mariadb-12.3.3/plugin/hashicorp_key_management/CMakeLists.txt.omv~ mariadb-12.3.3/plugin/hashicorp_key_management/CMakeLists.txt
+--- mariadb-12.3.3/plugin/hashicorp_key_management/CMakeLists.txt.omv~	2026-08-25 12:00:00.000000000 +0000
++++ mariadb-12.3.3/plugin/hashicorp_key_management/CMakeLists.txt	2026-08-25 12:00:00.000000000 +0000
+@@ -15,7 +15,7 @@ set(CPACK_RPM_hashicorp-key-management_P
  
  MYSQL_ADD_PLUGIN(HASHICORP_KEY_MANAGEMENT
    hashicorp_key_management_plugin.cc
@@ -9,4 +9,4 @@ diff -up mariadb-10.9.2/plugin/hashicorp_key_management/CMakeLists.txt.omv~ mari
 +  LINK_LIBRARIES CURL::libcurl
    CONFIG hashicorp_key_management.cnf
    COMPONENT hashicorp-key-management
-   MODULE_ONLY)
+   MODULE_ONLY
