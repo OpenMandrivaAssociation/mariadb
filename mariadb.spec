@@ -8,7 +8,7 @@
 
 %global __requires_exclude ^perl\\((hostnames|lib::mtr|lib::v1|mtr_|My::|wsrep)
 %global __provides_exclude_from ^%{_datadir}/(mysql|mysql-test)/
-#global __provides_exclude_from ^(%{_datadir}/(mysql|mysql-test)/.*|%{_libdir}/%{name}/plugin/.*\\.so)$
+#global __provides_exclude_from ^(%%{_datadir}/(mysql|mysql-test)/.*|%%{_libdir}/%%{name}/plugin/.*\\.so)$
 
 Summary:	The MariaDB database, a drop-in replacement for MySQL
 Name:		mariadb
@@ -227,6 +227,7 @@ Development files for the MariaDB database.
 %{_datadir}/aclocal/mysql.m4
 %{_libdir}/pkgconfig/libmariadb.pc
 %{_libdir}/pkgconfig/mariadb.pc
+%{_datadir}/cmake/mariadb-plugin
 %doc %{_mandir}/man1/mariadb_config.1*
 %doc %{_mandir}/man3/*.3*
 
@@ -384,6 +385,8 @@ MariaDB test suite.
 %{_datadir}/mysql/mini-benchmark
 %{_libdir}/mysql/plugin/func_test.so
 %{_libdir}/mysql/plugin/type_test.so
+%{_libdir}/mysql/plugin/plugin_name_ascii.so
+%{_libdir}/mysql/plugin/plugin_name_non_ascii.so
 %dir %{_libdir}/mysql/plugin/test_pam_modules
 %{_libdir}/mysql/plugin/test_pam_modules/pam_mariadb_mtr.so
 %doc %{_mandir}/man1/mariadb-test.1*
@@ -804,6 +807,7 @@ sed -i 's|WSREP_NORETURN|__attribute__((noreturn))|' wsrep-lib/include/wsrep/thr
 	-DWITH_EMBEDDED_SERVER:BOOL=ON \
 	-DWITH_MARIABACKUP:BOOL=ON \
 	-DPLUGIN_ROCKSDB=DYNAMIC \
+	-DPLUGIN_DUCKDB=DYNAMIC \
 	-DCURL_LIBRARIES=-lcurl
 
 %make_build -k || make
